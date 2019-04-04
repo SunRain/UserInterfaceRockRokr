@@ -1,0 +1,61 @@
+#LeftBar {
+    background-color: qlineargradient(x1:0.5, y1:0, x2:0.5, y2:1,
+                                    stop:0 #FFFFFF,
+                                    stop: 0.6 #F3F3F3,
+                                    stop:1 #FCFCFC);
+    border: none;
+}
+
+#RKTitle {
+  color: #1F2022;
+  font-size: 22px;
+  font-weight: bold;
+  font-style: italic;
+  background: transparent;
+  border: none;
+  text-align: left center;
+}
+
+#HomeTitle {
+  color: #BABBBB;
+  font-size: 14px;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  text-align: left center;
+}
+
+#PlaylistTitle {
+  color: #BABBBB;
+  font-size: 14px;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  text-align: left center;
+}
+
+/*
+#PlaylistWidget {
+    border: none;
+    background: red;
+}
+*/
+
+/*
+#IndexWidget{
+    border: none;
+    background: transparent;
+}
+
+#IndexWidget::item:hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+
+#IndexWidget::item:!hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+*/

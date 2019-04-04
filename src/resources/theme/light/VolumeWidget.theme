@@ -1,0 +1,4 @@
+VolumeWidget {
+    background: transparent;
+    border: none;
+}

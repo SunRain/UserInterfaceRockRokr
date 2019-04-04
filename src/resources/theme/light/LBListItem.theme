@@ -1,0 +1,102 @@
+#LBListItem:hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+
+#LBListItem:!hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+
+
+#LBListItem {
+    border: 1px solid #FCFCFC;
+    border-radius: 8px;
+    padding: 0px;
+    background-color: #FCFCFC;
+}
+
+#LBListItem[hoverState="active"] {
+    border: 1px solid #336CFB;
+    border-radius: 8px;
+    padding: 0px;
+    background-color: #336CFB;
+}
+
+#LBListItem[editableStatus="active"] {
+    border: 1px solid rgba(51, 108, 251, 0.2);
+    border-radius: 8px;
+    padding: 0px;
+    background-color: rgba(51, 108, 251, 0.8);
+}
+
+#TitleIconLabel {
+    background: transparent;
+}
+
+#TitleIconLabel[iconName="TypeArtist"] {
+    image: url(:/light/image/KEY_ARTISTS.svg);
+}
+
+#TitleIconLabel[iconName="TypeAlbums"] {
+    image: url(:/light/image/KEY_ALBUMS.svg);
+}
+
+#TitleIconLabel[iconName="TypeSongs"] {
+    image: url(:/light/image/KEY_SONGS.svg);
+}
+
+#TitleIconLabel[iconName="TypeGenres"] {
+    image: url(:/light/image/KEY_GENRES.svg);
+}
+
+#TitleIconLabel[iconName="TypeFavorites"] {
+    image: url(:/light/image/KEY_FAVORITES.svg);
+}
+
+/*
+#TitleTextEdit[status="active"] {
+  color: green;
+  background-color: black;
+}
+
+#TitleTextEdit:focus[status="active"] {
+  color: red;
+  background-color: white;
+  border-radius: 4.0px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+*/
+
+/*
+#TitleTextEdit[hoverState="active"] {
+    color: #F4F6FF;
+    background-color: transparent;
+}
+*/
+
+#TitleTextEdit {
+    color: #1F2022;
+    border: none;
+    background-color:transparent;
+}
+
+#TitleTextEdit[hoverState="active"] {
+    color: #FCFCFC;
+    border: none;
+    background-color:transparent;
+}
+
+#TitleTextEdit[editableStatus="active"] {
+    color: #009aff;
+}
+
+#TitleTextEdit:focus[editableStatus="active"] {
+    color: black;
+    background-color: white;
+    border-radius: 4.0px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+

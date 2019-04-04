@@ -1,0 +1,57 @@
+#LBListWidget {
+  border: none;
+  background-color: transparent;
+}
+
+#LBListWidget::item {
+  color: transparent;
+}
+
+#LBListWidget::item:hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+
+#LBListWidget::item:!hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+
+/*
+#LBListWidget::item:selected:!active {
+  color: blue;
+  background-color: qlineargradient(x1: 0 y1: 0, x2: 1 y2: 0, stop: 0 #2aa6f8, stop: 0.015 #2aa6f8, stop: 0.0155 rgba(42, 166, 248, 20%), stop: 1 rgba(42, 166, 248, 20%));
+}
+
+#LBListWidget::item:selected:active {
+  color: blue;
+  background-color: qlineargradient(x1: 0 y1: 0, x2: 1 y2: 0, stop: 0 #2aa6f8, stop: 0.015 #2aa6f8, stop: 0.0155 rgba(42, 166, 248, 20%), stop: 1 rgba(42, 166, 248, 20%));
+}
+*/
+
+#LBScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 4px;
+    margin: 0 0 0 0;
+}
+#LBScrollBar::handle:vertical {
+    background: #336CFB;
+    min-width: 4px;
+}
+
+/*
+#LBScrollBar::add-line:vertical {
+    border: 2px solid grey;
+    background: #32CC99;
+    width: 20px;
+}
+
+#LBScrollBar::sub-line:vertical {
+    border: 2px solid yellow;
+    background: #32CC99;
+    width: 20px;
+}
+*/

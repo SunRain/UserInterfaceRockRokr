@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg6"
+   version="1.1"
+   fill="none"
+   viewBox="0 0 30 30"
+   height="30"
+   width="30"
+   sodipodi:docname="btn_pre_hover.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1144"
+     inkscape:window-height="607"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="7.8666667"
+     inkscape:cx="15"
+     inkscape:cy="15"
+     inkscape:window-x="0"
+     inkscape:window-y="44"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <path
+     id="path2"
+     fill="#D4D3D3"
+     d="M15 30C6.71573 30 0 23.2843 0 15C0 6.71573 6.71573 0 15 0C23.2843 0 30 6.71573 30 15C30 23.2843 23.2843 30 15 30Z"
+     clip-rule="evenodd"
+     fill-rule="evenodd"
+     style="fill:#336cfb;fill-opacity:0.78431374" />
+  <path
+     style="fill:#ffffff;fill-opacity:1"
+     id="path4"
+     fill="white"
+     d="M7.98857 14.0085L12.9467 10.6552C13.2527 10.4483 13.6181 10.4483 13.924 10.6552C14.23 10.8621 14.4126 11.2328 14.4126 11.6466V14.1464C14.4622 14.095 14.5167 14.0486 14.5759 14.0085L19.5341 10.6553C19.8401 10.4483 20.2054 10.4483 20.5114 10.6553C20.8174 10.8622 21 11.2329 21 11.6467V18.3533C21 18.7672 20.8173 19.1378 20.5114 19.3447C20.3583 19.4482 20.1906 19.5 20.0227 19.5C19.8549 19.5 19.687 19.4482 19.5341 19.3447L14.576 15.9915C14.5167 15.9514 14.4622 15.9051 14.4126 15.8536V18.3534C14.4126 18.7672 14.2299 19.1379 13.924 19.3448C13.771 19.4483 13.6032 19.5 13.4353 19.5C13.2675 19.5 13.0997 19.4483 12.9467 19.3448L7.98861 15.9915C7.68259 15.7846 7.5 15.4139 7.5 15C7.49996 14.5862 7.68255 14.2154 7.98857 14.0085Z" />
+</svg>

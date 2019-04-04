@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/KEY_ALBUMS.svg</file>
+        <file>resources/KEY_ARTISTS.svg</file>
+        <file>resources/KEY_FAVORITES.svg</file>
+        <file>resources/KEY_GENRES.svg</file>
+        <file>resources/KEY_SONGS.svg</file>
+        <file>resources/playlist_add.svg</file>
+        <file>resources/playlist_add_grey600_18dp.png</file>
+        <file>resources/playlist_add_black_18dp.png</file>
+        <file>resources/icon-l-music.svg</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,84 @@
+/*#LeftBar {
+    background-color: #FCFCFC;
+    border: none;
+}
+#RKTitle {
+  color: #1F2022;
+  font-size: 22px;
+  font-weight: bold;
+  font-style: italic;
+  background: transparent;
+  border: none;
+  text-align: left center;
+}
+
+#HomeTitle {
+  color: #BABBBB;
+  font-size: 14;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  text-align: left center;
+}
+
+#PlaylistTitle {
+  color: #BABBBB;
+  font-size: 14;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  text-align: left center;
+}
+*/
+/*
+#PlaylistWidget {
+    border: none;
+    background: red;
+}
+*/
+
+/*
+#IndexWidget{
+    border: none;
+    background: transparent;
+}
+
+#IndexWidget::item:hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+
+#IndexWidget::item:!hover {
+    border: none;
+    padding: 0px;
+    background-color: transparent;
+}
+*/
+
+#LBPlaylistView {
+    background: yellow;
+    border: none;
+}
+
+#HeaderTitle {
+    color: #BABBBB;
+    font-size: 14;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    text-align: left center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

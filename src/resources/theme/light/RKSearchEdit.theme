@@ -1,0 +1,44 @@
+RKSearchEdit {
+    border-radius: 24px;
+    padding: 1px;
+    padding-bottom: 0px;
+    background-color: rgba(235, 235, 235, 0.3);
+}
+RKSearchEdit QFrame#DEditInsideFrame {
+    border: none;
+    background: transparent;
+}
+
+RKSearchEdit #PlaceHolder {
+    font-size: 16px;
+    color: rgba(48, 56, 76, 0.4);
+    margin: 0 0 0 3px;
+    background: transparent;
+}
+
+RKSearchEdit #Edit {
+    color: #336CFB;
+    font-size: 16px;
+    margin-right: 50px;
+    border: none;
+    background-color: transparent;
+}
+
+RKSearchEdit #SearchIcon {
+    padding-left: 20px;
+    padding-right: 10px;
+    background-color: transparent;
+    qproperty-normalPic: url(:/light/image/ic_search_48px.svg);
+    qproperty-hoverPic: url(:/light/image/ic_search_48px.svg);
+    qproperty-pressPic: url(:/light/image/ic_search_48px.svg);
+}
+
+RKSearchEdit #ClearIcon {
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: transparent;
+    qproperty-normalPic: url(:/light/image/input_clear_normal.svg);
+    qproperty-hoverPic: url(:/light/image/input_clear_hover.svg);
+    qproperty-pressPic: url(:/light/image/input_clear_press.svg);
+}
+

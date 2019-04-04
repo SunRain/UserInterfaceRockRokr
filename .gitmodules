@@ -1,0 +1,13 @@
+[submodule "thirdparty/libPhoenixPlayer/libPhoenixPlayer"]
+	path = thirdparty/libPhoenixPlayer/libPhoenixPlayer
+	url = https://github.com/SunRain/libPhoenixPlayer.git
+[submodule "thirdparty/dtk/dtk"]
+       path = thirdparty/dtk/dtk
+       url = https://github.com/linuxdeepin/dtk.git
+       
+[submodule "thirdparty/qsyncable/qsyncable"]
+	path = thirdparty/qsyncable/qsyncable
+	url = https://github.com/SunRain/qsyncable.git
+[submodule "thirdparty/qt-spek/qt-spek"]
+	path = thirdparty/qt-spek/qt-spek
+	url = https://github.com/SunRain/qt-spek.git
