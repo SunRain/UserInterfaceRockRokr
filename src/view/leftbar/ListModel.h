@@ -5,6 +5,10 @@
 #include <QObject>
 #include <QAbstractListModel>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class ListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -39,5 +43,9 @@ private:
     QMap<QString, QString> m_DataMap;
     QModelIndex m_curIdx;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // LISTMODEL_H

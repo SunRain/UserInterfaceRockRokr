@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>light/LeftBar.theme</file>
-        <file>light/LBListItem.theme</file>
         <file>light/image/KEY_ALBUMS.svg</file>
         <file>light/image/KEY_ARTISTS.svg</file>
         <file>light/image/KEY_FAVORITES.svg</file>
@@ -10,12 +8,8 @@
         <file>light/image/playlist_add_black_18dp.png</file>
         <file>light/image/playlist_add_grey600_18dp.png</file>
         <file>light/image/playlist_add.svg</file>
-        <file>light/LBListWidget.theme</file>
-        <file>light/LBPlaylistView.theme</file>
         <file>light/image/delete_grey600_48dp.png</file>
         <file>light/image/icon-l-music.svg</file>
-        <file>light/ImportView.theme</file>
-        <file>light/LoadingWidget.theme</file>
         <file>light/image/ic_arrow_back_grey_48px.svg</file>
         <file>light/image/ic_menu_black_48px.svg</file>
         <file>light/image/ic_menu_grey_48px.svg</file>
@@ -24,12 +18,10 @@
         <file>light/image/ic_close_black_48px.svg</file>
         <file>light/image/ic_close_grey_48px.svg</file>
         <file>light/image/ic_remove_black_48px.svg</file>
-        <file>light/RKSearchEdit.theme</file>
         <file>light/image/ic_search_48px.svg</file>
         <file>light/image/input_clear_hover.svg</file>
         <file>light/image/input_clear_normal.svg</file>
         <file>light/image/input_clear_press.svg</file>
-        <file>light/PlayBar.theme</file>
         <file>light/image/btn_next_hover.svg</file>
         <file>light/image/btn_next.svg</file>
         <file>light/image/btn_pre_hover.svg</file>
@@ -46,8 +38,6 @@
         <file>light/image/shuffle_enable_hover.svg</file>
         <file>light/image/shuffle_disable_hover.svg</file>
         <file>light/image/repeat_disable.svg</file>
-        <file>light/VolumeWidget.theme</file>
-        <file>light/RKSlider.theme</file>
         <file>light/image/volume-10_hover.svg</file>
         <file>light/image/volume-06_hover.svg</file>
         <file>light/image/volume-05_hover.svg</file>
@@ -59,5 +49,30 @@
         <file>light/image/volume.svg</file>
         <file>light/image/volume_muted_hover.svg</file>
         <file>light/image/volume_disable_hover.svg</file>
+        <file>light/image/pause_circle_outline_hover.svg</file>
+        <file>light/image/pause_circle_outline.svg</file>
+        <file>light/image/play_circle_outline_hover.svg</file>
+        <file>light/image/play_circle_outline.svg</file>
+        <file>light/image/default_cover.svg</file>
+        <file>light/image/default_cover.jpg</file>
+        <file>light/image/RKTableHeaderItem_menu_normal.svg</file>
+        <file>light/image/RKTableHeaderItem_menu_hover.svg</file>
+        <file>light/image/ic_format_list_numbered_hover.svg</file>
+        <file>light/image/ic_format_list_numbered.svg</file>
+        <file>light/image/del_notify.svg</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--BaseCategoryView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--ImportView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--LBListItem.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--LBListWidget.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--LBPlaylistView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--LeftBar.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--LoadingWidget.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--PlayBar.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RKListView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RKSearchEdit.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RKSlider.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--TrackInfoDialog.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--VolumeWidget.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--WaveformSlider.theme</file>
     </qresource>
 </RCC>

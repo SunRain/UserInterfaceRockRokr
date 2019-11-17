@@ -3,12 +3,17 @@
 
 #include <QSlider>
 
+class QLabel;
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class RKBaseSlider : public QSlider
 {
     Q_OBJECT
 public:
-    explicit RKBaseSlider(QWidget *parent = nullptr);
-    explicit RKBaseSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit RKBaseSlider(QWidget *parent = Q_NULLPTR);
+    explicit RKBaseSlider(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
 
     // QObject interface
 public:
@@ -25,14 +30,12 @@ protected:
     bool m_mousePress;
 };
 
-
-class QLabel;
 class RKSlider : public RKBaseSlider
 {
     Q_OBJECT
 public:
     explicit RKSlider(QWidget *parent = nullptr);
-    explicit RKSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit RKSlider(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
     virtual ~RKSlider() override;
 
     inline bool isMoving() const { return m_isMoving;}
@@ -57,10 +60,13 @@ protected:
     QPoint limitLableGeometry(int x, int y, int z);
 
 private:
-    bool m_isMoving;
-    QLabel *m_textLabel;
-
-
+    bool    m_isMoving = false;
+    QLabel  *m_textLabel = Q_NULLPTR;
 };
+
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // RKSLIDER_H

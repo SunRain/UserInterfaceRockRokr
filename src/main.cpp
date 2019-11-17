@@ -1,33 +1,33 @@
-#include "MainWindow.h"
+//#include "MainWindow.h"
 
-#include <DApplication>
+//#include <DApplication>
 
-#include <DThemeManager>
+//#include <DThemeManager>
 
-#include "libphoenixplayer_global.h"
+//#include "libphoenixplayer_global.h"
 
-#include "RockRokrApp.h"
+//#include "RockRokrApp.h"
 
-DWIDGET_USE_NAMESPACE
+//DWIDGET_USE_NAMESPACE
 
-int main(int argc, char *argv[])
-{
-    DApplication::loadDXcbPlugin();
+//int main(int argc, char *argv[])
+//{
+//    DApplication::loadDXcbPlugin();
 
-    QScopedPointer<QApplication> app(new QApplication(argc, argv));
-    app.data()->setOrganizationName("SunRain");
-    app.data()->setApplicationName("RockRokr");
-    app.data()->setApplicationDisplayName(QObject::tr("RockRokr Player"));
-    app.data()->setApplicationVersion("1.0.0");
+//    QScopedPointer<QApplication> app(new QApplication(argc, argv));
+//    app.data()->setOrganizationName("SunRain");
+//    app.data()->setApplicationName("RockRokr");
+//    app.data()->setApplicationDisplayName(QObject::tr("RockRokr Player"));
+//    app.data()->setApplicationVersion("1.0.0");
 
-    PhoenixPlayer::LibPhoenixPlayer_Init();
+//    PhoenixPlayer::LibPhoenixPlayer_Init();
 
-    DThemeManager::instance()->setTheme("light");
+//    DThemeManager::instance()->setTheme("light");
 
-//    MainWindow w;
-//    w.show();
-    RockRokrApp::instance()->init();
-    RockRokrApp::instance()->show();
+////    MainWindow w;
+////    w.show();
+//    RockRokrApp::instance()->init();
+//    RockRokrApp::instance()->show();
 
-    return app->exec();
-}
+//    return app->exec();
+//}

@@ -19,6 +19,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QWidget *parent)
     : QFrame(parent),
       m_textEdit(new QLineEdit),
@@ -47,7 +51,7 @@ LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QW
     m_iconLabel->setEnabled(false);
     m_iconLabel->setObjectName("TitleIconLabel");
     const QString iconName = enumToStr("ItemType", m_itemType);
-    qDebug()<<Q_FUNC_INFO<<"--- icon name is "<<iconName;
+    qDebug()<<"--- icon name is "<<iconName;
     m_iconLabel->setProperty("iconName", iconName);
 
 //    m_textEdit = new QLineEdit;
@@ -86,7 +90,7 @@ LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QW
 
     connect(m_textEdit, &QLineEdit::editingFinished,
             this, [&](){
-        qDebug()<<Q_FUNC_INFO<<"QLineEdit::editingFinished with text "<<m_textEdit->text();
+        qDebug()<<"QLineEdit::editingFinished with text "<<m_textEdit->text();
 
         if (m_textEdit->text().isEmpty()) {
             m_textEdit->setText(m_textEdit->property("EditValue").toString());
@@ -111,7 +115,7 @@ LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QW
 
     connect(m_textEdit, &QLineEdit::returnPressed,
             this, [&](){
-        qDebug()<<Q_FUNC_INFO<<"   --- QLineEdit::returnPressed";
+        qDebug()<<"   --- QLineEdit::returnPressed";
         m_textEdit->blockSignals(true);
         this->setFocus();
         m_textEdit->blockSignals(false);
@@ -177,7 +181,7 @@ void LBListItem::setEditMode(bool editable)
     this->update();
     if (editable) {
         QString text = m_textEdit->property("EditValue").toString();
-        qDebug()<<Q_FUNC_INFO<<" text is "<<text;
+        qDebug()<<" text is "<<text;
         m_textEdit->setEnabled(true);
         m_textEdit->setReadOnly(false);
         m_textEdit->setText(text);
@@ -239,3 +243,8 @@ int LBListItem::itemType() const
 //    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 //    QWidget::paintEvent(event);
 //}
+
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer

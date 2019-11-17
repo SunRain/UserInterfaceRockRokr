@@ -17,6 +17,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 VolumeWidget::VolumeWidget(QWidget *parent)
     : QFrame(parent),
       m_timer(new QTimer(this)),
@@ -110,7 +115,7 @@ RKSlider *VolumeWidget::slider() const
 void VolumeWidget::wheelEvent(QWheelEvent *event)
 {
     QFrame::wheelEvent(event);
-    qDebug()<<Q_FUNC_INFO<<event;
+    qDebug()<<event;
 
 }
 
@@ -212,3 +217,8 @@ void VolumeWidget::setBorderColor(QColor borderColor)
 {
     m_borderColor = borderColor;
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+

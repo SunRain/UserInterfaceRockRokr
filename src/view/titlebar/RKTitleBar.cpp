@@ -21,6 +21,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 RKTitleBar::RKTitleBar(QWidget *parent)
     : QFrame(parent)
 {
@@ -44,7 +48,7 @@ RKTitleBar::RKTitleBar(QWidget *parent)
     m_optionBtn = new DWindowOptionButton;
     connect(m_optionBtn, &DImageButton::clicked,
             this, [&](){
-        qDebug()<<Q_FUNC_INFO<<" option clicked ";
+        qDebug()<<" option clicked ";
     });
 
     m_closeBtn = new DWindowCloseButton;
@@ -53,7 +57,7 @@ RKTitleBar::RKTitleBar(QWidget *parent)
     m_minimizeBtn = new DWindowMinButton;
     connect(m_minimizeBtn, &DImageButton::clicked,
             this, [&](){
-        qDebug()<<Q_FUNC_INFO<<" m_minimizeBtn clicked ";
+        qDebug()<<" m_minimizeBtn clicked ";
     });
     iconLy->addWidget(m_optionBtn);
     iconLy->addWidget(m_minimizeBtn);
@@ -69,6 +73,8 @@ RKTitleBar::~RKTitleBar()
 
 }
 
-
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 

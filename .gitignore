@@ -27,3 +27,8 @@ build-*-Release
 *.qmlproject.user
 *.qmlproject.user.*
 tmp/*
+.gitee/*
+
+
+
+

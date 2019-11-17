@@ -6,6 +6,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 RKListWidget::RKListWidget(QWidget *parent)
     : QListWidget(parent),
       m_contentHeight(0)
@@ -56,7 +60,7 @@ void RKListWidget::updateHeight()
         if (item) {
             //TODO item is hidden?
             m_contentHeight += item->sizeHint().height();
-            qDebug()<<Q_FUNC_INFO<<" item "<<i<<" height "<<item->sizeHint().height();
+//            qDebug()<<Q_FUNC_INFO<<" item "<<i<<" height "<<item->sizeHint().height();
         }
     }
     if (this->count() > 0) {
@@ -67,6 +71,9 @@ void RKListWidget::updateHeight()
 
 
 
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 
 

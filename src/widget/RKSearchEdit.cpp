@@ -17,6 +17,10 @@
 
 DWIDGET_USE_NAMESPACE;
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 RKSearchEdit::RKSearchEdit(QWidget *parent)
     : QFrame(parent)
 {
@@ -205,4 +209,8 @@ bool RKSearchEdit::event(QEvent *e)
 
     return QFrame::event(e);
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 

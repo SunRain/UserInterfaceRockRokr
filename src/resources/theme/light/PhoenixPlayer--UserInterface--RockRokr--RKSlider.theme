@@ -1,0 +1,26 @@
+RKSlider {
+    background: transparent;
+    border: none;
+}
+
+RKSlider::groove:horizontal {
+    border: none;
+    height: 2px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+    background: #336CFB;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+RKSlider::handle:horizontal {
+    background: white;
+    border: 2px solid #336CFB;
+    width: 14px;
+    margin: -7px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+    border-radius: 8px;
+}
+
+#RKTextLabel {
+    color:rgba(0, 0, 0, 0.5);
+    background-color: #FCFCFC;
+    border:1px solid #F3F3F3;
+}

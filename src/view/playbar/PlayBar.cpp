@@ -11,24 +11,31 @@
 
 #include "LibPhoenixPlayerMain.h"
 #include "PPCommon.h"
+#include "PPUtility.h"
 #include "PlayerCore/PlayerCore.h"
 #include "PlayerCore/VolumeControl.h"
+#include "MusicLibrary/MusicLibraryManager.h"
+#include "UserInterface/UserInterfaceMgr.h"
+#include "UserInterface/IUserInterface.h"
+#include "DataProvider/TinySpectrumDataProvider.h"
+#include "DataProvider/ISpectrumGenerator.h"
 
 #include "rockrokr_global.h"
-#include "RockRokrApp.h"
-#include "MainWindow.h"
+#include "RKMainWindow.h"
+#include "UserInterfaceRockRokr.h"
 
 #include "widget/RKImage.h"
 #include "widget/RKSlider.h"
-#include "widget/qtmaterialiconbutton.h"
+#include "widget/RKIconButton.h"
 
 #include "VolumeWidget.h"
 #include "WaveformSlider.h"
 
-
 DWIDGET_USE_NAMESPACE;
-using namespace PhoenixPlayer;
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
 
 const static char *S_PROPERTY_TIP_TEXT              = "S_PROPERTY_TIP_TEXT";
 const static char *S_PROPERTY_TIP_HIDE_DELAY_MS     = "S_PROPERTY_TIP_HIDE_DELAY_MS";
@@ -45,8 +52,9 @@ class FilterObject : public QObject
 {
     Q_OBJECT
 public:
-    FilterObject(QObject *parent = Q_NULLPTR)
-        : QObject(parent)
+    FilterObject(UserInterfaceRockRokr *ui, QObject *parent = Q_NULLPTR)
+        : QObject(parent),
+          m_ui(ui)
     {
 
     }
@@ -72,7 +80,7 @@ public:
             }
             const QString text = w->property(S_PROPERTY_TIP_TEXT).toString();
             if (!text.isEmpty()) {
-                RockRokrApp::instance()->mainWindow()->showTip(w, text);
+                m_ui->mainWindow()->showTip(w, text);
             }
             break;
         }
@@ -92,24 +100,25 @@ public:
             const QString text = w->property(S_PROPERTY_TIP_TEXT).toString();
             const int delay = w->property(S_PROPERTY_TIP_HIDE_DELAY_MS).toInt();
             if (!text.isEmpty()) {
-                RockRokrApp::instance()->mainWindow()->hideTip(delay);
+                m_ui->mainWindow()->hideTip(delay);
             }
             break;
         }
         case QEvent::MouseButtonPress:
-            RockRokrApp::instance()->mainWindow()->hideTip();
+            m_ui->mainWindow()->hideTip();
             break;
         default:
             break;
         }
         return QObject::eventFilter(watched, event);
     }
+private:
+    UserInterfaceRockRokr *m_ui = Q_NULLPTR;
 };
 
 
 PlayBar::PlayBar(QWidget *parent)
     : QFrame(parent),
-      m_filter(new FilterObject(this)),
       m_ppCommon(Q_NULLPTR)
 {
     this->setObjectName("PlayBar");
@@ -117,17 +126,56 @@ PlayBar::PlayBar(QWidget *parent)
 
     this->setFrameStyle(QFrame::NoFrame);
 
-    initUI();
+    m_playCore      = new PlayerCore(this);
+    m_volumeCtrl    = new VolumeControl(this);
+    m_libraryMgr    = new MusicLibrary::MusicLibraryManager(this);
+    m_uiMgr         = new UserInterface::UserInterfaceMgr(this);
+    m_ui            = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
+    m_filter        = new FilterObject(m_ui, this);
 
+    initUserInterface();
 
-    m_playCore = phoenixPlayerLib->playerCore();
-    m_volumeCtrl = phoenixPlayerLib->volumeCtrl();
-
-    this->volumeChanged(m_volumeCtrl->volume());
+    this->changeVolume(m_volumeCtrl->volume());
     m_volumeView->slider()->setValue(m_volumeCtrl->volume());
 
-
     connect(m_playCore, &PlayerCore::playModeChanged, this, &PlayBar::playModeChanged);
+
+    connect(m_playCore, &PlayerCore::playBackendStateChanged,
+            this, [&](PPCommon::PlayBackendState state) {
+        if (PPCommon::PlayBackendPlaying == state) {
+            m_playPausedIcon->setProperty(S_PROPERTY_TIP_TEXT, tr("play"));
+            m_playPausedIcon->setProperty("PlayBackendState", "play");
+        } else if (PPCommon::PlayBackendStopped == state) {
+            m_playPausedIcon->setProperty(S_PROPERTY_TIP_TEXT, tr("stop"));
+            m_playPausedIcon->setProperty("PlayBackendState", "stop");
+        } else {
+            m_playPausedIcon->setProperty(S_PROPERTY_TIP_TEXT, tr("pause"));
+            m_playPausedIcon->setProperty("PlayBackendState", "pause");
+        }
+        this->style()->unpolish(m_playPausedIcon);
+        this->style()->polish(m_playPausedIcon);
+    });
+    connect(m_playCore, &PlayerCore::playTickActual, m_waveformSlider, &WaveformSlider::setPlayTickActual);
+
+    connect(m_playCore, &PlayerCore::trackChanged,
+            this, [&](const QVariantMap &map) {
+                AudioMetaObject obj = AudioMetaObject::fromMap(map);
+                if (obj.isHashEmpty() ||
+                    obj.mediaType() == PPCommon::MediaType::MediaTypeUrl) {
+                    return;
+                }
+                m_waveformSlider->setSpectrumData(m_libraryMgr->loadSpectrumData(obj),
+                                                  obj.trackMeta().duration());
+            });
+
+    connect(m_waveformSlider, &WaveformSlider::valueChanged,
+            this, [&](int value){
+        m_playedTime->setText(PPUtility::formateSongDuration(value));
+    });
+    connect(m_waveformSlider, &WaveformSlider::sliderReleasedAt,
+            this, [&](qreal value){
+        m_playCore->setPosition(value, false);
+    });
 
     connect(m_volumeCtrl, &VolumeControl::volumeChanged,
             this, [&](int volume) {
@@ -135,7 +183,7 @@ PlayBar::PlayBar(QWidget *parent)
         if (m_volumeView->isVisible()) {
             m_volumeView->slider()->setValue(volume);
         }
-        this->volumeChanged(volume);
+        this->changeVolume(volume);
     });
     connect(m_volumeCtrl, &VolumeControl::mutedChanged,
             this, [&](bool muted) {
@@ -168,6 +216,10 @@ PlayBar::PlayBar(QWidget *parent)
             m_playCore->setPlayMode(PPCommon::PlayModeShuffle);
         }
     });
+    connect(m_playPausedIcon, &QPushButton::clicked,
+            this, [&](){
+        m_playCore->togglePlayPause();
+    });
 
 
     connect(m_volumeView->slider(), &RKSlider::valueChanged,
@@ -178,23 +230,45 @@ PlayBar::PlayBar(QWidget *parent)
             m_volumeCtrl->setVolume(value);
         }
     });
-
-
-
-
-
-
 }
 
 PlayBar::~PlayBar()
 {
+    m_btnOrderOrRepeat->removeEventFilter(m_filter);
+    m_btnShuffle->removeEventFilter(m_filter);
+    m_btnSound->removeEventFilter(m_filter);
+    m_btnPre->removeEventFilter(m_filter);
+    m_btnNext->removeEventFilter(m_filter);
+    m_playPausedIcon->removeEventFilter(m_filter);
+
+    if (m_filter) {
+        m_filter->deleteLater();
+        m_filter = Q_NULLPTR;
+    }
+
     if (m_ppCommon) {
         m_ppCommon->deleteLater();
         m_ppCommon = Q_NULLPTR;
     }
-    if (m_filter) {
-        m_filter->deleteLater();
-        m_filter = Q_NULLPTR;
+    if (m_playCore) {
+        m_playCore->deleteLater();
+        m_playCore = Q_NULLPTR;
+    }
+    if (m_volumeCtrl) {
+        m_volumeCtrl->deleteLater();
+        m_volumeCtrl = Q_NULLPTR;
+    }
+    if (m_libraryMgr) {
+        m_libraryMgr->deleteLater();
+        m_libraryMgr = Q_NULLPTR;
+    }
+    if (m_spekProvider) {
+        m_spekProvider->deleteLater();
+        m_spekProvider = Q_NULLPTR;
+    }
+    if (m_uiMgr) {
+        m_uiMgr->deleteLater();
+        m_uiMgr = Q_NULLPTR;
     }
 }
 
@@ -202,7 +276,7 @@ void PlayBar::showVolumeView()
 {
     ///FIX fix parent widget of volumeview
     if (m_volumeView && !m_volumeView->parentWidget()) {
-        m_volumeView->setParent(RockRokrApp::instance()->mainWindow());
+        m_volumeView->setParent(m_ui->mainWindow());
     }
     //TODO only calculate pos once ??
     auto centerPos = m_btnSound->mapToGlobal(m_btnSound->rect().center());
@@ -217,7 +291,6 @@ void PlayBar::showVolumeView()
     centerPos = m_volumeView->mapToParent(centerPos);
     m_volumeView->move(centerPos);
     m_volumeView->raise();
-
 }
 
 void PlayBar::deleyHideVolumeView()
@@ -225,7 +298,7 @@ void PlayBar::deleyHideVolumeView()
     m_volumeView->deleyHide();
 }
 
-void PlayBar::initUI()
+void PlayBar::initUserInterface()
 {
     m_volumeView = new VolumeWidget;
     m_volumeView->hide();
@@ -264,13 +337,15 @@ void PlayBar::initUI()
 
         layout->addLayout(ly);
     }
-    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *4);
+    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *3);
+    layout->addStretch();
     {
         m_waveformSlider = new WaveformSlider;
         m_waveformSlider->setObjectName("RKWaveformSlider");
-        layout->addWidget(m_waveformSlider);
+//        m_waveformSlider->setFixedSize(PLAY_BAR_SLIDER_W, PLAY_BAR_SLIDER_H);
+        m_waveformSlider->setFixedHeight(PLAY_BAR_SLIDER_H);
+        layout->addWidget(m_waveformSlider, Qt::AlignVCenter);
     }
-//    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *4);
     {
         m_playedTime = new QLabel;
         m_playedTime->setObjectName("RKPlayedTime");
@@ -294,7 +369,8 @@ void PlayBar::initUI()
 
         layout->addLayout(ly);
     }
-    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *4);
+    layout->addStretch();
+    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *2);
     {
         QHBoxLayout *ly = new QHBoxLayout;
         ly->setContentsMargins(2, 0, 2, 0);
@@ -330,12 +406,20 @@ void PlayBar::initUI()
         m_btnNext->setProperty(S_PROPERTY_TIP_TEXT, tr("RKNextBtn"));
         m_btnNext->installEventFilter(m_filter);
 
+        m_playPausedIcon = new RKIconButton;
+        m_playPausedIcon->setObjectName("RKPlayPausedBtn");
+        m_playPausedIcon->setFixedSize(PLAY_BAR_BIG_BTN_W, PLAY_BAR_BIG_BTN_H);
+        m_playPausedIcon->setProperty(S_PROPERTY_TIP_TEXT, tr("Play"));
+        m_playPausedIcon->installEventFilter(m_filter);
+
         ly->addWidget(m_btnOrderOrRepeat);
         ly->addWidget(m_btnShuffle);
         ly->addWidget(m_btnSound);
         ly->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN/2);
         ly->addWidget(m_btnPre);
         ly->addWidget(m_btnNext);
+        ly->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN/2);
+        ly->addWidget(m_playPausedIcon);
 
         layout->addLayout(ly);
     }
@@ -343,7 +427,7 @@ void PlayBar::initUI()
 
 }
 
-void PlayBar::volumeChanged(int volume)
+void PlayBar::changeVolume(int volume)
 {
     if (volume == 0) {
         m_volumeCtrl->setMuted(true);
@@ -363,6 +447,11 @@ void PlayBar::volumeChanged(int volume)
     }
 }
 
+void PlayBar::resizeEvent(QResizeEvent *event)
+{
+
+}
+
 void PlayBar::playModeChanged(PPCommon::PlayMode mode)
 {
     if (!m_ppCommon) {
@@ -372,15 +461,15 @@ void PlayBar::playModeChanged(PPCommon::PlayMode mode)
     if (PPCommon::PlayMode::PlayModeShuffle == mode) {
         m_btnShuffle->setProperty("PlayMode", modeStr);
         m_btnOrderOrRepeat->setProperty("PlayMode", "");
-        RockRokrApp::instance()->mainWindow()->showTip(m_btnShuffle, QString("%1").arg(modeStr));
+        m_ui->mainWindow()->showTip(m_btnShuffle, modeStr);
     } else if (PPCommon::PlayMode::PlayModeOrder == mode) {
         m_btnShuffle->setProperty("PlayMode", "");
         m_btnOrderOrRepeat->setProperty("PlayMode", "");
-        RockRokrApp::instance()->mainWindow()->showTip(m_btnOrderOrRepeat, QString("%1").arg(modeStr));
+        m_ui->mainWindow()->showTip(m_btnOrderOrRepeat, modeStr);
     } else {
         m_btnShuffle->setProperty("PlayMode", "");
         m_btnOrderOrRepeat->setProperty("PlayMode", modeStr);
-        RockRokrApp::instance()->mainWindow()->showTip(m_btnOrderOrRepeat, QString("%1").arg(modeStr));
+        m_ui->mainWindow()->showTip(m_btnOrderOrRepeat, modeStr);
     }
     this->style()->unpolish(m_btnShuffle);
     this->style()->unpolish(m_btnOrderOrRepeat);
@@ -389,9 +478,9 @@ void PlayBar::playModeChanged(PPCommon::PlayMode mode)
 }
 
 
-
-
-
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 
 #include "PlayBar.moc"

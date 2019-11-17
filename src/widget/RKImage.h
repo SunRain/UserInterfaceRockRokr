@@ -4,13 +4,21 @@
 #include <QUrl>
 #include <QFrame>
 
-namespace PhoenixPlayer {
-    class PPSettings;
-}
+#include "RKImageProxy.h"
+
+class QFile;
+
 namespace QCurl {
     class QCNetworkAsyncReply;
 }
-class QFile;
+
+namespace PhoenixPlayer {
+
+    class PPSettings;
+
+    namespace UserInterface {
+
+        namespace RockRokr {
 
 // copy from Cover in deepin-music with some modifaction
 class RKImage : public QFrame
@@ -45,14 +53,19 @@ protected:
     void downloadFile(const QUrl &uri);
 
 private:
-    PhoenixPlayer::PPSettings   *m_settings;
-    QCurl::QCNetworkAsyncReply  *m_reply;
-    QFile                       *m_file;
+//    PhoenixPlayer::PPSettings   *m_settings = Q_NULLPTR;
+    QCurl::QCNetworkAsyncReply  *m_reply    = Q_NULLPTR;
+    QFile                       *m_file     = Q_NULLPTR;
     int                         m_radius;
     QColor                      m_borderColor;
     QColor                      m_shadowColor;
     QPixmap                     m_Background;
     QMarginsF                   outterMargins;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+
 
 #endif // RKIMAGE_H

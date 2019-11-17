@@ -6,6 +6,10 @@
 #include <QWidget>
 #include <QDialog>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class WidgetWindow;
 class WidgetProxy;
 class RKOverlayWidget : public QWidget
@@ -40,5 +44,9 @@ private:
     QStateMachine       *m_stateMachine;
     WidgetProxy         *m_proxy;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // RKOVERLAYWIDGET_H

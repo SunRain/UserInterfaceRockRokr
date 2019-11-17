@@ -4,10 +4,14 @@
 #include <QStackedWidget>
 #include <QPropertyAnimation>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class RKStackedWidget : public QStackedWidget
 {
     Q_OBJECT
-    Q_PROPERTY(float value READ GetValue WRITE SetValue)
+    Q_PROPERTY(int currentValue READ currentValue WRITE setCurrentValue)
 public:
     enum AnimationType
     {
@@ -15,75 +19,57 @@ public:
         BottomToTop,
         LeftToRight,
         RightToLeft,
-        RollInOut,
-        FadeInOut,
-        BlackInOut,
-        SlideInOut,
-        CoverInOutLeft,
-        CoverInOutRight,
-        FadeExchange,
-        VerticalFlipRotate,
-        VerticalFlipRotateOut,
-        VerticalCubeRotateT2B,
-        VerticalCubeRotateB2T,
-        HorizontalFlipRotate
-    };
 
+        AnimationTypeNone
+    };
     explicit RKStackedWidget(QWidget *parent = Q_NULLPTR);
     virtual ~RKStackedWidget() override;
 
-    void start(int index);
-    void setLength(int length, AnimationType type);
-
-    void setCurve(QEasingCurve::Type curve);
-    void setRevert(bool revert);
+    qreal currentValue() const;
 
     void setDuration(int duration);
-    int getDuration() const;
+    int duration() const;
 
-    void setFadeEnable(bool enable);
-    void setAnimatEnable(bool animat);
+    void setFadeEnable(bool fade);
+    bool fadeEnable() const;
 
     void addWidget(QWidget *widget);
 
-    bool isAnimating();
-
-    float GetValue() const;
-    void SetValue(const float value);
-
     // QWidget interface
 protected:
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
-Q_SIGNALS:
-    void pageChanged(int index);
-
-public Q_SLOTS:
-    void setCurrentIndex(int index);
-
-private:
+protected:
     void animationFinished();
     void renderPreviousWidget(QPainter *painter,  QTransform *transform);
     void renderCurrentWidget(QPainter  *painter, QTransform *transform);
 
+public Q_SLOTS:
+    void setCurrentIndex(int index, AnimationType type);
+    void setCurrentWidget(QWidget *w, AnimationType type);
+
+    void setCurrentValue(int currentValue);
+
 private:
-    int     m_currentIndex;
-    int     m_previousIndex;
-    bool    m_isAnimating;
-    bool    m_fade;
-    bool    m_animat;
-    bool    m_revert;
-    float   m_currentValue;
-    float   m_rangeValue;
-    float   m_startValue;
-    float   m_endValue;
+    void stopAndResetAnimation();
+
+private:
+    Q_DISABLE_COPY(RKStackedWidget)
+
+    int                     m_currentIndex;
+    int                     m_previousIndex;
+    int                     m_currentValue;
+    bool                    m_fade;
     QEasingCurve::Type      m_curve;
     AnimationType           m_type;
     QPropertyAnimation      *m_animation;
 
-    QPixmap     m_privPixmap;
-    QPixmap     m_currentPixmap;
+    QPixmap                 m_privPixmap;
+    QPixmap                 m_currentPixmap;
 };
 
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // RKSTACKWIDGET_H

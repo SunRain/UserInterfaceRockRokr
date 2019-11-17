@@ -1,0 +1,37 @@
+#TrackInfoDialog {
+    qproperty-backgroundColor: white;
+    qproperty-borderColor: rgba(0, 0, 0, 0.2);
+}
+
+/*
+#CloseBtn {
+    qproperty-normalPic: url(:/images/light/images/window/close_normal.svg);
+    qproperty-hoverPic: url(:/images/light/images/window/close_hover.svg);
+    qproperty-pressPic: url(:/images/light/images/window/close_press.svg);
+}
+*/
+
+#Cover {
+  background: transparent;
+  border: none;
+}
+
+#Title {
+  font-size: 12px;
+}
+
+#Split {
+  border-top: 1px solid rgba(0, 0, 0, 10%);
+}
+
+#Key {
+  border: 1px solid transparent;
+  font-size: 11px;
+  color: #606060;
+}
+
+#Value {
+  border: 1px solid transparent;
+  font-size: 11px;
+  color: #000000;
+}

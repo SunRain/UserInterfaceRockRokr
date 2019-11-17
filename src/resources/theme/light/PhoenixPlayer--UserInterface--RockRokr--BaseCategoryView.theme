@@ -1,0 +1,20 @@
+#BaseCategoryView {
+    background-color: transparent;
+    border: none;
+}
+
+#TitleLabel {
+    color: #1F2022;
+    font-size: 28px;
+    background: transparent;
+    border: none;
+    text-align: left center;
+}
+
+#ListTitleLabel {
+    color: rgba(25,32,44,0.5);
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    text-align: left center;
+}

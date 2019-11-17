@@ -31,6 +31,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 LeftBar::LeftBar(QWidget *parent)
     : QFrame(parent),
       m_listWidget(new LBListWidget),
@@ -52,29 +56,29 @@ LeftBar::LeftBar(QWidget *parent)
     m_sepAnimation->setKeyValueAt(0.4, 1.0);
     m_sepAnimation->setKeyValueAt(0.8, 1.0);
 
-    connect(m_listWidget, &QListWidget::itemClicked,
-            this, [&](QListWidgetItem *item) {
-        LBListItem *lbi = qobject_cast<LBListItem*>(m_listWidget->itemWidget(item));
-        if (!lbi) {
-            qWarning()<<Q_FUNC_INFO<<"empty item";
-            return;
-        }
-        qDebug()<<Q_FUNC_INFO<<"item clicked "<<lbi->enumToStr("ItemType", lbi->itemType());
-        emit itemClicked(lbi);
-    });
+//    connect(m_listWidget, &QListWidget::itemClicked,
+//            this, [&](QListWidgetItem *item) {
+//        LBListItem *lbi = qobject_cast<LBListItem*>(m_listWidget->itemWidget(item));
+//        if (!lbi) {
+//            qWarning()<<Q_FUNC_INFO<<"empty item";
+//            return;
+//        }
+//        qDebug()<<Q_FUNC_INFO<<"item clicked "<<lbi->enumToStr("ItemType", lbi->itemType());
+//        emit itemClicked(lbi);
+//    });
 
     connect(m_listWidget, &QListWidget::currentItemChanged,
             this, [&](QListWidgetItem *current, QListWidgetItem *previous) {
-        qDebug()<<Q_FUNC_INFO<<"---- currentItemChanged ---";
+        qDebug()<<"---- currentItemChanged ---";
         LBListItem *lbi = qobject_cast<LBListItem*>(m_listWidget->itemWidget(current));
         if (!lbi) {
-            qWarning()<<Q_FUNC_INFO<<"empty item";
+            qWarning()<<"empty item";
         } else {
             lbi->setHoverState(true);
         }
         lbi = qobject_cast<LBListItem*>(m_listWidget->itemWidget(previous));
         if (!lbi) {
-            qWarning()<<Q_FUNC_INFO<<"empty item";
+            qWarning()<<"empty item";
         } else {
             lbi->setHoverState(false);
         }
@@ -82,7 +86,7 @@ LeftBar::LeftBar(QWidget *parent)
 
     connect(m_listWidget, &QListWidget::entered,
             this, [&](const QModelIndex &index) {
-        qDebug()<<Q_FUNC_INFO<<"entered "<<index;
+        qDebug()<<"entered "<<index;
 
     });
 
@@ -142,7 +146,7 @@ void LeftBar::initUI()
         title->setText(tr("Rock Rokr"));
         layout->addWidget(title);
 
-        qDebug()<<Q_FUNC_INFO<<" title "<<title;
+        qDebug()<<" title "<<title;
     }
     {
         m_hSep = new DSeparatorHorizontal;
@@ -185,22 +189,16 @@ void LeftBar::initUI()
             ItemFragment *fm = createItemFragment(LEFT_BAR_ITEM_H);
 
             LBListItem *lbi = new LBListItem((LBListItem::ItemType)list.at(i), names.at(i));
+            lbi->setExtraData(i);
             lbi->setFixedWidth(LEFT_BAR_ITEM_W);
             lbi->setFixedHeight(LEFT_BAR_ITEM_H);
             connect(lbi, &LBListItem::leftBtnClicked,
                     this, [&](LBListItem *item){
-                qDebug()<<Q_FUNC_INFO<<"item clicked "<<item->enumToStr("ItemType", item->itemType());
+                qDebug()<<"item clicked "<<item->enumToStr("ItemType", item->itemType());
                 emit this->itemClicked(item);
             });
             fm->layout()->addWidget(lbi);
             m_listWidget->setItemWidget(item, fm);
-//            fm->setParent(m_listWidget);
-
-            qDebug()<<Q_FUNC_INFO<<"left bar "<<this
-                   <<" m_listWidget "<<m_listWidget
-                  <<" item "<<item
-                 <<" fm "<<fm<<" parent "<<fm->parent()
-                <<" lbi parent "<<lbi->parent();
         }
     }
     addSpacingListWidgetItem(LEFT_BAR_CONTENT_BASE_MARGIN);
@@ -320,3 +318,9 @@ ItemFragment *LeftBar::createItemFragment(int height)
     fm->layout()->setAlignment(Qt::AlignmentFlag::AlignLeft | Qt::AlignVCenter);
     return  fm;
 }
+
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+

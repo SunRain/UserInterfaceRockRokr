@@ -6,6 +6,10 @@
 
 #include "rockrokr_global.h"
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 MainListView::MainListView(QWidget *parent)
     : QListView(parent),
       m_popMenu(new QMenu(this)),
@@ -67,4 +71,7 @@ void MainListView::setContextMenuEnabled(bool contextMenuEnabled)
 {
     m_contextMenuEnabled = contextMenuEnabled;
 }
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 

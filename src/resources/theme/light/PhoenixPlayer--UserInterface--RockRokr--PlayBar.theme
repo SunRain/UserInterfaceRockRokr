@@ -1,0 +1,220 @@
+#PlayBar {
+    background-color: qlineargradient(x1:0, y1:0, x2:0.8, y2:1,
+                                    stop:0 #FFFFFF,
+                                    stop: 0.6 #F3F3F3,
+                                    stop:1 #FFFFFF);
+    border: none;
+
+}
+#RKCover {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 4px;
+    qproperty-radius: 4;
+}
+
+#RKTitle {
+    font-size: 16px;
+    font-weight: bold;
+    color: #19202C;
+    background: red;
+}
+#RKArtist {
+    font-size: 12px;
+    color: rgba(25, 32, 44, 0.5);
+    background: transparent;
+}
+
+#RKPlayedTime {
+    font-size: 16px;
+    font-weight: bold;
+    color: #19202C;
+    background: red;
+}
+
+#RKTotalTime {
+    font-size: 12px;
+    color: rgba(25, 32, 44, 0.5);
+    background: transparent;
+}
+
+/***** start repeat btn ********/
+
+    /***** repeat disable ********/
+    #RKRepeatBtn {
+      border-image: url(:/light/image/repeat_disable.svg);
+      background: transparent;
+    }
+
+    #RKRepeatBtn:hover {
+      border-image: url(:/light/image/repeat_disable_hover.svg);
+      background: transparent;
+    }
+
+    /***** repeat one ********/
+    #RKRepeatBtn[PlayMode="PlayModeRepeatCurrent"] {
+      border-image: url(:/light/image/repeat_one.svg);
+      background: transparent;
+    }
+
+    #RKRepeatBtn:hover[PlayMode="PlayModeRepeatCurrent"] {
+      border-image: url(:/light/image/repeat_one_hover.svg);
+      background: transparent;
+    }
+
+    /***** repeat all ********/
+    #RKRepeatBtn[PlayMode="PlayModeRepeatAll"] {
+      border-image: url(:/light/image/repeat_all.svg);
+      background: transparent;
+    }
+
+    #RKRepeatBtn:hover[PlayMode="PlayModeRepeatAll"] {
+      border-image: url(:/light/image/repeat_all_hover.svg);
+      background: transparent;
+    }
+
+/***** end repeat btn ********/
+
+#RKShuffleBtn {
+  border-image: url(:/light/image/shuffle_disable.svg);
+  background: transparent;
+}
+
+#RKShuffleBtn:hover {
+  border-image: url(:/light/image/shuffle_disable_hover.svg);
+  background: transparent;
+}
+
+#RKShuffleBtn[PlayMode="PlayModeShuffle"] {
+  border-image: url(:/light/image/shuffle_enable.svg);
+  background: transparent;
+}
+
+#RKShuffleBtn:hover[PlayMode="PlayModeShuffle"] {
+  border-image: url(:/light/image/shuffle_enable_hover.svg);
+  background: transparent;
+}
+
+/******** start sound btn ***********/
+    #RKSoundBtn {
+      border-image: url(:/light/image/volume_disable.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn:hover {
+      border-image: url(:/light/image/volume_disable_hoversvg);
+      background: transparent;
+    }
+
+    #RKSoundBtn[iconName="iconMuted"] {
+      border-image: url(:/light/image/volume_disable.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn:hover[iconName="iconMuted"] {
+      border-image: url(:/light/image/volume_disable_hover.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn[iconName="icon1_3"] {
+      border-image: url(:/light/image/volume-03.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn:hover[iconName="icon1_3"] {
+      border-image: url(:/light/image/volume-03_hover.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn[iconName="icon1_2"] {
+      border-image: url(:/light/image/volume-05.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn:hover[iconName="icon1_2"] {
+      border-image: url(:/light/image/volume-05_hover.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn[iconName="icon2_3"] {
+      border-image: url(:/light/image/volume-06.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn:hover[iconName="icon2_3"] {
+      border-image: url(:/light/image/volume-06_hover.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn[iconName="icon3"] {
+      border-image: url(:/light/image/volume-10.svg);
+      background: transparent;
+    }
+
+    #RKSoundBtn:hover[iconName="icon3"] {
+      border-image: url(:/light/image/volume-10_hover.svg);
+      background: transparent;
+    }
+
+/****** end sound btn ****************/
+
+#RKPreBtn {
+  border-image: url(:/light/image/btn_pre.svg);
+  background: transparent;
+}
+
+#RKPreBtn:hover {
+  border-image: url(:/light/image/btn_pre_hover.svg);
+  background: transparent;
+}
+
+#RKNextBtn {
+  border-image: url(:/light/image/btn_next.svg);
+  background: transparent;
+}
+
+#RKNextBtn:hover {
+  border-image: url(:/light/image/btn_next_hover.svg);
+  background: transparent;
+}
+
+/*************************************/
+#RKPlayPausedBtn {
+    border-image: url(:/light/image/play_circle_outline.svg);
+    background: transparent;
+}
+#RKPlayPausedBtn:hover {
+    border-image: url(:/light/image/play_circle_outline_hover.svg);
+    background: transparent;
+}
+
+#RKPlayPausedBtn[PlayBackendState="play"] {
+    border-image: url(:/light/image/pause_circle_outline.svg);
+    background: transparent;
+}
+#RKPlayPausedBtn:hover[PlayBackendState="play"] {
+    border-image: url(:/light/image/pause_circle_outline_hover.svg);
+    background: transparent;
+}
+
+#RKPlayPausedBtn[PlayBackendState="pause"] {
+    border-image: url(:/light/image/play_circle_outline.svg);
+    background: transparent;
+}
+#RKPlayPausedBtn:hover[PlayBackendState="pause"] {
+    border-image: url(:/light/image/play_circle_outline_hover.svg);
+    background: transparent;
+}
+
+#RKPlayPausedBtn[PlayBackendState="stop"] {
+    border-image: url(:/light/image/play_circle_outline.svg);
+    background: transparent;
+}
+#RKPlayPausedBtn:hover[PlayBackendState="stop"] {
+    border-image: url(:/light/image/play_circle_outline_hover.svg);
+    background: transparent;
+}
+
+
+

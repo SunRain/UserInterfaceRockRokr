@@ -3,8 +3,13 @@
 
 #include <QFrame>
 
-class RKSlider;
 class QTimer;
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+class RKSlider;
+
 class VolumeWidget : public QFrame
 {
     Q_OBJECT
@@ -49,6 +54,8 @@ private:
     QColor                  m_borderColor;
 };
 
-
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // VOLUMEWIDGET_H

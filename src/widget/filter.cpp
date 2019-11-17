@@ -33,6 +33,10 @@
 
 #include <DUtil>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 HoverFilter::HoverFilter(QObject *parent) : QObject(parent)
 {
 
@@ -253,3 +257,8 @@ bool HoverShadowFilter::eventFilter(QObject *obj, QEvent *event)
         return QObject::eventFilter(obj, event);
     }
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+

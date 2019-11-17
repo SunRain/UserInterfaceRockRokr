@@ -4,6 +4,11 @@
 #include <QListView>
 
 class QMenu;
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class MainListView : public QListView
 {
     Q_OBJECT
@@ -33,5 +38,8 @@ private:
     bool        m_contextMenuEnabled;
     QModelIndex m_curIdx;
 };
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // MAINLISTVIEW_H

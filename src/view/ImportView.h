@@ -5,11 +5,16 @@
 
 class QLabel;
 class QPushButton;
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class ImportView : public QFrame
 {
     Q_OBJECT
 public:
-    explicit ImportView(QWidget *parent = nullptr);
+    explicit ImportView(QWidget *parent = Q_NULLPTR);
     virtual ~ImportView() override;
 
     // QWidget interface
@@ -29,5 +34,9 @@ private:
     QLabel          *m_label;
     QPushButton     *m_btn;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // IMPORTVIEW_H

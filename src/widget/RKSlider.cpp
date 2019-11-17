@@ -10,6 +10,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 RKBaseSlider::RKBaseSlider(QWidget *parent)
     : RKBaseSlider(Qt::Horizontal, parent)
 {
@@ -110,7 +114,7 @@ RKSlider::RKSlider(Qt::Orientation orientation, QWidget *parent)
     m_textLabel->setGeometry(0, 0, 40, 20);
     m_textLabel->setAlignment(Qt::AlignCenter);
     m_textLabel->setFocusPolicy(Qt::NoFocus);
-    m_textLabel->setStyleSheet("QLabel{ color:rgba(0, 0, 0, 0.5); background-color:#FCFCFC; border:1px solid #F3F3F3;}");
+//    m_textLabel->setStyleSheet("QLabel{ color:rgba(0, 0, 0, 0.5); background-color:#FCFCFC; border:1px solid #F3F3F3;}");
 }
 
 RKSlider::~RKSlider()
@@ -198,3 +202,6 @@ QPoint RKSlider::limitLableGeometry(int x, int y, int z)
 }
 
 
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer

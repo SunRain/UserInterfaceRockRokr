@@ -13,6 +13,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 LBListWidget::LBListWidget(QWidget *parent)
     : RKListWidget(parent),
 //      m_itemsHeight(0),
@@ -62,7 +66,7 @@ LBListWidget::LBListWidget(QWidget *parent)
     m_timer->setInterval(/*m_animation->duration()*/500);
     connect(m_timer, &QTimer::timeout,
             this, [&](){
-        qDebug()<<Q_FUNC_INFO<<" timer to hide scrollbar ";
+        qDebug()<<" timer to hide scrollbar ";
         if (!m_mouseIn) {
             this->animateHideScrollbar(true);
         }
@@ -148,7 +152,7 @@ void LBListWidget::updateScrollBar()
     m_scrollBar->setSingleStep(1);
     m_scrollBar->setPageStep(size.height() / averageItemH);
 
-            qDebug()<<Q_FUNC_INFO<<" item h "<<itemH<<" size h "<<size.height();
+//            qDebug()<<Q_FUNC_INFO<<" item h "<<itemH<<" size h "<<size.height();
 
     if (itemH > size.height()) {
         m_scrollBarState = true;
@@ -172,7 +176,7 @@ void LBListWidget::showContextMenu(const QPoint &pos)
 
 void LBListWidget::animateShowScrollbar(bool animate)
 {
-    qDebug()<<Q_FUNC_INFO<<"----------";
+    qDebug()<<"----------";
 
 //    if (m_scrollBar->isVisible()) {
 //        return;
@@ -210,7 +214,7 @@ void LBListWidget::animateHideScrollbar(bool animate)
 //    if (!m_scrollBar->isVisible()) {
 //        return;
 //    }
-    qDebug()<<Q_FUNC_INFO<<"----------";
+    qDebug()<<"----------";
 
     if (!animate) {
 //        m_scrollBar->setEnabled(false);
@@ -237,5 +241,7 @@ void LBListWidget::animateHideScrollbar(bool animate)
 }
 
 
-
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 

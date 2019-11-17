@@ -8,6 +8,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class RKBoxWidget : public DBoxWidget
 {
     Q_OBJECT
@@ -38,5 +42,10 @@ class RKVBoxWidget : public RKBoxWidget
 public:
     explicit RKVBoxWidget(QWidget *parent = Q_NULLPTR) : RKBoxWidget(QBoxLayout::TopToBottom, parent){}
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+
 
 #endif // RKBOXWIDGET_H

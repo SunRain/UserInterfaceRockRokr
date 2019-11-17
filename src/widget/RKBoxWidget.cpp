@@ -3,6 +3,10 @@
 #include <QDebug>
 #include <QEvent>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 RKBoxWidget::RKBoxWidget(QBoxLayout::Direction direction, QWidget *parent)
     : DBoxWidget(direction, parent)
 {
@@ -33,3 +37,7 @@ void RKBoxWidget::updateSize(const QSize &size)
 //     qDebug()<<Q_FUNC_INFO<<" *****************-  "<<size;
      DBoxWidget::updateSize(size);
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer

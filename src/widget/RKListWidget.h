@@ -3,6 +3,10 @@
 
 #include <QListWidget>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class RKListWidget : public QListWidget
 {
     Q_OBJECT
@@ -31,5 +35,9 @@ protected:
 private:
     int m_contentHeight;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // RKLISTWIDGET_H

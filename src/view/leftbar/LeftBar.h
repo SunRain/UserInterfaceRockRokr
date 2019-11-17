@@ -8,13 +8,17 @@ DWIDGET_BEGIN_NAMESPACE
 class DSeparatorHorizontal;
 DWIDGET_END_NAMESPACE
 
-class LBListItem;
+class QListWidgetItem;
 class QListWidget;
 class QGraphicsOpacityEffect;
 class QPropertyAnimation;
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
+class LBListItem;
 class LBListWidget;
-class QListWidgetItem;
 class ItemFragment;
 class LBPlaylistView;
 class LeftBar : public QFrame
@@ -48,5 +52,9 @@ private:
     QPropertyAnimation                          *m_sepAnimation;
     bool                                        m_isSepHidden;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // LEFTBAR_H

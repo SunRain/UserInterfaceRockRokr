@@ -6,6 +6,11 @@
 
 class QLabel;
 class QLineEdit;
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+    
 class LBListItem : public QFrame
 {
     Q_OBJECT
@@ -14,8 +19,8 @@ public:
     enum ItemType {
         TypeArtist = 0x0,
         TypeAlbums,
-        TypeSongs,
         TypeGenres,
+        TypeSongs,
         TypeFavorites,
         TypePlaylist
     };
@@ -57,5 +62,9 @@ private:
     QString         m_text;
     QVariant        m_extraData;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // LBLISTITEM_H

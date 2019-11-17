@@ -25,7 +25,9 @@
 #include "widget/RKListWidget.h"
 #include "widget/RKBoxWidget.h"
 
-using namespace PhoenixPlayer;
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
 
 LBPlaylistView::LBPlaylistView(QWidget *parent)
     : RKExpand(parent),
@@ -34,7 +36,7 @@ LBPlaylistView::LBPlaylistView(QWidget *parent)
       m_ImgBtn(new DImageButton),
       m_toast(Q_NULLPTR),
       m_listWidget(new RKVBoxWidget),
-      m_plsMetaMgr(PlayListMetaMgr::instance())
+      m_plsMetaMgr(new PlayListMetaMgr(this))
 {
     this->setObjectName("LBPlaylistView");
     DThemeManager::instance()->registerWidget(this);
@@ -114,7 +116,7 @@ LBPlaylistView::LBPlaylistView(QWidget *parent)
     });
     connect(m_plsMetaMgr, &PlayListMetaMgr::metaDeleted,
             this, [&](const PlayListMeta &meta) {
-        qDebug()<<Q_FUNC_INFO<<"   PlayListMetaMgr::deleteMeta  "<<meta.getFileName();
+        qDebug()<<"PlayListMetaMgr::deleteMeta  "<<meta.getFileName();
 
         for (int i = 0; i < m_listWidget->layout()->count(); ++i) {
             QLayoutItem *ly = m_listWidget->layout()->itemAt(i);
@@ -154,7 +156,7 @@ LBPlaylistView::LBPlaylistView(QWidget *parent)
 //                qDebug()<<Q_FUNC_INFO<<" find item "<<old.getFileName();
                 item->setExtraData(newMeta.toMap());
             } else {
-                qWarning()<<Q_FUNC_INFO<<" can't find item for "<<old.getFileName()
+                qWarning()<<" can't find item for "<<old.getFileName()
                          <<" with new name "<<newMeta.getFileName();
             }
         } else {
@@ -224,10 +226,10 @@ void LBPlaylistView::showPlaylistRightClickMenu(LBListItem *item, const QPoint &
     QMenu menu;
     menu.setStyle(QStyleFactory::create("dlight"));
     menu.addAction(tr("play"), [&](){
-        qDebug()<<Q_FUNC_INFO<<" play clicked";
+        qDebug()<<" play clicked";
     });
     menu.addAction(tr("rename"), [&](){
-        qDebug()<<Q_FUNC_INFO<<" rename clicked";
+        qDebug()<<" rename clicked";
         item->setEditMode(true);
     });
     menu.addAction(tr("delete"), [&, item](){
@@ -261,12 +263,12 @@ void LBPlaylistView::connectLBListItemSignals(LBListItem *item)
     }
     connect(item, &LBListItem::leftBtnClicked,
             this, [&, item](LBListItem *i){
-        qDebug()<<Q_FUNC_INFO<<" LBListItem::clicked item clicked";
+        qDebug()<<"LBListItem::clicked item clicked";
         //TODO left click to show playlist view
     });
     connect(item, &LBListItem::rename,
             this, [&, item](const QString &text){
-        qDebug()<<Q_FUNC_INFO<<"  LBListItem::renam  rename to "<<text;
+        qDebug()<<"LBListItem::renam  rename to "<<text;
 
         PlayListMeta meta = PlayListMeta::fromMap(item->extraData().toMap());
         if (meta.getFileName() != text) {
@@ -297,5 +299,8 @@ LBListItem *LBPlaylistView::findLBListItem(const QVariant &value)
     return Q_NULLPTR;
 }
 
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 //#include "LBPlaylistView.moc"

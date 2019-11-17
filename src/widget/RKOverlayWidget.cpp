@@ -10,6 +10,10 @@
 #include <QPropertyAnimation>
 #include <QStackedLayout>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class WidgetWindow : public QWidget
 {
     Q_OBJECT
@@ -105,7 +109,7 @@ public:
 public:
     bool event(QEvent *event) override
     {
-        qDebug()<<Q_FUNC_INFO<<event->type();
+        qDebug()<<event->type();
         const QEvent::Type type = event->type();
 
         if (QEvent::Move == type || QEvent::Resize == type) {
@@ -126,7 +130,7 @@ protected:
     {
         Q_UNUSED(event)
         QPainter painter(this);
-        qDebug()<<Q_FUNC_INFO<<"  m_mode "<<m_mode;
+        qDebug()<<"  m_mode "<<m_mode;
         if (Transparent == m_mode) {
             return;
         } else if (Opaque != m_mode) {
@@ -270,7 +274,7 @@ RKOverlayWidget::RKOverlayWidget(QWidget *parent)
 
 RKOverlayWidget::~RKOverlayWidget()
 {
-     qDebug()<<Q_FUNC_INFO<<"----------------";
+     qDebug()<<"----------------";
 }
 
 QLayout *RKOverlayWidget::windowLayout() const
@@ -297,7 +301,7 @@ bool RKOverlayWidget::event(QEvent *event)
     if (!parent()) {
         return QWidget::event(event);
     }
-    qDebug()<<Q_FUNC_INFO<<event->type();
+    qDebug()<<event->type();
 
     switch (event->type()) {
         case QEvent::ParentChange: {
@@ -332,7 +336,7 @@ void RKOverlayWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
 
-    qDebug()<<Q_FUNC_INFO<<event;
+    qDebug()<<event;
 
     QPainter painter(this);
     QBrush brush;
@@ -347,7 +351,7 @@ void RKOverlayWidget::paintEvent(QPaintEvent *event)
 
 void RKOverlayWidget::showOverlay()
 {
-    qDebug()<<Q_FUNC_INFO<<"----------------";
+    qDebug()<<"----------------";
     this->m_stateMachine->postEvent(new OverlayStateTransitionEvent(OverlayShowTransition));
     this->raise();
 }
@@ -359,5 +363,9 @@ void RKOverlayWidget::hideOverlay()
     this->m_proxyStack->setCurrentIndex(1);
 }
 
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #include "RKOverlayWidget.moc"

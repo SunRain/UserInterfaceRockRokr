@@ -8,6 +8,11 @@
 class QScrollBar;
 class QTimer;
 class QGraphicsOpacityEffect;
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class LBListWidget : public RKListWidget
 {
     Q_OBJECT
@@ -52,5 +57,9 @@ private:
     bool                    m_scrollBarState;
     bool                    m_mouseIn;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // LBLISTWIDGET_H

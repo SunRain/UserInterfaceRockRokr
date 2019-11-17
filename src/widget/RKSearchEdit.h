@@ -14,6 +14,10 @@ DWIDGET_END_NAMESPACE
 class QLabel;
 class QLineEdit;
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 // copy from DSearchEdit with tiny modifacation
 class RKSearchEdit : public QFrame
 {
@@ -68,5 +72,11 @@ private:
     QEasingCurve        m_showCurve = QEasingCurve::OutCubic;
     QEasingCurve        m_hideCurve = QEasingCurve::InCubic;
 };
+
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+
 
 #endif // RKSEARCHEDIT_H

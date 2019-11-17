@@ -1,0 +1,45 @@
+#RKListView {
+    border: none;
+    background-color: transparent;
+}
+
+#RKListView::item {
+  color: transparent;
+}
+
+/*
+#RKListView::item:hover {
+    border: none;
+    padding: 0px;
+    background-color: gray;
+}
+
+#RKListView::item:!hover {
+    border: none;
+    padding: 0px;
+    background-color: yellow;
+}
+*/
+
+#RKScrollBar:horizontal {
+    border: none;
+    background: transparent;
+    margin: 0 0 0 0;
+}
+
+#RKScrollBar::handle:horizontal {
+    background: #336CFB;
+    min-width: 80px;
+}
+
+
+#RKScrollBar:vertical {
+    border: none;
+    background: transparent;
+    margin: 0 0 0 0;
+}
+
+#RKScrollBar::handle:vertical {
+    background: #336CFB;
+    min-width: 4px;
+}

@@ -2,6 +2,11 @@
 
 #include <QDebug>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
+
 const static char *KEY_ARTISTS      = "KEY_ARTISTS";
 const static char *KEY_ALBUMS       = "KEY_ALBUMS";
 const static char *KEY_SONGS        = "KEY_SONGS";
@@ -12,7 +17,7 @@ ListModel::ListModel(QAbstractListModel *parent)
     : QAbstractListModel(parent),
       m_curIdx(QModelIndex())
 {
-    qDebug()<<Q_FUNC_INFO<<"-----------------------";
+
 }
 
 ListModel::~ListModel()
@@ -88,5 +93,7 @@ void ListModel::setCurIdx(QModelIndex idx)
     emit dataChanged(m_curIdx, m_curIdx);
 }
 
-
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 

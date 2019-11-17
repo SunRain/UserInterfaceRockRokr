@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QBoxLayout>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class RKBoxWidget;
 class ItemFragment : public QWidget
 {
@@ -15,12 +19,17 @@ public:
     };
 
     explicit ItemFragment(LayoutOrientation o = Horizontal, QWidget *parent = Q_NULLPTR);
-    ~ItemFragment();
+    virtual ~ItemFragment();
 
     QBoxLayout *layout() const;
 
 private:
     QBoxLayout          *m_layout;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+
 
 #endif // ITEMFRAGMENT_H

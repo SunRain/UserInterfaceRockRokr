@@ -24,11 +24,15 @@
 #include <QObject>
 #include <QScopedPointer>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 class HoverFilter : public QObject
 {
     Q_OBJECT
 public:
-    explicit HoverFilter(QObject *parent = 0);
+    explicit HoverFilter(QObject *parent = Q_NULLPTR);
     bool eventFilter(QObject *obj, QEvent *event);
 };
 
@@ -36,7 +40,7 @@ class HoverShadowFilter : public QObject
 {
     Q_OBJECT
 public:
-    explicit HoverShadowFilter(QObject *parent = 0);
+    explicit HoverShadowFilter(QObject *parent = Q_NULLPTR);
     bool eventFilter(QObject *obj, QEvent *event);
 };
 
@@ -46,7 +50,7 @@ class HintFilter: public QObject
 {
     Q_OBJECT
 public:
-    HintFilter(QObject *parent = 0);
+    HintFilter(QObject *parent = Q_NULLPTR);
     ~HintFilter();
 
     void hideAll();
@@ -56,3 +60,8 @@ private:
     QScopedPointer<HintFilterPrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), HintFilter)
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+

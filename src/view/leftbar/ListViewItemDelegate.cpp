@@ -6,12 +6,17 @@
 #include <QPixmap>
 
 #include "rockrokr_global.h"
+#include "RKUtility.h"
 #include "view/leftbar/ListModel.h"
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
 
 ListViewItemDelegate::ListViewItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-    qDebug()<<Q_FUNC_INFO<<"-----------------------";
+
 }
 
 ListViewItemDelegate::~ListViewItemDelegate()
@@ -23,7 +28,7 @@ void ListViewItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 {
 //    qDebug()<<Q_FUNC_INFO<<"-----------------------";
     if (!index.isValid()) {
-        qDebug()<<Q_FUNC_INFO<<"Invalid index";
+        qDebug()<<"Invalid index";
         return;
     }
     const QRect rect = option.rect;
@@ -65,7 +70,7 @@ void ListViewItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         //FIXME LEFT_BAR_ITEM_CONTENT_MARGIN *4??
         textSize.setWidth(rect.width() - iconSize.width() - LEFT_BAR_ITEM_CONTENT_MARGIN*3);
 //        textTopLeft.setY(rect.y() + iconMargin);
-        const QPixmap ip = svgToPixmap(icon, iconSize);
+        const QPixmap ip = RKUtility::svgToPixmap(icon, iconSize);
         if (!icon.isNull()) {
             painter->drawPixmap(iconRect, ip);
         } else {
@@ -96,3 +101,7 @@ QSize ListViewItemDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
 {
     return QSize(LEFT_BAR_ITEM_W, LEFT_BAR_ITEM_H);
 }
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+

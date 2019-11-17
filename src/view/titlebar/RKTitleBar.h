@@ -15,6 +15,9 @@ class DWindowCloseButton;
 class DWindowMinButton;
 DWIDGET_END_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
 
 class RKSearchEdit;
 class RKTitleBar : public QFrame//DTK_WIDGET_NAMESPACE::DTitlebar
@@ -24,8 +27,6 @@ public:
     explicit RKTitleBar(QWidget *parent = Q_NULLPTR);
     virtual ~RKTitleBar() override;
 
-
-
 private:
     DTK_WIDGET_NAMESPACE::DWindowOptionButton   *m_optionBtn;
     DTK_WIDGET_NAMESPACE::DWindowCloseButton    *m_closeBtn;
@@ -33,5 +34,9 @@ private:
     RKSearchEdit                                *m_searchEdit;
 
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // RKTITLEBAR_H

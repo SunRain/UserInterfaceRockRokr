@@ -6,6 +6,11 @@
 #include <QResizeEvent>
 #include <dbaseexpand.h>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
+
 class RKContentLoader : public ContentLoader
 {
     Q_OBJECT
@@ -294,6 +299,9 @@ void RKExpand::resizeEvent(QResizeEvent *e)
 //    emit expandSizeChanged(m_expectedExpendSize, e->size());
 }
 
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #include "RKExpand.moc"
 

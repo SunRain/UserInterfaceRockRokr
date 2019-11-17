@@ -12,6 +12,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
+
 const static char *linkTemplate = "<a href='%1' style='text-decoration: none; color: #336CFB; '>%2</a>";
 
 ImportView::ImportView(QWidget *parent)
@@ -21,7 +26,6 @@ ImportView::ImportView(QWidget *parent)
 {
     this->setObjectName("ImportView");
     DThemeManager::instance()->registerWidget(this);
-
     this->setAcceptDrops(true);
 
     QVBoxLayout *layout= new QVBoxLayout(this);
@@ -91,13 +95,13 @@ void ImportView::dragLeaveEvent(QDragLeaveEvent *event)
 
 void ImportView::dropEvent(QDropEvent *event)
 {
-    qDebug()<<Q_FUNC_INFO<<event->mimeData();
+    qDebug()<<event->mimeData();
     if (!event->mimeData()->hasFormat("text/uri-list")) {
         return;
     }
 
     auto urls = event->mimeData()->urls();
-    qDebug()<<Q_FUNC_INFO<<" urls "<<urls;
+    qDebug()<<" urls "<<urls;
     QStringList localpaths;
     for (auto &url : urls) {
         localpaths << url.toLocalFile();
@@ -106,3 +110,7 @@ void ImportView::dropEvent(QDropEvent *event)
         emit importFiles(localpaths);
     }
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer

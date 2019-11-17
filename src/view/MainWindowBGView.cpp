@@ -4,6 +4,11 @@
 
 #include "rockrokr_global.h"
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
+
 MainWindowBGView::MainWindowBGView(QWidget *parent)
     : QWidget(parent)
 {
@@ -41,3 +46,7 @@ MainWindowBGView::~MainWindowBGView()
 {
 
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer

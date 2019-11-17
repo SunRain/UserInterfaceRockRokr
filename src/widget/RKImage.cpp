@@ -16,11 +16,15 @@
 #include "RKUtility.h"
 
 DWIDGET_USE_NAMESPACE;
-using namespace PhoenixPlayer;
-using namespace QCurl;
+
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 static auto borderPenWidth = 1.0;
 
-static QCNetworkAccessManager *s_mgr = new QCNetworkAccessManager;
+static QCurl::QCNetworkAccessManager *s_mgr = Q_NULLPTR;// = new QCurl::QCNetworkAccessManager();
+
 RKImage::RKImage(QWidget *parent)
     : QFrame(parent),
       m_reply(Q_NULLPTR),
@@ -34,11 +38,12 @@ RKImage::RKImage(QWidget *parent)
     DThemeManager::instance()->registerWidget(this);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 
-    m_settings = phoenixPlayerLib->settings();
+//    m_settings = phoenixPlayerLib->settings();
 }
 
 RKImage::~RKImage()
 {
+    qDebug()<<"-----------------------";
     if (m_reply) {
         if (m_reply->isRunning()) {
             m_reply->abort();
@@ -114,7 +119,7 @@ void RKImage::paintEvent(QPaintEvent *)
 void RKImage::downloadFile(const QUrl &uri)
 {
     if (uri.isEmpty() || !uri.isValid()) {
-        qDebug()<<Q_FUNC_INFO<<"Empty or invalid uri "<<uri;
+        qDebug()<<"Empty or invalid uri "<<uri;
         return;
     }
     QString path = RKUtility::coverCacheDir();
@@ -139,18 +144,20 @@ void RKImage::downloadFile(const QUrl &uri)
     }
     m_file = new QFile(path);
     if (!m_file->open(QIODevice::WriteOnly)) {
-        qDebug()<<Q_FUNC_INFO<<"open to write to path ["<<path<<"] error";
+        qDebug()<<"open to write to path ["<<path<<"] error";
         m_file->deleteLater();
         m_file = Q_NULLPTR;
     }
-    QCNetworkRequest req(uri);
+    QCurl::QCNetworkRequest req(uri);
+    if (Q_UNLIKELY(!s_mgr)) {
+        s_mgr = new QCurl::QCNetworkAccessManager();
+    }
     s_mgr->setCookieFilePath(RKUtility::httpCookieFile());
     m_reply = s_mgr->get(req);
-    connect(m_reply, &QCNetworkAsyncReply::finished,
-            this, [&, uri, path](){
-        const NetworkError error = m_reply->error();
-        if (error != NetworkNoError) {
-            qDebug()<<Q_FUNC_INFO<<"download cover image from uri ["<<uri<<"] error: "<<m_reply->errorString();
+    connect(m_reply, &QCurl::QCNetworkAsyncReply::finished, this, [&, uri, path]() {
+        const QCurl::NetworkError error = m_reply->error();
+        if (error != QCurl::NetworkNoError) {
+            qDebug()<<"download cover image from uri ["<<uri<<"] error: "<<m_reply->errorString();
             m_file->close();
             m_file->deleteLater();
             m_file = Q_NULLPTR;
@@ -174,6 +181,7 @@ void RKImage::downloadFile(const QUrl &uri)
             this->setUri(path);
         }
     });
+    m_reply->perform();
 }
 
 void RKImage::setPixmap(const QPixmap &pixmap)
@@ -215,7 +223,7 @@ void RKImage::setPixmap(const QPixmap &pixmap)
 void RKImage::setUri(const QUrl &uri)
 {
     if (uri.isEmpty() || !uri.isValid()) {
-        qWarning()<<Q_FUNC_INFO<<" uri is invalid";
+        qWarning()<<" uri is invalid";
         return;
     }
     QString path;
@@ -226,7 +234,7 @@ void RKImage::setUri(const QUrl &uri)
         path = uri.toString();
     }
     if (path.isEmpty()) {
-        qWarning()<<Q_FUNC_INFO<<"No suitable path for uri ["<<uri<<"]";
+        qWarning()<<"No suitable path for uri ["<<uri<<"]";
         return;
     }
     if (uri.scheme().startsWith("http") || uri.scheme().startsWith("ftp")) { //url
@@ -239,13 +247,13 @@ void RKImage::setUri(const QUrl &uri)
      }
      QImage img(path);
      if (img.isNull()) {
-         qWarning()<<Q_FUNC_INFO<<"Can't load img for uri "<<uri
+         qWarning()<<"Can't load img for uri "<<uri
                   <<" with path "<<path;
          return;
      }
      QPixmap pixmap = QPixmap::fromImage(img);
      if (pixmap.isNull()) {
-         qWarning()<<Q_FUNC_INFO<<"Can't load pixmap from image uri "<<uri;
+         qWarning()<<"Can't load pixmap from image uri "<<uri;
          return;
      }
      this->setPixmap(pixmap);
@@ -268,3 +276,8 @@ void RKImage::setShadowColor(QColor shadowColor)
 
     m_shadowColor = shadowColor;
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
+

@@ -3,6 +3,10 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
+
 ItemFragment::ItemFragment(ItemFragment::LayoutOrientation o, QWidget *parent)
     : QWidget(parent)
 {
@@ -23,3 +27,7 @@ QBoxLayout *ItemFragment::layout() const
 {
     return m_layout;
 }
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer

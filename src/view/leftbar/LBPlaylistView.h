@@ -12,6 +12,9 @@
 #include "widget/RKExpand.h"
 
 
+
+class QLabel;
+
 DWIDGET_BEGIN_NAMESPACE
 class DArrowButton;
 class DBoxWidget;
@@ -24,10 +27,13 @@ DWIDGET_USE_NAMESPACE
 
 
 namespace PhoenixPlayer {
-    class PlayListMetaMgr;
-}
 
-class QLabel;
+    class PlayListMetaMgr;
+
+    namespace UserInterface {
+
+        namespace RockRokr {
+
 class RKVBoxWidget;
 class LBListItem;
 class LBPlaylistView : public RKExpand
@@ -62,5 +68,9 @@ private:
     RKVBoxWidget                        *m_listWidget;
     PhoenixPlayer::PlayListMetaMgr      *m_plsMetaMgr;
 };
+
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
 
 #endif // LBPLAYLISTVIEW_H

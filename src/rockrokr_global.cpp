@@ -9,23 +9,11 @@
 #include <QApplication>
 
 
-QPixmap svgToPixmap(const QString &svg, const QSize &targetSize)
-{
-    if (!QFile::exists(svg) || !targetSize.isValid()) {
-        return QPixmap();
-    }
-    QImageReader reader;
-    reader.setFileName(svg);
+namespace PhoenixPlayer {
+namespace UserInterface {
+namespace RockRokr {
 
-    QPixmap pixmap;
-    if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
-        reader.setScaledSize(targetSize * ratio);
-        pixmap = QPixmap::fromImage(reader.read());
-        pixmap.setDevicePixelRatio(ratio);
-    } else {
-        pixmap.load(svg);
-    }
 
-    return pixmap;
-}
+} //namespace RockRokr
+} //namespace UserInterface
+} //namespace PhoenixPlayer
