@@ -129,12 +129,12 @@ void CategoryAllViewDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     textOpt.setAlignment(Qt::AlignmentFlag::AlignVCenter | Qt::AlignmentFlag::AlignLeft);
     textOpt.setWrapMode(QTextOption::WrapMode::WordWrap);
 
-    const int textWidth = /*rect.width()*/innerSize.width() - dpi_to_px(4);
+    const int textWidth = /*rect.width()*/innerSize.width() - _to_px(4);
     const int innerMargin = /*rect.height()*/innerSize.height()
                             - coverSz.height()
                             - MAIN_VIEW_R_VIEW_FONT_SIZE_PRIMARY
                             - MAIN_VIEW_R_VIEW_FONT_SIZE_SECONDARY
-                            - dpi_to_px(4);
+                            - _to_px(4);
     int textMargin = 0;
     if (innerMargin > 2) {
         textMargin = 2;
@@ -147,7 +147,7 @@ void CategoryAllViewDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         if (str.isEmpty()) {
             str = tr("UnKnow");
         }
-        const int y = rect.y() + margin + coverSz.height() + innerMargin - textMargin -dpi_to_px(4);
+        const int y = rect.y() + margin + coverSz.height() + innerMargin - textMargin -_to_px(4);
         textTopLeft.setY(y);
         const QSizeF sf(textWidth, MAIN_VIEW_R_VIEW_FONT_SIZE_PRIMARY);
         QRectF tf(textTopLeft, sf);

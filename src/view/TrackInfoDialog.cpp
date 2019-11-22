@@ -25,22 +25,22 @@ TrackInfoDialog::TrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj, QWid
     this->setObjectName("TrackInfoDialog");
     DThemeManager::instance()->registerWidget(this);
 
-    this->setFixedWidth(dpi_to_px(320));
+    this->setFixedWidth(_to_px(320));
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
-    layout->setMargin(dpi_to_px(5));
+    layout->setMargin(_to_px(5));
 
     {
         DImageButton *closeBtn = new DImageButton;
         closeBtn->setObjectName("CloseBtn");
-        closeBtn->setFixedSize(dpi_to_px(27), dpi_to_px(23));
+        closeBtn->setFixedSize(_to_px(27), _to_px(23));
         closeBtn->setNormalPic(":/images/light/images/window/close_normal.svg");
         closeBtn->setHoverPic(":/images/light/images/window/close_hover.svg");
         closeBtn->setPressPic(":/images/light/images/window/close_press.svg");
 
         layout->addWidget(closeBtn, 0, Qt::AlignTop | Qt::AlignRight);
-        layout->addSpacing(dpi_to_px(43));
+        layout->addSpacing(_to_px(43));
 
         connect(closeBtn, &DImageButton::clicked,
                 this, &DAbstractDialog::close);
@@ -49,10 +49,10 @@ TrackInfoDialog::TrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj, QWid
         auto cover = new QLabel;
         cover->setContentsMargins(0, 0, 0, 0);
         cover->setObjectName("Cover");
-        cover->setFixedSize(dpi_to_px(140), dpi_to_px(140));
+        cover->setFixedSize(_to_px(140), _to_px(140));
         cover->setAlignment(Qt::AlignCenter);
         layout->addWidget(cover, 0, Qt::AlignCenter);
-        layout->addSpacing(dpi_to_px(13));
+        layout->addSpacing(_to_px(13));
 
         auto cimg = QImage(QString(":/light/image/default_cover.jpg"));
         QUrl uri = obj.queryImgUri();
@@ -69,12 +69,12 @@ TrackInfoDialog::TrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj, QWid
             }
         }
         int ms = qMax(cimg.width(), cimg.height());
-        if (ms > dpi_to_px(140)) {
+        if (ms > _to_px(140)) {
             qreal ratio = 1.0;
             if (cimg.width() > cimg.height()) {
-                ratio = cimg.width()/dpi_to_px(140);
+                ratio = cimg.width()/_to_px(140);
             } else {
-                ratio = cimg.height()/dpi_to_px(140);
+                ratio = cimg.height()/_to_px(140);
             }
             qreal w = cimg.width()/ratio;
             qreal h = cimg.height()/ratio;
@@ -86,12 +86,12 @@ TrackInfoDialog::TrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj, QWid
     {
         auto title = new QLabel;
         title->setObjectName("Title");
-        title->setFixedWidth(dpi_to_px(300));
+        title->setFixedWidth(_to_px(300));
         title->setWordWrap(true);
         title->setAlignment(Qt::AlignCenter);
 
         layout->addWidget(title, 0, Qt::AlignCenter);
-        layout->addSpacing(dpi_to_px(19));
+        layout->addSpacing(_to_px(19));
 
         QString text = obj.trackMeta().title();
         if (text.isEmpty()) {
@@ -102,12 +102,12 @@ TrackInfoDialog::TrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj, QWid
     {
         auto label = new QLabel;
         label->setObjectName("Split");
-        label->setFixedSize(dpi_to_px(300), 1);
+        label->setFixedSize(_to_px(300), 1);
         label->setAlignment(Qt::AlignCenter);
         layout->addWidget(label, 0, Qt::AlignCenter);
-        layout->addSpacing(dpi_to_px(19));
+        layout->addSpacing(_to_px(19));
     }
-#define ADD_SPACING layout->addSpacing(dpi_to_px(5));
+#define ADD_SPACING layout->addSpacing(_to_px(5));
     createInfoLabel(layout, tr("Title:"), obj.trackMeta().title().isEmpty()
                                               ? obj.name()
                                               : obj.trackMeta().title());
@@ -127,7 +127,7 @@ TrackInfoDialog::TrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj, QWid
     createInfoLabel(layout, tr("Duration:"), PPUtility::formateSongDuration(obj.trackMeta().duration()));
     ADD_SPACING
     createInfoLabel(layout, tr("Path:"), QString("%1/%2").arg(obj.path()).arg(obj.name()));
-    layout->addSpacing(dpi_to_px(10));
+    layout->addSpacing(_to_px(10));
     layout->addStretch();
 }
 
@@ -140,11 +140,11 @@ void TrackInfoDialog::createInfoLabel(QBoxLayout *parent, const QString &key, co
 {
     QHBoxLayout *ly = new QHBoxLayout;
     ly->setContentsMargins(0, 0, 0, 0);
-    ly->setSpacing(dpi_to_px(5));
+    ly->setSpacing(_to_px(5));
 
     auto kl = new QLabel;
     kl->setObjectName("Key");
-    kl->setMinimumHeight(dpi_to_px(18));
+    kl->setMinimumHeight(_to_px(18));
     kl->setAlignment(Qt::AlignRight);
     kl->setText(key);
 
@@ -152,9 +152,9 @@ void TrackInfoDialog::createInfoLabel(QBoxLayout *parent, const QString &key, co
     vl->setObjectName("Value");
     vl->setAlignment(Qt::AlignLeft);
     vl->setWordWrap(true);
-    vl->setMinimumHeight(dpi_to_px(18));
-    vl->setMinimumWidth(dpi_to_px(200));
-    vl->setMaximumWidth(dpi_to_px(220));
+    vl->setMinimumHeight(_to_px(18));
+    vl->setMinimumWidth(_to_px(200));
+    vl->setMaximumWidth(_to_px(220));
     vl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     if (vale.isEmpty()) {
         vl->setText(tr("Unknow"));

@@ -21,7 +21,7 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
-const static int S_FONT_SIZE = dpi_to_px(16);
+const static int S_FONT_SIZE = _to_px(16);
 
 TrackListViewDelegate::TrackListViewDelegate(QObject *parent)
     : QStyledItemDelegate (parent),
@@ -154,11 +154,11 @@ void TrackListViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         text = tr("Unknow"); \
     } \
     QFont font = option.font; \
-    font.setPixelSize(dpi_to_px(S_FONT_SIZE)); \
+    font.setPixelSize(_to_px(S_FONT_SIZE)); \
     QFontMetrics fm(font); \
-    const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - dpi_to_px(4)); \
+    const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - _to_px(4)); \
     qreal textY = rect.y() + (rect.height() - S_FONT_SIZE)/2; \
-    const QRectF tf(painterX+dpi_to_px(2), textY, textWidth - dpi_to_px(4), S_FONT_SIZE); \
+    const QRectF tf(painterX+_to_px(2), textY, textWidth - _to_px(4), S_FONT_SIZE); \
     painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
 
     // title
@@ -169,11 +169,11 @@ void TrackListViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 //            text = tr("Unknow");
 //        }
 //        QFont font = option.font;
-//        font.setPixelSize(dpi_to_px(S_FONT_SIZE));
+//        font.setPixelSize(_to_px(S_FONT_SIZE));
 //        QFontMetrics fm(font);
-//        const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - dpi_to_px(4));
+//        const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - _to_px(4));
 //        qreal textY = rect.y() + (rect.height() - S_FONT_SIZE)/2;
-//        const QRectF tf(painterX+dpi_to_px(2), textY, textWidth - dpi_to_px(4), S_FONT_SIZE);
+//        const QRectF tf(painterX+_to_px(2), textY, textWidth - _to_px(4), S_FONT_SIZE);
 //        painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
         DRAW_TEXT(TrackListModel::RoleSongTitle, textWidth)
 
@@ -201,11 +201,11 @@ void TrackListViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
             text = tr("Unknow");
         }
         QFont font = option.font;
-        font.setPixelSize(dpi_to_px(S_FONT_SIZE));
+        font.setPixelSize(_to_px(S_FONT_SIZE));
         QFontMetrics fm(font);
-        const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - dpi_to_px(4));
+        const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - _to_px(4));
         qreal textY = rect.y() + (rect.height() - S_FONT_SIZE)/2;
-        const QRectF tf(painterX+dpi_to_px(2), textY, textWidth - dpi_to_px(4), S_FONT_SIZE);
+        const QRectF tf(painterX+_to_px(2), textY, textWidth - _to_px(4), S_FONT_SIZE);
         painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
     }
 }

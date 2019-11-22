@@ -176,7 +176,7 @@ void BaseTrackView::menuAddToPlaylist(QMenu *menu, const AudioMetaObject &obj)
     QFontMetrics fm(font);
     foreach(const PlayListMeta &meta, metalist) {
         auto text = fm.elidedText(QString(meta.getFileName().replace("&", "&&")),
-                                  Qt::ElideMiddle, dpi_to_px(160));
+                                  Qt::ElideMiddle, _to_px(160));
         subMenu->addAction(text, [&, meta, obj](){
             PlayListObject po(meta);
             po.addTrack(obj);

@@ -69,8 +69,8 @@ void ViewUtility::showTrackRemoveDialog(const PhoenixPlayer::AudioMetaObject &ob
             cover = img;
         }
     }
-    auto icon = QPixmap::fromImage(ViewUtility::cropRect(cover, QSize(dpi_to_px(64), dpi_to_px((64)))));
-    dlg.setIcon(icon, QSize(dpi_to_px(64), dpi_to_px(64)));
+    auto icon = QPixmap::fromImage(ViewUtility::cropRect(cover, QSize(_to_px(64), _to_px((64)))));
+    dlg.setIcon(icon, QSize(_to_px(64), _to_px(64)));
 
     QString name = obj.trackMeta().title();
     if (name.isEmpty()) {

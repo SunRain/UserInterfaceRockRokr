@@ -323,7 +323,7 @@ void WaveformSlider::paintEvent(QPaintEvent *event)
                 maxSpek = i;
             }
         }
-        scale = (this->rect().height() - dpi_to_px(2)) / maxSpek;
+        scale = (this->rect().height() - _to_px(2)) / maxSpek;
     }
     {
         QPainterPath path;

@@ -39,10 +39,10 @@ namespace RockRokr {
 FavoriteTrackViewDataProvider::FavoriteTrackViewDataProvider()
 {
     m_header = new RKTableHeaderItem;
-    m_header->setFixedHeight(dpi_to_px(30));
+    m_header->setFixedHeight(_to_px(30));
     m_header->setEnableClick(true);
     m_header->setEnableArrowIcon(true);
-    m_header->setCoverColumnWidth(dpi_to_px(50));
+    m_header->setCoverColumnWidth(_to_px(50));
     m_header->setCoverColumnIcon(DHiDPIHelper::loadNxPixmap(":/light/image/ic_format_list_numbered.svg"),
                                  DHiDPIHelper::loadNxPixmap(":/light/image/ic_format_list_numbered_hover.svg"));
     m_header->setCoverColumnToolTip(QObject::tr("Rest to default order"));

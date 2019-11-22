@@ -45,7 +45,7 @@ namespace RockRokr {
     }
 
 #define DRAW_ARROW_ICON(painter, rect, textW, isHover, column) \
-    const qreal iconH = rect.height() - dpi_to_px(4); \
+    const qreal iconH = rect.height() - _to_px(4); \
     QPixmap icon; \
     if (isHover) { \
         icon = (m_arrowMap.value(column) == DirectionUp \
@@ -62,8 +62,8 @@ namespace RockRokr {
         const QSize iconSize(w, iconH); \
         icon = icon.scaled(iconSize, Qt::KeepAspectRatio); \
     } \
-    textW = textW - icon.width() - dpi_to_px(16); \
-    const qreal iconX = rect.x() + textW + dpi_to_px(8); \
+    textW = textW - icon.width() - _to_px(16); \
+    const qreal iconX = rect.x() + textW + _to_px(8); \
     const qreal iconY = rect.y() + (rect.height() - icon.height())/2; \
     painter->drawPixmap(iconX, iconY, icon);
 
@@ -71,9 +71,9 @@ namespace RockRokr {
     QFont f = this->font(); \
     f.setPixelSize(m_fontSize); \
     QFontMetrics fm(f); \
-    const QString str = fm.elidedText(text, Qt::ElideRight, textW - dpi_to_px(4)); \
+    const QString str = fm.elidedText(text, Qt::ElideRight, textW - _to_px(4)); \
     qreal textY = (rect.height() - m_fontSize)/2; \
-    const QRectF tf(rect.x() + dpi_to_px(2), textY, textW - dpi_to_px(4), m_fontSize); \
+    const QRectF tf(rect.x() + _to_px(2), textY, textW - _to_px(4), m_fontSize); \
     painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
 
 
@@ -84,8 +84,8 @@ RKTableHeaderItem::RKTableHeaderItem(RKTableHeaderItem::ArrowIconDirection direc
     this->setMouseTracking(true);
 
     m_radius = 0;
-    m_fontSize = dpi_to_px(12);
-    m_coverWidth = dpi_to_px(60);
+    m_fontSize = _to_px(12);
+    m_coverWidth = _to_px(60);
     m_coverTextAlignment = Qt::AlignmentFlag::AlignVCenter | Qt::AlignmentFlag::AlignHCenter;
 //    m_hoverState = false;
     m_enableClick = true;
@@ -346,7 +346,7 @@ void RKTableHeaderItem::resizeEvent(QResizeEvent *event)
 
 QSize RKTableHeaderItem::sizeHint() const
 {
-    return QSize(dpi_to_px(1000), dpi_to_px(60));
+    return QSize(_to_px(1000), _to_px(60));
 }
 
 void RKTableHeaderItem::calcColumnsWidth()
@@ -431,7 +431,7 @@ void RKTableHeaderItem::drawCover(QPainter *painter, const QRectF &rect)
         QFontMetrics fm(f);
         const QString str = fm.elidedText(m_coverText, Qt::ElideRight, rect.width());
         qreal textY = (rect.height() - m_fontSize)/2;
-        const QRectF tf(rect.x() + dpi_to_px(2), textY, rect.width() - dpi_to_px(4), m_fontSize);
+        const QRectF tf(rect.x() + _to_px(2), textY, rect.width() - _to_px(4), m_fontSize);
         painter->drawText(tf, m_coverTextAlignment, str);
     }
 }
@@ -452,9 +452,9 @@ void RKTableHeaderItem::drawTitle(QPainter *painter, const QRectF &rect)
 //    QFont f = this->font();
 //    f.setPixelSize(m_fontSize);
 //    QFontMetrics fm(f);
-//    const QString str = fm.elidedText(tr("Title"), Qt::ElideRight, textW - dpi_to_px(4));
+//    const QString str = fm.elidedText(tr("Title"), Qt::ElideRight, textW - _to_px(4));
 //    qreal textY = (rect.height() - m_fontSize)/2;
-//    const QRectF tf(rect.x() + dpi_to_px(2), textY, textW - dpi_to_px(4), m_fontSize);
+//    const QRectF tf(rect.x() + _to_px(2), textY, textW - _to_px(4), m_fontSize);
 //    painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
     DRAW_TEXT(painter, tr("Title"), textW, rect)
 }
@@ -519,7 +519,7 @@ void RKTableHeaderItem::drawDuration(QPainter *painter, const QRectF &rect)
     QFontMetrics fm(f);
     const QString str = fm.elidedText(tr("Duration"), Qt::ElideRight, textW);
     qreal textY = (rect.height() - m_fontSize)/2;
-    const QRectF tf(rect.x()+dpi_to_px(2), textY, textW - dpi_to_px(4), m_fontSize);
+    const QRectF tf(rect.x()+_to_px(2), textY, textW - _to_px(4), m_fontSize);
     painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
 }
 

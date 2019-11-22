@@ -2,6 +2,8 @@
 
 #include <QStyleFactory>
 #include <QRadioButton>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include <ddialog.h>
 #include <DThemeManager>

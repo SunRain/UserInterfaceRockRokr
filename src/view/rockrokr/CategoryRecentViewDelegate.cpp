@@ -137,13 +137,13 @@ void CategoryRecentViewDelegate::paint(QPainter *painter, const QStyleOptionView
 
     QPointF textTopLeft;
     textTopLeft.setX(painterX);
-    textTopLeft.setY(rect.y() + (rect.height() - dpi_to_px(14))/2);
+    textTopLeft.setY(rect.y() + (rect.height() - _to_px(14))/2);
     {
         QString str = index.data(BaseCategoryModel::ModelRoles::RoleCategoryName).toString();
         if (str.isEmpty()) {
             str = tr("UnKnow");
         }
-        const QSizeF sf(MAIN_VIEW_LISTITEM_LEFT_CONTENT_W, dpi_to_px(14));
+        const QSizeF sf(MAIN_VIEW_LISTITEM_LEFT_CONTENT_W, _to_px(14));
         QRectF tf(textTopLeft, sf);
         painter->drawText(tf, str, textOpt);
 
