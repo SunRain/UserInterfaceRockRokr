@@ -32,6 +32,8 @@ RKTitleBar::RKTitleBar(QWidget *parent)
 
     DThemeManager::instance()->registerWidget(this);
 
+    this->setFixedHeight(TITLE_BAR_H);
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);

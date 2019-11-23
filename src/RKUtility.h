@@ -11,9 +11,6 @@ namespace RockRokr {
 class RKUtility
 {
 public:
-    explicit RKUtility();
-    ~RKUtility();
-
     static QString coverCacheDir();
 
     static QString httpCookieFile();
@@ -25,6 +22,8 @@ public:
     static QImage defaultCoverImage(const QSize &size, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     static QPixmap defaultCoverPixmap(const QSize &size);
+
+    static void setWidgetFontSize(QWidget *target, int pixelSize);
 
 };
 

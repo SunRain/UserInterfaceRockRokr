@@ -74,5 +74,8 @@
         <file>light/PhoenixPlayer--UserInterface--RockRokr--TrackInfoDialog.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--VolumeWidget.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--WaveformSlider.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--MainWindowBGView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RockRokrView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RKTitleBar.theme</file>
     </qresource>
 </RCC>

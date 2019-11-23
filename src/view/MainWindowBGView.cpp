@@ -1,18 +1,21 @@
 #include "MainWindowBGView.h"
 
 #include <QGraphicsDropShadowEffect>
+#include <DThemeManager>
 
 #include "rockrokr_global.h"
+
+DWIDGET_USE_NAMESPACE
 
 namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
-
 MainWindowBGView::MainWindowBGView(QWidget *parent)
     : QWidget(parent)
 {
-    this->setStyleSheet(QString("QWidget{background-color:%1;}").arg(MAIN_VIEW_BG_COLOR));
+    this->setObjectName("MainWindowBGView");
+    DThemeManager::instance()->registerWidget(this);
 
 //    <Canvas
 //      Width="1400"
@@ -35,7 +38,7 @@ MainWindowBGView::MainWindowBGView(QWidget *parent)
 //    </Canvas>
     ///FIXME QGraphicsDropShadowEffect cause layout problem for inner widget why?
 //    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
-//    effect->setColor("00,00,00, 0.12");
+//    effect->setColor("31,00,00, 0.12");
 //    effect->setBlurRadius(80);
 //    effect->setOffset(0, 60);
 //    this->setGraphicsEffect(effect);

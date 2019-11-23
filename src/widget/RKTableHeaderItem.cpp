@@ -84,7 +84,7 @@ RKTableHeaderItem::RKTableHeaderItem(RKTableHeaderItem::ArrowIconDirection direc
     this->setMouseTracking(true);
 
     m_radius = 0;
-    m_fontSize = _to_px(12);
+    m_fontSize = _to_font_px(12);
     m_coverWidth = _to_px(60);
     m_coverTextAlignment = Qt::AlignmentFlag::AlignVCenter | Qt::AlignmentFlag::AlignHCenter;
 //    m_hoverState = false;

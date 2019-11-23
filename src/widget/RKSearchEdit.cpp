@@ -15,6 +15,9 @@
 #include <dimagebutton.h>
 #include <DThemeManager>
 
+#include "RKUtility.h"
+#include "rockrokr_global.h"
+
 DWIDGET_USE_NAMESPACE;
 
 namespace PhoenixPlayer {
@@ -31,14 +34,25 @@ RKSearchEdit::RKSearchEdit(QWidget *parent)
 
     m_searchBtn = new DImageButton;
     m_searchBtn->setObjectName("SearchIcon");
+    m_searchBtn->setNormalPic(":/light/image/ic_search_48px.svg");
+    m_searchBtn->setHoverPic(":/light/image/ic_search_48px.svg");
+    m_searchBtn->setPressPic(":/light/image/ic_search_48px.svg");
+
 //    m_searchBtn->setFixedSize(16, 16);
     m_clearBtn = new DImageButton;
     m_clearBtn->setObjectName("ClearIcon");
+    m_clearBtn->setNormalPic(":/light/image/input_clear_normal.svg");
+    m_clearBtn->setHoverPic(":/light/image/input_clear_hover.svg");
+    m_clearBtn->setPressPic(":/light/image/input_clear_press.svg");
     m_clearBtn->hide();
+
     m_edt = new QLineEdit;
     m_edt->setObjectName("Edit");
+    RKUtility::setWidgetFontSize(m_edt, _to_font_px(16));
+
     m_placeHolder = new QLabel;
     m_placeHolder->setObjectName("PlaceHolder");
+    RKUtility::setWidgetFontSize(m_placeHolder, _to_font_px(16));
 
     m_animation = new QPropertyAnimation(m_edt, "minimumWidth");
 
@@ -58,7 +72,7 @@ RKSearchEdit::RKSearchEdit(QWidget *parent)
     layout->addStretch();
     layout->addWidget(m_clearBtn);
     layout->setAlignment(m_clearBtn, Qt::AlignCenter);
-    layout->setSpacing(0);
+//    layout->setSpacing(0);
     layout->setContentsMargins(3, 0, 3, 0);
 
     setAutoFillBackground(true);
@@ -66,7 +80,11 @@ RKSearchEdit::RKSearchEdit(QWidget *parent)
 
     connect(m_clearBtn, &DImageButton::clicked, m_edt, static_cast<void (QLineEdit::*)()>(&QLineEdit::setFocus));
     connect(m_clearBtn, &DImageButton::clicked, this, &RKSearchEdit::clear);
-    connect(m_edt, &QLineEdit::textChanged, [this] {m_clearBtn->setVisible(!m_edt->text().isEmpty());});
+    connect(m_edt, &QLineEdit::textChanged, [&]() {
+        qDebug()<<"------------- text chagned "<<m_edt->text().isEmpty();
+        m_clearBtn->setVisible(!m_edt->text().isEmpty());
+    });
+
     connect(m_edt, &QLineEdit::textChanged, this, &RKSearchEdit::textChanged, Qt::DirectConnection);
     connect(m_edt, &QLineEdit::editingFinished, this, &RKSearchEdit::editingFinished, Qt::DirectConnection);
     connect(m_edt, &QLineEdit::returnPressed, this, &RKSearchEdit::returnPressed, Qt::DirectConnection);

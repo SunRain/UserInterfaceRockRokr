@@ -29,6 +29,9 @@ inline void calcRatio() {
     qreal dpi = QGuiApplication::primaryScreen()->logicalDotsPerInch();
     S_RATIO = qMin(height/S_REF_HEIGHT, width/S_REF_WIDTH);
     S_RATIO_FONT = qMin(height*S_REF_DPI/(dpi*S_REF_HEIGHT), width*S_REF_DPI/(dpi*S_REF_WIDTH));
+    if (S_RATIO_FONT < 1) {
+        S_RATIO_FONT = 1.0;
+    }
 }
 
 int _to_px(qint64 px)

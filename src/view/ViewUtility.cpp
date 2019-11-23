@@ -3,6 +3,8 @@
 #include <QStyleFactory>
 #include <QRadioButton>
 #include <qcompilerdetection.h>
+#include <QFont>
+#include <QWidget>
 
 #include <ddialog.h>
 

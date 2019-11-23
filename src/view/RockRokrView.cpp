@@ -18,6 +18,8 @@
 #include "rockrokr/AllTrackView.h"
 #include "rockrokr/FavoriteTrackView.h"
 
+DWIDGET_USE_NAMESPACE
+
 namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
@@ -26,8 +28,8 @@ RockRokrView::RockRokrView(QWidget *parent)
     : QFrame(parent)
 
 {
-//    DThemeManager::instance()->registerWidget(this);
-    this->setStyleSheet(QString("QWidget{background-color:%1;}").arg(MAIN_VIEW_BG_COLOR));
+    this->setObjectName("RockRokrView");
+    DThemeManager::instance()->registerWidget(this);
 
     m_leftbar = new LeftBar;
     m_titlebar = new RKTitleBar;
@@ -101,7 +103,7 @@ void RockRokrView::initUI()
             vv->setSpacing(0);
 
             vv->addWidget(m_titlebar, 0, Qt::AlignTop);
-            vv->addSpacing(32);
+            vv->addSpacing(_to_px(32));
             vv->addWidget(m_stack);
             vbox->addLayout(vv);
         }

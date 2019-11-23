@@ -6,6 +6,8 @@
 #include <QPixmap>
 #include <QImageReader>
 #include <QApplication>
+#include <QFont>
+#include <QWidget>
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -13,16 +15,6 @@ namespace RockRokr {
 
 //const static char *DEFAULT_COVER_RES = ":/light/image/default_cover.svg";
 const static char *DEFAULT_COVER_RES = ":/light/image/default_cover.jpg";
-
-RKUtility::RKUtility()
-{
-
-}
-
-RKUtility::~RKUtility()
-{
-
-}
 
 QString RKUtility::coverCacheDir()
 {
@@ -93,6 +85,16 @@ QImage RKUtility::defaultCoverImage(const QSize &size, Qt::AspectRatioMode aspec
 QPixmap RKUtility::defaultCoverPixmap(const QSize &size)
 {
     return QPixmap::fromImage(defaultCoverImage(size));
+}
+
+void RKUtility::setWidgetFontSize(QWidget *target, int pixelSize)
+{
+    if (!target) {
+        return;
+    }
+    QFont f(target->font());
+    f.setPixelSize(pixelSize);
+    target->setFont(f);
 }
 
 
