@@ -16,6 +16,9 @@
 #include <dwindowminbutton.h>
 #include <DSearchEdit>
 
+#include "UserInterface/UserInterfaceMgr.h"
+#include "UserInterface/IUserInterface.h"
+
 #include "rockrokr_global.h"
 #include "widget/RKSearchEdit.h"
 
@@ -54,7 +57,13 @@ RKTitleBar::RKTitleBar(QWidget *parent)
     });
 
     m_closeBtn = new DWindowCloseButton;
-    connect(m_closeBtn, &DImageButton::clicked, this, &QApplication::quit);
+    connect(m_closeBtn, &DImageButton::clicked, this, [&] () {
+        UserInterface::UserInterfaceMgr mgr;
+        UserInterface::IUserInterface *us = mgr.usedInterface();
+        if (us) {
+            us->close();
+        }
+    });
 
     m_minimizeBtn = new DWindowMinButton;
     connect(m_minimizeBtn, &DImageButton::clicked,

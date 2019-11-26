@@ -31,6 +31,7 @@ UserInterfaceRockRokr::UserInterfaceRockRokr(QObject *parent)
 UserInterfaceRockRokr::~UserInterfaceRockRokr()
 {
     if (m_mainWindow) {
+        m_mainWindow->close();
         m_mainWindow->deleteLater();
         m_mainWindow = Q_NULLPTR;
     }
@@ -86,7 +87,14 @@ void UserInterfaceRockRokr::hide()
 
 void UserInterfaceRockRokr::close()
 {
-
+    if (m_mainWindow) {
+       if (m_mainWindow->close()) {
+           m_mainWindow->deleteLater();
+           m_mainWindow = Q_NULLPTR;
+       } else {
+           qWarning()<<"Close main window failure!!!!";
+       }
+    }
 }
 
 QStringList UserInterfaceRockRokr::snapshots() const
