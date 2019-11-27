@@ -45,10 +45,8 @@ RKListView::RKListView(QWidget *parent)
     m_animation->setKeyValueAt(0.4, 1.0);
     m_animation->setKeyValueAt(0.8, 1.0);
 
-    connect(m_scrollBar, &QScrollBar::valueChanged,
-            this, [&](int value) {
-                qDebug()<<" QScrollBar::valueChanged "<<value;
-
+    connect(m_scrollBar, &QScrollBar::valueChanged, this, [&](int value) {
+//                qDebug()<<" QScrollBar::valueChanged "<<value;
         this->getInnerScrollBar()->setValue(value);
         emit this->scrollValueChanged(value);
     });
@@ -58,7 +56,7 @@ RKListView::RKListView(QWidget *parent)
     m_timer->setInterval(500);
     connect(m_timer, &QTimer::timeout,
             this, [&](){
-        qDebug()<<" timer to hide scrollbar ";
+//        qDebug()<<" timer to hide scrollbar ";
         if (!m_mouseIn) {
             this->animateHideScrollbar(true);
         }
@@ -189,11 +187,11 @@ void RKListView::updateScrollBar()
     if (this->model()->rowCount() > 0) {
         itemSize += (this->model()->rowCount() - 1) * this->spacing();
     }
-    qDebug()<<" this size "<<size
-             <<" m_defaultItemSize "<<m_defaultItemSize
-             <<" orientation "<<m_scrollBar->orientation()
-             <<" model row count "<<model()->rowCount()
-             <<" model columnCount "<<model()->columnCount();
+//    qDebug()<<" this size "<<size
+//             <<" m_defaultItemSize "<<m_defaultItemSize
+//             <<" orientation "<<m_scrollBar->orientation()
+//             <<" model row count "<<model()->rowCount()
+//             <<" model columnCount "<<model()->columnCount();
 
     if (m_scrollBar->orientation() == Qt::Orientation::Vertical) {
         itemSize += m_defaultItemSize.height() * this->model()->rowCount();
