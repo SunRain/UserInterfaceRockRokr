@@ -22,7 +22,9 @@ public:
         TypeGenres,
         TypeSongs,
         TypeFavorites,
-        TypePlaylist
+        TypePlaylist,
+        TypeAddon,
+        TypeService
     };
     explicit LBListItem(const ItemType &type, const QString &text, QWidget *parent = Q_NULLPTR);
     virtual ~LBListItem() override;

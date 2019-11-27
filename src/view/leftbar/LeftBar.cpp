@@ -49,6 +49,8 @@ LeftBar::LeftBar(QWidget *parent)
 
     this->setFrameStyle(QFrame::NoFrame);
 
+    m_plsView->setExpandedSeparatorVisible(false);
+
     m_sepEffect->setOpacity(0);
     m_sepAnimation->setTargetObject(m_sepEffect);
     m_sepAnimation->setPropertyName("opacity");
@@ -228,8 +230,7 @@ void LeftBar::initUI()
             m_listWidget->updateHeight();
         });
 
-        connect(m_plsView, &RKExpand::expandChange,
-                this, [&, item, fm, headerItemH](bool expanded){
+        connect(m_plsView, &RKExpand::expandChange, this, [&, item, fm, headerItemH](bool expanded) {
 
         });
 
@@ -237,62 +238,41 @@ void LeftBar::initUI()
         m_listWidget->setItemWidget(item, fm);
 
     }
-//    layout->addSpacing(LEFT_BAR_CONTENT_BASE_MARGIN);
-//    {
-//        QHBoxLayout *ll = new QHBoxLayout;
-//        ll->setContentsMargins(0, 0, 0, 0);
-//        ll->setAlignment(Qt::AlignmentFlag::AlignLeft | Qt::AlignmentFlag::AlignVCenter);
-//        ll->setSpacing(0);
-
-//        QLabel *title = new QLabel;
-//        title->setObjectName("PlaylistTitle");
-//        title->setFixedHeight(LEFT_BAR_BIG_TITLE_FONT_SIZE);
-//        title->setFixedWidth(contentW - LEFT_BAR_ITEM_H);
-//        title->setWordWrap(true);
-//        title->setText(tr("PLAYLIST"));
-//        ll->addWidget(title);
-
-//        DImageButton *icon = new DImageButton();
-//        icon->setHoverPic(":resources/playlist_add_black_18dp.png");
-//        icon->setNormalPic(":resources/playlist_add_grey600_18dp.png");
-//        icon->setFixedSize(LEFT_BAR_BIG_TITLE_FONT_SIZE, LEFT_BAR_BIG_TITLE_FONT_SIZE);
-////        connect(icon, &DImageButton::clicked, this, &LeftBar::playlistAddClicked);
-//        connect(icon, &DImageButton::clicked,
-//                this, [&](){
-//            QListWidgetItem *item = new QListWidgetItem(m_listWidget);
-//            item->setSizeHint(QSize(LEFT_BAR_ITEM_W, LEFT_BAR_ITEM_H));
-//            m_listWidget->addItem(item);
-
-
-//            //TODO
-//            QLabel *l = new QLabel(QString("item aaaaa"));
-//            l->setFixedSize(LEFT_BAR_ITEM_W, LEFT_BAR_ITEM_H);
-//            m_listWidget->setItemWidget(item, l);
-//        });
-
-//        ll->addWidget(icon);
-//        ll->addStretch();
-//        layout->addLayout(ll);
-//    }
-//    layout->addSpacing(LEFT_BAR_CONTENT_BASE_MARGIN);
-//    {
-//        m_listWidget->setSpacing(0);
-//        m_listWidget->setFixedWidth(LEFT_BAR_ITEM_W);
-//        m_listWidget->setFixedHeight(200);
-
-//        for (int i=0; i<3; ++i) {
-//            QListWidgetItem *item = new QListWidgetItem(m_listWidget);
-//            item->setSizeHint(QSize(LEFT_BAR_ITEM_W, LEFT_BAR_ITEM_H));
-//            m_listWidget->addItem(item);
-//            QLabel *l = new QLabel(QString("item %1").arg(i));
-//            l->setFixedSize(LEFT_BAR_ITEM_W, LEFT_BAR_ITEM_H);
-//            m_listWidget->setItemWidget(item, l);
-//        }
-//        layout->addWidget(m_listWidget);
-//    }
-
     layout->addWidget(m_listWidget);
-    layout->addStretch();
+    layout->addSpacing(4);
+
+    {
+        ItemFragment *fm = createItemFragment(LEFT_BAR_FONT_SIZE_SECTION);
+        DSeparatorHorizontal *sep = new DSeparatorHorizontal;
+        sep->setFixedWidth(LEFT_BAR_ITEM_W);
+        fm->layout()->addWidget(sep);
+        layout->addWidget(fm);
+    }
+    layout->addSpacing(4);
+    {
+        ItemFragment *fm = createItemFragment(LEFT_BAR_ITEM_H);
+        LBListItem *item = new LBListItem(LBListItem::TypeAddon, tr("TypeAddon"));
+        item->setFixedHeight(LEFT_BAR_ITEM_H);
+        item->setFixedWidth(LEFT_BAR_ITEM_W);
+        connect(item, &LBListItem::leftBtnClicked, this, [&](LBListItem *item) {
+
+        });
+        fm->layout()->addWidget(item);
+        layout->addWidget(fm);
+    }
+    layout->addSpacing(4);
+    {
+        ItemFragment *fm = createItemFragment(LEFT_BAR_ITEM_H);
+        LBListItem *item = new LBListItem(LBListItem::TypeService, tr("TypeService"));
+        item->setFixedHeight(LEFT_BAR_ITEM_H);
+        item->setFixedWidth(LEFT_BAR_ITEM_W);
+        connect(item, &LBListItem::leftBtnClicked, this, [&](LBListItem *item) {
+
+        });
+        fm->layout()->addWidget(item);
+        layout->addWidget(fm);
+    }
+    layout->addSpacing(LEFT_BAR_CONTENT_BASE_MARGIN);
     this->setLayout(layout);
 }
 

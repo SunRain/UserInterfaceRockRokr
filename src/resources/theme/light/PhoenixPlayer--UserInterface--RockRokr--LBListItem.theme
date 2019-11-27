@@ -56,6 +56,16 @@
     image: url(:/light/image/KEY_FAVORITES.svg);
 }
 
+
+#TitleIconLabel[iconName="TypeAddon"] {
+    image: url(:/light/image/KEY_ADDON.svg);
+}
+
+
+#TitleIconLabel[iconName="TypeService"] {
+    image: url(:/light/image/KEY_SERVICE.svg);
+}
+
 /*
 #TitleTextEdit[status="active"] {
   color: green;
