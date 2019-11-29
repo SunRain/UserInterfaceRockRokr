@@ -18,7 +18,7 @@ qreal _to_font_pxF(qint64 px);
 
 
 #define MAIN_WINDOW_W                       _to_px(1400)
-#define MAIN_WINDOW_H                       _to_px(/*800*/830)
+#define MAIN_WINDOW_H                       _to_px(830)
 
 #define HIGHLIGHT_BG_COLOR                  "#336CFB"
 #define HIGHLIGHT_FONT_COLOR                "#F4F6FF"
@@ -34,7 +34,7 @@ qreal _to_font_pxF(qint64 px);
  * begin left bar
  */
 #define LEFT_BAR_W                          _to_px(240)
-#define LEFT_BAR_H                          MAIN_WINDOW_H - _to_px(85) // -PLAY_BAR_H
+#define LEFT_BAR_H                          (MAIN_WINDOW_H - _to_px(85)) // -PLAY_BAR_H
 #define LEFT_BAR_CONTENT_BASE_MARGIN        _to_px(20)
 #define LEFT_BAR_CONTENT_LR_MARGIN          _to_px(40)
 
@@ -64,7 +64,7 @@ qreal _to_font_pxF(qint64 px);
 /*
  * begin play bar
  */
-#define PLAY_BAR_W                          MAIN_WINDOW_W - LEFT_BAR_W
+#define PLAY_BAR_W                          (MAIN_WINDOW_W - LEFT_BAR_W)
 #define PLAY_BAR_H                          _to_px(80)
 #define PLAY_BAR_CONTENT_H_BASE_MARGIN      _to_px(20)
 #define PLAY_BAR_COVER_H                    PLAY_BAR_H
@@ -86,7 +86,7 @@ qreal _to_font_pxF(qint64 px);
 /*
  * begin title bar
  */
-#define TITLE_BAR_W                         MAIN_WINDOW_H - LEFT_BAR_W
+#define TITLE_BAR_W                         (MAIN_WINDOW_H - LEFT_BAR_W)
 #define TITLE_BAR_H                         _to_px(90)
 #define TITIE_BAR_ICON_H                    _to_px(48)
 #define TITLE_BAR_SEARCH_VIEW_W             _to_px(350)
