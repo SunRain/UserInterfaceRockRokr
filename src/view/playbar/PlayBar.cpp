@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QEvent>
+#include <qcompilerdetection.h>
 
 #include <DThemeManager>
 
@@ -118,13 +119,13 @@ private:
 
 
 PlayBar::PlayBar(QWidget *parent)
-    : QFrame(parent),
-      m_ppCommon(Q_NULLPTR)
+    : QFrame(parent)
 {
     this->setObjectName("PlayBar");
     DThemeManager::instance()->registerWidget(this);
 
     this->setFrameStyle(QFrame::NoFrame);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_playCore      = new PlayerCore(this);
     m_volumeCtrl    = new VolumeControl(this);
@@ -132,8 +133,19 @@ PlayBar::PlayBar(QWidget *parent)
     m_uiMgr         = new UserInterface::UserInterfaceMgr(this);
     m_ui            = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
     m_filter        = new FilterObject(m_ui, this);
+    m_spekProvider  = new DataProvider::TinySpectrumDataProvider(this);
 
     initUserInterface();
+
+    connect(m_spekProvider, &DataProvider::TinySpectrumDataProvider::generated,
+            this, [&](const AudioMetaObject &obj, const QList<QList<qreal>> &data) {
+        if (obj.hash() != m_playCore->curTrackMetaObject().hash()) {
+            qDebug()<<"Not same obj, ignore !!";
+            return;
+        }
+        m_waveformSlider->setSpectrumData(data, obj.trackMeta().duration());
+    });
+
 
     this->changeVolume(m_volumeCtrl->volume());
     m_volumeView->slider()->setValue(m_volumeCtrl->volume());
@@ -159,34 +171,31 @@ PlayBar::PlayBar(QWidget *parent)
 
     connect(m_playCore, &PlayerCore::trackChanged,
             this, [&](const QVariantMap &map) {
-                AudioMetaObject obj = AudioMetaObject::fromMap(map);
-                if (obj.isHashEmpty() ||
-                    obj.mediaType() == PPCommon::MediaType::MediaTypeUrl) {
-                    return;
-                }
-                m_waveformSlider->setSpectrumData(m_libraryMgr->loadSpectrumData(obj),
-                                                  obj.trackMeta().duration());
-            });
+        AudioMetaObject obj = AudioMetaObject::fromMap(map);
+        if (obj.isHashEmpty() ||
+                obj.mediaType() == PPCommon::MediaType::MediaTypeUrl) {
+            qDebug()<<"Hash empty of MediaTypeUrl, ignore !!";
+            return;
+        }
+        m_spekProvider->generate(obj);
+    });
 
-    connect(m_waveformSlider, &WaveformSlider::valueChanged,
-            this, [&](int value){
+    connect(m_waveformSlider, &WaveformSlider::valueChanged, this, [&](int value){
         m_playedTime->setText(PPUtility::formateSongDuration(value));
     });
-    connect(m_waveformSlider, &WaveformSlider::sliderReleasedAt,
-            this, [&](qreal value){
+
+    connect(m_waveformSlider, &WaveformSlider::sliderReleasedAt, this, [&](qreal value){
         m_playCore->setPosition(value, false);
     });
 
-    connect(m_volumeCtrl, &VolumeControl::volumeChanged,
-            this, [&](int volume) {
-//        qDebug()<<Q_FUNC_INFO<<" VolumeControl::volumeChanged is slider moveing "<<m_volumeView->slider()->isMoving();
+    connect(m_volumeCtrl, &VolumeControl::volumeChanged, this, [&](int volume) {
         if (m_volumeView->isVisible()) {
             m_volumeView->slider()->setValue(volume);
         }
         this->changeVolume(volume);
     });
-    connect(m_volumeCtrl, &VolumeControl::mutedChanged,
-            this, [&](bool muted) {
+
+    connect(m_volumeCtrl, &VolumeControl::mutedChanged, this, [&](bool muted) {
         if (muted) {
             m_btnSound->setProperty(S_PROPERTY_VOLUME_BTN_ICON, S_VOLUME_BTN_MUTED);
             m_preVolumeIcon = QString(S_VOLUME_BTN_MUTED);
@@ -195,8 +204,7 @@ PlayBar::PlayBar(QWidget *parent)
         }
     });
 
-    connect(m_btnOrderOrRepeat, &QPushButton::clicked,
-            this, [&](){
+    connect(m_btnOrderOrRepeat, &QPushButton::clicked, this, [&]() {
         int mode = m_playCore->playModeInt();
         if (PPCommon::PlayMode::PlayModeShuffle == mode) {
             mode = (int)PPCommon::PlayModeOrder;
@@ -207,8 +215,8 @@ PlayBar::PlayBar(QWidget *parent)
         }
         m_playCore->setPlayModeInt(mode);
     });
-    connect(m_btnShuffle, &QPushButton::clicked,
-            this, [&](){
+
+    connect(m_btnShuffle, &QPushButton::clicked, this, [&](){
         int mode = m_playCore->playModeInt();
         if (PPCommon::PlayModeShuffle == mode) {
             m_playCore->setPlayMode(PPCommon::PlayModeOrder);
@@ -216,14 +224,12 @@ PlayBar::PlayBar(QWidget *parent)
             m_playCore->setPlayMode(PPCommon::PlayModeShuffle);
         }
     });
-    connect(m_playPausedIcon, &QPushButton::clicked,
-            this, [&](){
+
+    connect(m_playPausedIcon, &QPushButton::clicked, this, [&](){
         m_playCore->togglePlayPause();
     });
 
-
-    connect(m_volumeView->slider(), &RKSlider::valueChanged,
-            this, [&](int value){
+    connect(m_volumeView->slider(), &RKSlider::valueChanged, this, [&](int value){
         if (value == 0) {
             m_volumeCtrl->setMuted(true);
         } else {
@@ -241,6 +247,10 @@ PlayBar::~PlayBar()
     m_btnNext->removeEventFilter(m_filter);
     m_playPausedIcon->removeEventFilter(m_filter);
 
+    if (m_spekProvider) {
+        m_spekProvider->deleteLater();
+        m_spekProvider = Q_NULLPTR;
+    }
     if (m_filter) {
         m_filter->deleteLater();
         m_filter = Q_NULLPTR;
@@ -306,7 +316,8 @@ void PlayBar::initUserInterface()
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN);
+    layout->setSpacing(0);
+    layout->setAlignment(Qt::AlignmentFlag::AlignLeft | Qt::AlignmentFlag::AlignVCenter);
 
     m_cover = new RKImage;
     m_cover->setObjectName("RKCover");
@@ -314,6 +325,7 @@ void PlayBar::initUserInterface()
 
     layout->addWidget(m_cover);
 
+    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN);
     {
         QVBoxLayout *ly = new QVBoxLayout;
         ly->setContentsMargins(2, 0, 2, 0);
@@ -337,8 +349,7 @@ void PlayBar::initUserInterface()
 
         layout->addLayout(ly);
     }
-    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *3);
-    layout->addStretch();
+    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *4);
     {
         m_waveformSlider = new WaveformSlider;
         m_waveformSlider->setObjectName("RKWaveformSlider");
@@ -346,6 +357,7 @@ void PlayBar::initUserInterface()
         m_waveformSlider->setFixedHeight(PLAY_BAR_SLIDER_H);
         layout->addWidget(m_waveformSlider, Qt::AlignVCenter);
     }
+    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN);
     {
         m_playedTime = new QLabel;
         m_playedTime->setObjectName("RKPlayedTime");
@@ -369,7 +381,6 @@ void PlayBar::initUserInterface()
 
         layout->addLayout(ly);
     }
-    layout->addStretch();
     layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *2);
     {
         QHBoxLayout *ly = new QHBoxLayout;
@@ -423,7 +434,8 @@ void PlayBar::initUserInterface()
 
         layout->addLayout(ly);
     }
-    layout->addStretch();
+    layout->addSpacing(PLAY_BAR_CONTENT_H_BASE_MARGIN *3);
+    this->setLayout(layout);
 
 }
 
@@ -449,7 +461,8 @@ void PlayBar::changeVolume(int volume)
 
 void PlayBar::resizeEvent(QResizeEvent *event)
 {
-
+    m_waveformSlider->setFixedWidth(event->size().width() - PLAY_BAR_W + PLAY_BAR_SLIDER_W);
+    QFrame::resizeEvent(event);
 }
 
 void PlayBar::playModeChanged(PPCommon::PlayMode mode)
