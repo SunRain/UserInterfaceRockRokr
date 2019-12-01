@@ -33,7 +33,7 @@ WaveformSlider::WaveformSlider(QWidget *parent)
 
     this->setMinimum(0);
     this->setAcceptDrops(true);
-    this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     this->setMinimumSize(PLAY_BAR_SLIDER_W/2, PLAY_BAR_SMALL_BTN_H/2);
 
     this->setCursor(QCursor(Qt::PointingHandCursor));
@@ -48,8 +48,7 @@ WaveformSlider::WaveformSlider(QWidget *parent)
 
     m_labelTimer = new QTimer(this);
     m_labelTimer->setSingleShot(true);
-    connect(m_labelTimer, &QTimer::timeout,
-            this, [&](){
+    connect(m_labelTimer, &QTimer::timeout, this, [&]() {
         m_textLabel->hide();
     });
 
@@ -68,9 +67,9 @@ WaveformSlider::WaveformSlider(QWidget *parent)
 //    this->m_waveBorderColor = QColor(Qt::transparent);
 //    this->m_groovePlayingColor = QColor(Qt::red);
 //    this->m_groovePausedColor = QColor(Qt::yellow);
-    this->m_indicatorColor = QColor(Qt::transparent);
-    this->m_indicatorWidth = 1;
-    this->m_waveColor         = QColor(218, 218, 218);
+    this->m_indicatorColor      = QColor(Qt::transparent);
+    this->m_indicatorWidth      = 1;
+    this->m_waveColor           = QColor(218, 218, 218);
     this->m_waveHightlightColor = QColor(HIGHLIGHT_BG_COLOR);
 
     this->m_waveWidth = 3.0;
@@ -78,33 +77,6 @@ WaveformSlider::WaveformSlider(QWidget *parent)
 
     this->m_valueScale = 1.0;
     this->m_valueWhenMoving = 0.0;
-
-//    m_playcore = phoenixPlayerLib->playerCore();
-//    connect(m_playcore, &PlayerCore::trackChanged,
-//            this, [&](const QVariantMap &map){
-//        AudioMetaObject obj = AudioMetaObject::fromMap(map);
-//        if (obj.isHashEmpty() ||
-//                obj.mediaType() == PPCommon::MediaType::MediaTypeUrl) {
-//            m_curFile = QString();
-//        } else {
-//            //FIXME
-//            QUrl url = obj.uri();
-//            if (!url.scheme().isEmpty()) {
-//                m_curFile = url.toLocalFile();
-//            } else {
-//                m_curFile = url.toString();
-//            }
-//            if (m_preFile != m_curFile) {
-//                m_spek->stop();
-//                m_spek->open(m_curFile);
-//            }
-//        }
-//    });
-
-//    connect(m_playcore, &PlayerCore::playTickActual,
-//            this, [&](quint64 sec) {
-//        m_textLabel->setText(PPUtility::formateSongDuration(sec));
-//    });
 }
 
 WaveformSlider::~WaveformSlider()
@@ -141,15 +113,6 @@ void WaveformSlider::setSpectrumData(const QList<QList<qreal> > &list, int track
 
     this->update();
 }
-
-//void WaveformSlider::initSpekData()
-//{
-//    const double duration = m_trackDuration;
-//    this->setMaximum(duration);
-//    qDebug()<<Q_FUNC_INFO<<" duration "<<duration;
-//    m_valueScale = duration/(double)this->width();
-
-//}
 
 void WaveformSlider::updateTextLabel()
 {
@@ -262,10 +225,9 @@ void WaveformSlider::wheelEvent(QWheelEvent *event)
 void WaveformSlider::resizeEvent(QResizeEvent *event)
 {
     QAbstractSlider::resizeEvent(event);
-//    this->drawWaveform();
-//    this->update();
-    qDebug()<<"-------------"<<event->size();
+
     this->setFixedSize(event->size());
+    m_valueScale = m_trackDuration/(double)this->width();
     this->update();
 }
 
@@ -318,7 +280,7 @@ void WaveformSlider::paintEvent(QPaintEvent *event)
     qreal scale = 1.0;
     if (!m_spekList.isEmpty()) {
         qreal maxSpek = 0;
-        foreach (auto i, m_spekList) {
+        foreach (const auto &i, m_spekList) {
             if (i >= maxSpek) {
                 maxSpek = i;
             }

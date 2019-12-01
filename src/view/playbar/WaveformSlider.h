@@ -16,8 +16,6 @@ class WaveformSlider : public QAbstractSlider
 {
     Q_OBJECT
 
-    friend class SpekSpectrogram;
-
     Q_PROPERTY(int radius READ radius WRITE setRadius)
     Q_PROPERTY(QBrush background READ background WRITE setBackground)
     Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor)
@@ -41,12 +39,8 @@ public:
     void setSpectrumData(const QList<QList<qreal>> &list, int trackDuration);
 
 protected:
-//    virtual void initSpekData();
     virtual void updateTextLabel();
     QPoint limitLableGeometry(int x, int y, int z);
-
-
-//    virtual void drawWaveform();
 
     // QWidget interface
 public:
@@ -140,10 +134,6 @@ private:
     QLabel                                  *m_textLabel    = Q_NULLPTR;
     QTimer                                  *m_labelTimer   = Q_NULLPTR;
 
-//    PhoenixPlayer::PlayerCore               *m_playcore     = Q_NULLPTR;
-//    DataProvider::TinySpectrumDataProvider  *m_spekProvider = Q_NULLPTR;
-//    QString                         m_curFile;
-//    QString                         m_preFile;
     QList<qreal>  m_spekList;
     int           m_trackDuration;
     qreal         m_waveWidth;
