@@ -53,7 +53,19 @@ void RKIconButton::resizeEvent(QResizeEvent *event)
                     this->height() + this->height()/2));
     r.moveCenter(this->geometry().center());
     m_overlay->setGeometry(r);
+
     QPushButton::resizeEvent(event);
+}
+
+void RKIconButton::moveEvent(QMoveEvent *event)
+{
+    QRect r = this->rect();
+    r.setSize(QSize(this->width() + this->width()/2,
+                    this->height() + this->height()/2));
+    r.moveCenter(this->geometry().center());
+    m_overlay->setGeometry(r);
+
+    QPushButton::moveEvent(event);
 }
 
 } //namespace RockRokr
