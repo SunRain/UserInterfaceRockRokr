@@ -25,6 +25,7 @@
 #include "rockrokr_global.h"
 #include "widget/LoadingWidget.h"
 #include "widget/RKStackWidget.h"
+#include "widget/RKOverlayWidget.h"
 #include "view/ImportView.h"
 #include "view/MainWindowBGView.h"
 #include "view/RockRokrView.h"
@@ -69,9 +70,12 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_loadingWidget = new LoadingWidget;
     m_rkView = new RockRokrView;
 
+    m_overlayWidget = new RKOverlayWidget;
+
     m_stack->addWidget(m_importView);
     m_stack->addWidget(m_loadingWidget);
     m_stack->addWidget(m_rkView);
+    m_stack->addWidget(m_overlayWidget);
 
     connect(m_importView, &ImportView::scanStandardMusicPath,
             this, [&]() {
@@ -99,7 +103,7 @@ RKMainWindow::RKMainWindow(QWidget *parent)
         if (m_stack->widget(idx) != m_loadingWidget) {
             m_loadingWidget->stop();
         }
-        if (m_stack->widget(idx) != m_rkView) {
+        if ((m_stack->widget(idx) != m_rkView) && (m_stack->widget(idx) != m_overlayWidget)) {
             this->setDefaultTitlebarHidden(false);
         } else {
             this->setDefaultTitlebarHidden(true);
@@ -251,6 +255,14 @@ void RKMainWindow::showToast(const QString &text)
         m_toast->move((this->width() - m_toast->width()) / 2,
                       (this->height() - m_toast->height()));
     });
+}
+
+void RKMainWindow::showOverlay()
+{
+    m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
+
+    m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::BottomToTop);
+
 }
 
 } //namespace RockRokr

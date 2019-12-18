@@ -19,8 +19,11 @@
 #include "PlayerCore/PlayListObject.h"
 #include "LibPhoenixPlayerMain.h"
 #include "PPSettings.h"
+#include "UserInterface/UserInterfaceMgr.h"
 
 #include "rockrokr_global.h"
+#include "UserInterfaceRockRokr.h"
+#include "RKMainWindow.h"
 #include "LBListItem.h"
 #include "widget/RKListWidget.h"
 #include "widget/RKBoxWidget.h"
@@ -264,6 +267,11 @@ void LBPlaylistView::connectLBListItemSignals(LBListItem *item)
     connect(item, &LBListItem::leftBtnClicked,
             this, [&, item](LBListItem *i){
         qDebug()<<"LBListItem::clicked item clicked";
+        UserInterface::UserInterfaceMgr mgr;
+        UserInterfaceRockRokr *rk = qobject_cast<UserInterfaceRockRokr*>(mgr.usedInterface());
+        RKMainWindow *w = rk->mainWindow();
+        w->showOverlay();
+
         //TODO left click to show playlist view
     });
     connect(item, &LBListItem::rename,

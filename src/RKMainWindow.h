@@ -30,6 +30,7 @@ namespace PhoenixPlayer {
             class RockRokrView;
             class RKTitleBar;
             class RKStackedWidget;
+            class RKOverlayWidget;
 
 class RKMainWindow : public DTK_WIDGET_NAMESPACE::DMainWindow
 {
@@ -63,6 +64,8 @@ public:
 
     void showToast(const QString &text);
 
+    void showOverlay();
+
 private:
     QWidget                             *m_mainWidget       = Q_NULLPTR;
     QTimer                              *m_tipTimer         = Q_NULLPTR;
@@ -77,6 +80,7 @@ private:
     LoadingWidget                       *m_loadingWidget    = Q_NULLPTR;
     RockRokrView                        *m_rkView           = Q_NULLPTR;
     RKTitleBar                          *m_rkTitleBar       = Q_NULLPTR;
+    RKOverlayWidget                     *m_overlayWidget    = Q_NULLPTR;
 
     DTK_WIDGET_NAMESPACE::DToast        *m_tip              = Q_NULLPTR;
     DTK_WIDGET_NAMESPACE::DToast        *m_toast            = Q_NULLPTR;
