@@ -26,6 +26,9 @@ public:
      */
     void addContent(QWidget *content, Qt::AlignmentFlag flag = Qt::AlignCenter);
 
+signals:
+    void mousePressOutsideContent();
+
     // QWidget interface
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

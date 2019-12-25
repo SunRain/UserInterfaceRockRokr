@@ -87,7 +87,7 @@ void RKOverlayWidget::mousePressEvent(QMouseEvent *event)
             || pt.x() > (gm.x() + gm.width())
             || pt.y() < gm.y()
             || pt.y() > (gm.y() + gm.height())) {
-        this->hide();
+        emit mousePressOutsideContent();
     } else {
         QWidget::mousePressEvent(event);
     }
