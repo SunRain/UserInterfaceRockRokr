@@ -79,6 +79,16 @@ void RKStackedWidget::addWidget(QWidget *widget)
     QStackedWidget::addWidget(widget);
 }
 
+int RKStackedWidget::previousIndex() const
+{
+    return m_previousIndex;
+}
+
+int RKStackedWidget::currentIndex() const
+{
+    return m_currentIndex;
+}
+
 void RKStackedWidget::paintEvent(QPaintEvent *event)
 {
     if (m_animation->state() == QAbstractAnimation::State::Running) {

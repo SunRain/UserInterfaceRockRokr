@@ -35,6 +35,10 @@ public:
 
     void addWidget(QWidget *widget);
 
+    int previousIndex() const;
+
+    int currentIndex() const;
+
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
