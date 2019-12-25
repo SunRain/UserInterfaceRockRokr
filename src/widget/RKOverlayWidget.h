@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QVBoxLayout>
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -17,6 +18,13 @@ public:
 
     void setBackgroundPixmap(const QPixmap &pixmap);
 
+    /*!
+     * \brief addContent This will set content's parent to RKOverlayWidget
+     * \param content
+     * \param flag AlignmentFlag for how content added to parent widget.
+     * Not parent layout is QVBoxLayout.
+     */
+    void addContent(QWidget *content, Qt::AlignmentFlag flag = Qt::AlignCenter);
 
     // QWidget interface
 protected:
@@ -25,7 +33,10 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QPixmap m_bgPixmap;
+    QWidget         *m_backgroundWidget = Q_NULLPTR;
+    QWidget         *m_content = Q_NULLPTR;
+    QVBoxLayout     *m_contentLayout = Q_NULLPTR;
+    QPixmap         m_bgPixmap;
 };
 
 } //namespace RockRokr
