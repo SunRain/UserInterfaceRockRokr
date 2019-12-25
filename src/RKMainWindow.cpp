@@ -50,12 +50,6 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_mainWidget->resize(MAIN_WINDOW_W, MAIN_WINDOW_H);
     this->setCentralWidget(m_mainWidget);
 
-
-//    m_topStack = new QStackedLayout(m_mainWidget);
-//    m_topStack->setContentsMargins(0, 0, 0, 0);
-//    m_topStack->setMargin(0);
-//    m_topStack->setSpacing(0);
-
     QVBoxLayout *ly = new QVBoxLayout(m_mainWidget);
     ly->setContentsMargins(0, 0, 0, 0);
     ly->setSpacing(0);
@@ -71,6 +65,10 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_rkView = new RockRokrView;
 
     m_overlayWidget = new RKOverlayWidget;
+
+    QLabel *lb = new QLabel;
+    lb->setText("bbbbbbbbbbbbbbbbbbbbbbbbb");
+    m_overlayWidget->addContent(lb);
 
     m_stack->addWidget(m_importView);
     m_stack->addWidget(m_loadingWidget);
@@ -108,6 +106,11 @@ RKMainWindow::RKMainWindow(QWidget *parent)
         } else {
             this->setDefaultTitlebarHidden(true);
         }
+    });
+
+    connect(m_overlayWidget, &RKOverlayWidget::mousePressOutsideContent, this, [&](){
+        m_stack->setCurrentIndex(m_stack->previousIndex(),
+                                 RKStackedWidget::AnimationType::AnimationTypeNone);
     });
 }
 
@@ -261,7 +264,7 @@ void RKMainWindow::showOverlay()
 {
     m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
 
-    m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::BottomToTop);
+    m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
 
 }
 
