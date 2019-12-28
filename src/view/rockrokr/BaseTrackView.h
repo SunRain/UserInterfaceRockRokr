@@ -63,10 +63,10 @@ protected:
 
     QModelIndex indexAtPos(const QPoint &pos) const;
 
-    inline UserInterfaceRockRokr *userInterfaceRockRokr() const
-    {
-        return m_ui;
-    }
+//    inline UserInterfaceRockRokr *userInterfaceRockRokr() const
+//    {
+//        return m_ui;
+//    }
 
 private:
     PlayerCore                  *m_playerCore = Q_NULLPTR;
@@ -75,8 +75,8 @@ private:
     RKListView                  *m_listView = Q_NULLPTR;
     TrackListViewDelegate       *m_delegate = Q_NULLPTR;
     BaseTrackViewDataProvider   *m_provider = Q_NULLPTR;
-    UserInterfaceMgr            *m_uiMgr    = Q_NULLPTR;
-    UserInterfaceRockRokr       *m_ui       = Q_NULLPTR;
+//    UserInterfaceMgr            *m_uiMgr    = Q_NULLPTR;
+//    UserInterfaceRockRokr       *m_ui       = Q_NULLPTR;
 };
 
 } //namespace RockRokr

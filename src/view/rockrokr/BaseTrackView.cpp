@@ -46,8 +46,8 @@ BaseTrackView::BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent)
 
     m_playerCore = new PlayerCore(this);
     m_plsMetaMgr = new PlayListMetaMgr(this);
-    m_uiMgr = new UserInterfaceMgr(this);
-    m_ui = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
+//    m_uiMgr = new UserInterfaceMgr(this);
+//    m_ui = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
 
     m_delegate = new TrackListViewDelegate;
 
@@ -116,10 +116,10 @@ BaseTrackView::~BaseTrackView()
         m_plsMetaMgr->deleteLater();
         m_plsMetaMgr = Q_NULLPTR;
     }
-    if (m_uiMgr) {
-        m_uiMgr->deleteLater();
-        m_uiMgr = Q_NULLPTR;
-    }
+//    if (m_uiMgr) {
+//        m_uiMgr->deleteLater();
+//        m_uiMgr = Q_NULLPTR;
+//    }
 
     if (m_provider) {
         delete m_provider;
@@ -181,7 +181,8 @@ void BaseTrackView::menuAddToPlaylist(QMenu *menu, const AudioMetaObject &obj)
             PlayListObject po(meta);
             po.addTrack(obj);
             if (!po.save()) {
-                m_ui->mainWindow()->showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
+//                m_ui->mainWindow()->showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
+                ViewUtility::showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
             }
         });
     }

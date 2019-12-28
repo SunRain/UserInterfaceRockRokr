@@ -96,7 +96,8 @@ void FavoriteTrackView::showContextMenu(const QPoint &pos)
     const QString hash = getModel()->data(idx, TrackListModel::RoleHash).toString();
     const AudioMetaObject obj = m_libraryMgr->trackFromHash(hash);
     if (obj.isHashEmpty()) {
-        this->userInterfaceRockRokr()->mainWindow()->showToast(tr("Empty audio meta object !!"));
+//        this->userInterfaceRockRokr()->mainWindow()->showToast(tr("Empty audio meta object !!"));
+        ViewUtility::showToast(tr("Empty audio meta object !!"));
         return;
     }
     QMenu menu;
