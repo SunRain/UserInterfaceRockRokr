@@ -3,12 +3,16 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <QVBoxLayout>
+#include <QStackedLayout>
 
 namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
+/*!
+ * \brief The RKOverlayWidget class
+ * Use QStackedLayout to manager added widget
+ */
 class RKOverlayWidget : public QWidget
 {
     Q_OBJECT
@@ -18,16 +22,22 @@ public:
 
     void setBackgroundPixmap(const QPixmap &pixmap);
 
-    /*!
-     * \brief addContent This will set content's parent to RKOverlayWidget
-     * \param content
-     * \param flag AlignmentFlag for how content added to parent widget.
-     * Not parent layout is QVBoxLayout.
-     */
-    void addContent(QWidget *content, Qt::AlignmentFlag flag = Qt::AlignCenter);
+    int addWidget(QWidget *widget);
+
+    int currentIndex() const;
+
+    QWidget *currentWidget() const;
+
+    QWidget *widget(int index) const;
+
+    void removeWidget(QWidget *widget);
 
 signals:
     void mousePressOutsideContent();
+
+    void currentChanged(int index);
+
+    void widgetRemoved(int index);
 
     // QWidget interface
 protected:
@@ -35,10 +45,15 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
+public slots:
+    void setCurrentIndex(int index);
+
+    void setCurrentWidget(QWidget *widget);
+
 private:
     QWidget         *m_backgroundWidget = Q_NULLPTR;
     QWidget         *m_content = Q_NULLPTR;
-    QVBoxLayout     *m_contentLayout = Q_NULLPTR;
+    QStackedLayout  *m_stack = Q_NULLPTR;
     QPixmap         m_bgPixmap;
 };
 

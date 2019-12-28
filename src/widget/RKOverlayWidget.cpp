@@ -50,9 +50,15 @@ RKOverlayWidget::RKOverlayWidget(QWidget *parent)
 
     this->setLayout(ly);
 
-    m_contentLayout = new QVBoxLayout(m_backgroundWidget);
-    m_contentLayout->setSpacing(0);
-    m_contentLayout->setContentsMargins(0, 0, 0, 0);
+    m_stack = new QStackedLayout(m_backgroundWidget);
+    m_stack->setSpacing(0);
+    m_stack->setContentsMargins(0, 0, 0, 0);
+
+    connect(m_stack, &QStackedLayout::currentChanged,
+            this, &RKOverlayWidget::currentChanged);
+
+    connect(m_stack, &QStackedLayout::widgetRemoved,
+            this, &RKOverlayWidget::widgetRemoved);
 }
 
 RKOverlayWidget::~RKOverlayWidget()
@@ -65,19 +71,44 @@ void RKOverlayWidget::setBackgroundPixmap(const QPixmap &pixmap)
     m_bgPixmap = pixmap;
 }
 
-void RKOverlayWidget::addContent(QWidget *content, Qt::AlignmentFlag flag)
+int RKOverlayWidget::addWidget(QWidget *widget)
 {
-    if (m_content) {
-        m_content->close();
-        m_content->deleteLater();
-    }
-    m_content = content;
-    if (m_content) {
-        m_backgroundWidget->setFixedSize(m_content->size().width() + 10,
-                                         m_content->size().height() +10);
-    }
-    m_contentLayout->addWidget(m_content, 0, flag);
+    return m_stack->addWidget(widget);
 }
+
+int RKOverlayWidget::currentIndex() const
+{
+    return m_stack->currentIndex();
+}
+
+QWidget *RKOverlayWidget::currentWidget() const
+{
+    return m_stack->currentWidget();
+}
+
+QWidget *RKOverlayWidget::widget(int index) const
+{
+    return m_stack->widget(index);
+}
+
+void RKOverlayWidget::removeWidget(QWidget *widget)
+{
+    m_stack->removeWidget(widget);
+}
+
+//void RKOverlayWidget::addContent(QWidget *content, Qt::AlignmentFlag flag)
+//{
+//    if (m_content) {
+//        m_content->close();
+//        m_content->deleteLater();
+//    }
+//    m_content = content;
+//    if (m_content) {
+//        m_backgroundWidget->setFixedSize(m_content->size().width() + 10,
+//                                         m_content->size().height() +10);
+//    }
+//    m_contentLayout->addWidget(m_content, 0, flag);
+//}
 
 void RKOverlayWidget::mousePressEvent(QMouseEvent *event)
 {
@@ -135,6 +166,32 @@ void RKOverlayWidget::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(point.x()-2 , point.y()-2, rect.width()+4, rect.height()+4, 4, 4);
 
     QWidget::paintEvent(event);
+}
+
+void RKOverlayWidget::setCurrentIndex(int index)
+{
+    QWidget *content = m_stack->widget(index);
+    if (!content) {
+        qDebug()<<"Can't find widget at index";
+        return;
+    }
+    m_backgroundWidget->setFixedSize(m_content->size().width() + 10,
+                                     m_content->size().height() +10);
+    m_stack->setCurrentIndex(index);
+}
+
+void RKOverlayWidget::setCurrentWidget(QWidget *widget)
+{
+    if (!widget) {
+        return;
+    }
+    if (m_stack->indexOf(widget) < 0) {
+        qDebug()<<"Can't find current widget";
+        return;
+    }
+    m_backgroundWidget->setFixedSize(widget->size().width() + 10,
+                                     widget->size().height() +10);
+    m_stack->setCurrentWidget(widget);
 }
 
 
