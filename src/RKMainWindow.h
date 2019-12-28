@@ -31,6 +31,7 @@ namespace PhoenixPlayer {
             class RKTitleBar;
             class RKStackedWidget;
             class RKOverlayWidget;
+            class CategoryDetailView;
 
 class RKMainWindow : public DTK_WIDGET_NAMESPACE::DMainWindow
 {
@@ -81,6 +82,7 @@ private:
     RockRokrView                        *m_rkView           = Q_NULLPTR;
     RKTitleBar                          *m_rkTitleBar       = Q_NULLPTR;
     RKOverlayWidget                     *m_overlayWidget    = Q_NULLPTR;
+    CategoryDetailView              *m_ctgryDetailView  = Q_NULLPTR;
 
     DTK_WIDGET_NAMESPACE::DToast        *m_tip              = Q_NULLPTR;
     DTK_WIDGET_NAMESPACE::DToast        *m_toast            = Q_NULLPTR;

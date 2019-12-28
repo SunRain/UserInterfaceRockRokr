@@ -30,6 +30,7 @@
 #include "view/MainWindowBGView.h"
 #include "view/RockRokrView.h"
 #include "view/titlebar/RKTitleBar.h"
+#include "view/rockrokr/CategoryDetailView.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -65,10 +66,9 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_rkView = new RockRokrView;
 
     m_overlayWidget = new RKOverlayWidget;
-
-    QLabel *lb = new QLabel;
-    lb->setText("bbbbbbbbbbbbbbbbbbbbbbbbb");
-    m_overlayWidget->addContent(lb);
+    m_ctgryDetailView = new CategoryDetailView;
+    m_ctgryDetailView->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+    m_overlayWidget->addWidget(m_ctgryDetailView);
 
     m_stack->addWidget(m_importView);
     m_stack->addWidget(m_loadingWidget);
@@ -265,6 +265,7 @@ void RKMainWindow::showOverlay()
     m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
 
     m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
+    m_overlayWidget->setCurrentWidget(m_ctgryDetailView);
 
 }
 

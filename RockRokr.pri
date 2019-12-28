@@ -50,6 +50,7 @@ HEADERS += \
     $$PWD/src/view/rockrokr/BaseCategoryView.h \
     $$PWD/src/view/rockrokr/BaseTrackView.h \
     $$PWD/src/view/rockrokr/CategoryAllViewDelegate.h \
+    $$PWD/src/view/rockrokr/CategoryDetailView.h \
     $$PWD/src/view/rockrokr/CategoryModel.h \
     $$PWD/src/view/rockrokr/CategoryModelImageProvider.h \
     $$PWD/src/view/rockrokr/CategoryRecentViewDelegate.h \
@@ -106,6 +107,7 @@ SOURCES += \
     $$PWD/src/view/rockrokr/BaseCategoryView.cpp \
     $$PWD/src/view/rockrokr/BaseTrackView.cpp \
     $$PWD/src/view/rockrokr/CategoryAllViewDelegate.cpp \
+    $$PWD/src/view/rockrokr/CategoryDetailView.cpp \
     $$PWD/src/view/rockrokr/CategoryModel.cpp \
     $$PWD/src/view/rockrokr/CategoryModelImageProvider.cpp \
     $$PWD/src/view/rockrokr/CategoryRecentViewDelegate.cpp \
