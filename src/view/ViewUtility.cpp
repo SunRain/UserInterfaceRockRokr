@@ -1,8 +1,9 @@
 #include "ViewUtility.h"
 
+#include <qcompilerdetection.h>
+#include <QDebug>
 #include <QStyleFactory>
 #include <QRadioButton>
-#include <qcompilerdetection.h>
 #include <QFont>
 #include <QWidget>
 
@@ -25,6 +26,19 @@ namespace RockRokr {
 
 static RKMainWindow *s_mainWindow = Q_NULLPTR;
 
+inline void chkMainWindow()
+{
+    if (Q_UNLIKELY(!s_mainWindow)) {
+        UserInterfaceMgr mgr;
+        UserInterfaceRockRokr *rk = qobject_cast<UserInterfaceRockRokr*>(mgr.usedInterface());
+        if (rk) {
+            s_mainWindow = rk->mainWindow();
+        } else {
+            qFatal("No main window point found!!");
+        }
+    }
+}
+
 QImage ViewUtility::cropRect(const QImage &image, QSize sz)
 {
     QImage newImage = image.scaled(sz, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
@@ -43,13 +57,7 @@ QImage ViewUtility::cropRect(const QImage &image, QSize sz)
 
 void ViewUtility::showTrackRemoveDialog(const PhoenixPlayer::AudioMetaObject &obj)
 {
-    if (Q_UNLIKELY(!s_mainWindow)) {
-        UserInterfaceMgr mgr;
-        UserInterfaceRockRokr *rk = qobject_cast<UserInterfaceRockRokr*>(mgr.usedInterface());
-        if (rk) {
-            s_mainWindow = rk->mainWindow();
-        }
-    }
+    chkMainWindow();
 
     DDialog dlg(s_mainWindow);
     dlg.setStyle(QStyleFactory::create("dlight"));
@@ -88,7 +96,6 @@ void ViewUtility::showTrackRemoveDialog(const PhoenixPlayer::AudioMetaObject &ob
     dlg.addContent(btn, Qt::AlignLeft);
 
     if (dlg.exec() == QDialog::Accepted) {
-//        phoenixPlayerLib->libraryMgr()->deleteObject(obj, btn->isChecked());
         MusicLibrary::MusicLibraryManager mgr;
         mgr.deleteObject(obj, btn->isChecked());
     }
@@ -96,16 +103,24 @@ void ViewUtility::showTrackRemoveDialog(const PhoenixPlayer::AudioMetaObject &ob
 
 void ViewUtility::showTrackInfoDialog(const AudioMetaObject &obj)
 {
-    if (Q_UNLIKELY(!s_mainWindow)) {
-        UserInterfaceMgr mgr;
-        UserInterfaceRockRokr *rk = qobject_cast<UserInterfaceRockRokr*>(mgr.usedInterface());
-        if (rk) {
-            s_mainWindow = rk->mainWindow();
-        }
-    }
+    chkMainWindow();
+
     auto dlg = new TrackInfoDialog(obj, s_mainWindow);
-//    dlg->setModal(false);
     dlg->exec();
+}
+
+void ViewUtility::showToast(const QString &msg)
+{
+    chkMainWindow();
+
+    s_mainWindow->showToast(msg);
+}
+
+void ViewUtility::showTip(QWidget *baseWidget, const QString &text, int delayShowMilliseconds)
+{
+    chkMainWindow();
+
+    s_mainWindow->showTip(baseWidget, text, delayShowMilliseconds);
 }
 
 } //namespace RockRokr

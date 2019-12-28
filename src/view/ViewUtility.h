@@ -18,6 +18,11 @@ public:
     static void showTrackRemoveDialog(const PhoenixPlayer::AudioMetaObject &obj);
 
     static void showTrackInfoDialog(const PhoenixPlayer::AudioMetaObject &obj);
+
+    static void showToast(const QString &msg);
+
+    static void showTip(QWidget *baseWidget, const QString &text, int delayShowMilliseconds = 0);
+
 };
 
 } //namespace RockRokr
