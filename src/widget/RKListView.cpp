@@ -138,10 +138,23 @@ void RKListView::mouseMoveEvent(QMouseEvent *event)
 
 void RKListView::setModel(QAbstractItemModel *model)
 {
-    qDebug()<<" row count "<<model->rowCount();
-
     QListView::setModel(model);
     updateScrollBar();
+
+    if (!model) {
+        return;
+    }
+    connect(model, &QAbstractItemModel::rowsAboutToBeInserted,
+            this, &RKListView::updateScrollBar);
+
+    connect(model, &QAbstractItemModel::rowsAboutToBeRemoved,
+            this, &RKListView::updateScrollBar);
+
+    connect(model, &QAbstractItemModel::columnsAboutToBeRemoved,
+            this, &RKListView::updateScrollBar);
+
+    connect(model, &QAbstractItemModel::columnsAboutToBeInserted,
+            this, &RKListView::updateScrollBar);
 }
 
 void RKListView::setSelectionModel(QItemSelectionModel *selectionModel)
