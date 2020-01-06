@@ -10,6 +10,7 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
+class BaseCategoryModel;
 class RKListView;
 class CategoryRecommendedViewDelegate;
 class CategoryRecentViewDelegate;
@@ -26,6 +27,12 @@ public:
 
     void initListViewParameter(QListView *view);
 
+Q_SIGNALS:
+    void recommendedListViewClicked(BaseCategoryModel *model, const QModelIndex &index);
+
+    void recentListViewClicked(BaseCategoryModel *model, const QModelIndex &index);
+
+    void allListViewClicked(BaseCategoryModel *model, const QModelIndex &index);
 
 private:
     RKListView                          *m_recommendedListView      = Q_NULLPTR;

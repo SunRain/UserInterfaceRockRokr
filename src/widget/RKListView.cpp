@@ -46,7 +46,7 @@ RKListView::RKListView(QWidget *parent)
     m_animation->setKeyValueAt(0.8, 1.0);
 
     connect(m_scrollBar, &QScrollBar::valueChanged, this, [&](int value) {
-//                qDebug()<<" QScrollBar::valueChanged "<<value;
+//                qDebug()<<" m_scrollBar ::valueChanged "<<value;
         this->getInnerScrollBar()->setValue(value);
         emit this->scrollValueChanged(value);
     });
@@ -84,12 +84,25 @@ void RKListView::setScrollBarOrientation(Qt::Orientation orientation)
     this->style()->unpolish(m_scrollBar);
     this->style()->polish(m_scrollBar);
     updateScrollBar();
+
+    if (!getInnerScrollBar()) {
+        return;
+    }
+    connect(getInnerScrollBar(),  &QScrollBar::valueChanged, this, [&](int value) {
+        Q_UNUSED(value);
+        m_scrollBar->setSliderPosition(getInnerScrollBar()->sliderPosition());
+    });
+
+    connect(getInnerScrollBar(),  &QScrollBar::sliderMoved, this, [&](int value) {
+        Q_UNUSED(value);
+    });
+
+
 }
 
 void RKListView::wheelEvent(QWheelEvent *event)
 {
     QListView::wheelEvent(event);
-    m_scrollBar->setSliderPosition(this->getInnerScrollBar()->sliderPosition());
 }
 
 void RKListView::enterEvent(QEvent *event)
@@ -101,7 +114,7 @@ void RKListView::enterEvent(QEvent *event)
         }
         animateShowScrollbar(true);
     }
-//    QListView::enterEvent(event);
+    QListView::enterEvent(event);
 }
 
 void RKListView::leaveEvent(QEvent *event)
@@ -111,6 +124,8 @@ void RKListView::leaveEvent(QEvent *event)
         m_timer->start();
     }
     QListView::leaveEvent(event);
+    ///NOTE: emit entered signal with empty QModelIndex manually
+    /// to tell that mouse is not in any item of listview currently
     emit entered(QModelIndex());
 }
 
@@ -120,10 +135,12 @@ void RKListView::resizeEvent(QResizeEvent *event)
     static const int scSize = MAIN_VIEW_SCROLLBAR_SIZE;
     const QSize size = event->size();
     if (m_scrollBar->orientation() == Qt::Orientation::Vertical) {
-        m_scrollBar->resize(scSize, size.height());
+//        m_scrollBar->resize(scSize, size.height());
+        m_scrollBar->setFixedSize(scSize, size.height());
         m_scrollBar->move(size.width()-scSize, 0);
     } else {
-        m_scrollBar->resize(size.width(), scSize);
+//        m_scrollBar->resize(size.width(), scSize);
+        m_scrollBar->setFixedSize(size.width(), scSize);
         m_scrollBar->move(0, size.height()-scSize);
     }
     updateScrollBar();
@@ -138,23 +155,26 @@ void RKListView::mouseMoveEvent(QMouseEvent *event)
 
 void RKListView::setModel(QAbstractItemModel *model)
 {
+    if (model) {
+        if (this->model()) {
+            this->model()->disconnect();
+        }
+
+        connect(model, &QAbstractItemModel::rowsAboutToBeInserted,
+                this, &RKListView::updateScrollBar);
+
+        connect(model, &QAbstractItemModel::rowsAboutToBeRemoved,
+                this, &RKListView::updateScrollBar);
+
+        connect(model, &QAbstractItemModel::columnsAboutToBeRemoved,
+                this, &RKListView::updateScrollBar);
+
+        connect(model, &QAbstractItemModel::columnsAboutToBeInserted,
+                this, &RKListView::updateScrollBar);
+    }
+
     QListView::setModel(model);
     updateScrollBar();
-
-    if (!model) {
-        return;
-    }
-    connect(model, &QAbstractItemModel::rowsAboutToBeInserted,
-            this, &RKListView::updateScrollBar);
-
-    connect(model, &QAbstractItemModel::rowsAboutToBeRemoved,
-            this, &RKListView::updateScrollBar);
-
-    connect(model, &QAbstractItemModel::columnsAboutToBeRemoved,
-            this, &RKListView::updateScrollBar);
-
-    connect(model, &QAbstractItemModel::columnsAboutToBeInserted,
-            this, &RKListView::updateScrollBar);
 }
 
 void RKListView::setSelectionModel(QItemSelectionModel *selectionModel)

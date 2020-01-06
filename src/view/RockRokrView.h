@@ -17,15 +17,23 @@ class ArtistCategoryView;
 class GenresCategoryView;
 class AllTrackView;
 class FavoriteTrackView;
+class CategoryDetailView;
 class RockRokrView : public QFrame
 {
     Q_OBJECT
+
+    friend class RKMainWindow;
 public:
     explicit RockRokrView(QWidget *parent = nullptr);
     virtual ~RockRokrView() override;
 
 protected:
     void initUI();
+
+    inline CategoryDetailView *categoryDetailView()
+    {
+        return m_ctgDetailView;
+    }
 
 private:
     LBListItem          *m_preLeftBarItem   = Q_NULLPTR;
@@ -38,6 +46,7 @@ private:
     GenresCategoryView  *m_genresCategory   = Q_NULLPTR;
     AllTrackView        *m_allTrackView     = Q_NULLPTR;
     FavoriteTrackView   *m_favTrackView     = Q_NULLPTR;
+    CategoryDetailView  *m_ctgDetailView    = Q_NULLPTR;
 
 };
 

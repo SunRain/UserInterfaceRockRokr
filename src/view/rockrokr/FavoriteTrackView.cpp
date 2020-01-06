@@ -67,7 +67,7 @@ TrackListModel *FavoriteTrackViewDataProvider::dataModel() const
     return m_dataModel;
 }
 
-void FavoriteTrackViewDataProvider::resetDataModelToDefalutState() const
+void FavoriteTrackViewDataProvider::resetDataModelToDefalutState()
 {
     m_dataModel->showFavorites();
 }

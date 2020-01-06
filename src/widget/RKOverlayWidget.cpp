@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QMouseEvent>
+#include <QtMath>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
@@ -33,22 +34,25 @@ RKOverlayWidget::RKOverlayWidget(QWidget *parent)
     this->setObjectName("RKOverlayWidget");
     DThemeManager::instance()->registerWidget(this);
 
-    this->setAttribute(Qt::WA_TranslucentBackground);
+//    this->setAttribute(Qt::WA_TranslucentBackground);
 
     m_backgroundWidget = new QWidget;
-//    m_backgroundWidget->setObjectName("BackgroundWidget");
-    m_backgroundWidget->setStyleSheet("QWidget{background-color: rgb(255, 255, 255);border-radius:4px}");
+    m_backgroundWidget->setObjectName("BackgroundWidget");
+
+    m_shadowWidget = new QWidget(this);
+    m_shadowWidget->setObjectName("ShadowWidget");
 
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
     effect->setOffset(0, 0);
     effect->setColor(Qt::gray);
-    effect->setBlurRadius(15);
-    m_backgroundWidget->setGraphicsEffect(effect);
+    effect->setBlurRadius(50);
+    m_shadowWidget->setGraphicsEffect(effect);
 
-    QVBoxLayout *ly = new QVBoxLayout(this);
-    ly->addWidget(m_backgroundWidget, 0, Qt::AlignmentFlag::AlignCenter);
-
-    this->setLayout(ly);
+    {
+        QVBoxLayout *ly = new QVBoxLayout(this);
+        ly->addWidget(m_backgroundWidget, 0, Qt::AlignmentFlag::AlignCenter);
+        this->setLayout(ly);
+    }
 
     m_stack = new QStackedLayout(m_backgroundWidget);
     m_stack->setSpacing(0);
@@ -155,13 +159,13 @@ void RKOverlayWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(QColor(255, 255, 255, 50));
     painter.drawRect(0, 0, pm.width(), pm.height());
 
-    // draw content rect
-    painter.setPen(/*QPen(QColor(0, 0, 0),  0)*/Qt::gray); //border
-    painter.setBrush(Qt::white);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
     QRect rect = m_backgroundWidget->rect();
     QPoint point = m_backgroundWidget->geometry().topLeft();
+
+    // draw content rect
+    painter.setPen(QColor(255, 255, 255, 50)); //border
+//    painter.setBrush(Qt::white);
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.drawRoundedRect(point.x()-2 , point.y()-2, rect.width()+4, rect.height()+4, 4, 4);
 
@@ -170,13 +174,16 @@ void RKOverlayWidget::paintEvent(QPaintEvent *event)
 
 void RKOverlayWidget::setCurrentIndex(int index)
 {
-    QWidget *content = m_stack->widget(index);
-    if (!content) {
+    QWidget *widget = m_stack->widget(index);
+    if (!widget) {
         qDebug()<<"Can't find widget at index";
         return;
     }
-    m_backgroundWidget->setFixedSize(m_content->size().width() + 10,
-                                     m_content->size().height() +10);
+    m_backgroundWidget->setFixedSize(widget->size().width(),
+                                     widget->size().height());
+    m_shadowWidget->setFixedSize(m_backgroundWidget->size());
+    m_shadowWidget->setGeometry(m_backgroundWidget->geometry());
+
     m_stack->setCurrentIndex(index);
 }
 
@@ -189,8 +196,11 @@ void RKOverlayWidget::setCurrentWidget(QWidget *widget)
         qDebug()<<"Can't find current widget";
         return;
     }
-    m_backgroundWidget->setFixedSize(widget->size().width() + 10,
-                                     widget->size().height() +10);
+    m_backgroundWidget->setFixedSize(widget->size().width(),
+                                     widget->size().height());
+    m_shadowWidget->setFixedSize(m_backgroundWidget->size());
+    m_shadowWidget->setGeometry(m_backgroundWidget->geometry());
+
     m_stack->setCurrentWidget(widget);
 }
 

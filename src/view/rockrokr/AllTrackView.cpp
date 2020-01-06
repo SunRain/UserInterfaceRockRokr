@@ -134,7 +134,7 @@ TrackListModel *AllTrackViewDataProvider::dataModel() const
     return m_dataModel;
 }
 
-void AllTrackViewDataProvider::resetDataModelToDefalutState() const
+void AllTrackViewDataProvider::resetDataModelToDefalutState()
 {
     m_dataModel->showAllTracks();
 }

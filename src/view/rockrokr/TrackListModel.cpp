@@ -25,10 +25,24 @@ TrackListModel::TrackListModel(QAbstractListModel *parent)
 
     connect(m_libraryMgr, &MusicLibrary::MusicLibraryManager::libraryListSizeChanged,
             this, [&] () {
-        if (m_viewMode == ViewMode::ModeShowAllTracks) {
+        switch (m_viewMode) {
+        case ModeShowAllTracks:
             showAllTracks();
-        } else if (m_viewMode == ViewMode::ModeShowFavorites) {
+            break;
+        case ModeShowFavorites:
             showFavorites();
+            break;
+        case ModeShowAlbumTracks:
+            showAlbumTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
+            break;
+        case ModeShowArtistTracks:
+            showArtistTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
+            break;
+        case ModeShowGenreTracks:
+            showGenreTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
+            break;
+        default:
+            break;
         }
     });
 }
@@ -73,6 +87,68 @@ void TrackListModel::showFavorites()
     }
     beginInsertRows(QModelIndex(), 0, m_dataList.size() -1);
     endInsertRows();
+}
+
+void TrackListModel::showArtistTracks(const QString &artistName, int limitNum)
+{
+    m_trackNumLimitForMode = limitNum;
+    m_keyForTrackGroupName = artistName;
+    m_viewMode = ViewMode::ModeShowArtistTracks;
+
+    clearList();
+    m_dataList.append(m_libraryMgr->artistTracks(artistName, limitNum));
+
+    beginInsertRows(QModelIndex(), 0, m_dataList.size() -1);
+    endInsertRows();
+}
+
+void TrackListModel::showAlbumTracks(const QString &albumName, int limitNum)
+{
+    m_trackNumLimitForMode = limitNum;
+    m_keyForTrackGroupName = albumName;
+    m_viewMode = ViewMode::ModeShowAlbumTracks;
+
+    clearList();
+    m_dataList.append(m_libraryMgr->albumTracks(albumName, limitNum));
+
+    beginInsertRows(QModelIndex(), 0, m_dataList.size() -1);
+    endInsertRows();
+}
+
+void TrackListModel::showGenreTracks(const QString &genreName, int limitNum)
+{
+    m_trackNumLimitForMode = limitNum;
+    m_keyForTrackGroupName = genreName;
+    m_viewMode = ViewMode::ModeShowGenreTracks;
+
+    clearList();
+    m_dataList.append(m_libraryMgr->genreTracks(genreName, limitNum));
+
+    beginInsertRows(QModelIndex(), 0, m_dataList.size() -1);
+    endInsertRows();
+}
+
+void TrackListModel::resetToDefalutState()
+{
+    switch (m_viewMode) {
+    case ModeShowAllTracks:
+        showAllTracks();
+        break;
+    case ModeShowFavorites:
+        showFavorites();
+        break;
+    case ModeShowAlbumTracks:
+        showAlbumTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
+        break;
+    case ModeShowArtistTracks:
+        showArtistTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
+        break;
+    case ModeShowGenreTracks:
+        showGenreTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
+        break;
+    default:
+        break;
+    }
 }
 
 int TrackListModel::rowCount(const QModelIndex &parent) const

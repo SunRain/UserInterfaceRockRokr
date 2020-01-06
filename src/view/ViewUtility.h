@@ -23,6 +23,7 @@ public:
 
     static void showTip(QWidget *baseWidget, const QString &text, int delayShowMilliseconds = 0);
 
+    static void showOverlayView();
 };
 
 } //namespace RockRokr

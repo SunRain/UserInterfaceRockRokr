@@ -33,7 +33,7 @@ public:
 public:
     RKTableHeaderItem *headerItem() const Q_DECL_OVERRIDE;
     TrackListModel *dataModel() const Q_DECL_OVERRIDE;
-    void resetDataModelToDefalutState() const Q_DECL_OVERRIDE;
+    void resetDataModelToDefalutState() Q_DECL_OVERRIDE;
 
 private:
     RKTableHeaderItem           *m_header  = Q_NULLPTR;

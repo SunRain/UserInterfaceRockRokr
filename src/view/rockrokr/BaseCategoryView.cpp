@@ -93,6 +93,13 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
                 model->setCurIdx(idx);
             });
 
+   connect(m_recommendedListView, &RKListView::clicked,
+           this, [&](const QModelIndex &index) {
+       BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recommendedModel());
+       Q_ASSERT(model != Q_NULLPTR);
+       Q_EMIT(recommendedListViewClicked(model, index));
+   });
+
     connect(m_recentListView, &RKListView::entered,
             this, [&](const QModelIndex &idx) {
 //                qDebug()<<Q_FUNC_INFO<<" entered "<<idx;
@@ -100,6 +107,12 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
                 Q_ASSERT(model != Q_NULLPTR);
                 model->setCurIdx(idx);
             });
+    connect(m_recentListView, &RKListView::clicked,
+            this, [&](const QModelIndex &index) {
+        BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recentModel());
+        Q_ASSERT(model != Q_NULLPTR);
+        Q_EMIT(recentListViewClicked(model, index));
+    });
 
     connect(m_allListView, &RKListView::entered,
             this, [&](const QModelIndex &idx) {
@@ -108,6 +121,12 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
                 Q_ASSERT(model != Q_NULLPTR);
                 model->setCurIdx(idx);
             });
+    connect(m_allListView, &RKListView::clicked,
+            this, [&](const QModelIndex &index) {
+        BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->allListModel());
+        Q_ASSERT(model != Q_NULLPTR);
+        Q_EMIT(allListViewClicked(model, index));
+    });
 
 
 }

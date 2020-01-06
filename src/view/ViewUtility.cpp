@@ -123,6 +123,13 @@ void ViewUtility::showTip(QWidget *baseWidget, const QString &text, int delaySho
     s_mainWindow->showTip(baseWidget, text, delayShowMilliseconds);
 }
 
+void ViewUtility::showOverlayView()
+{
+    chkMainWindow();
+
+    s_mainWindow->showOverlay();
+}
+
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer

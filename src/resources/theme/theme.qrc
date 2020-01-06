@@ -79,5 +79,6 @@
         <file>light/PhoenixPlayer--UserInterface--RockRokr--RKTitleBar.theme</file>
         <file>light/image/KEY_ADDON.svg</file>
         <file>light/image/KEY_SERVICE.svg</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RKOverlayWidget.theme</file>
     </qresource>
 </RCC>

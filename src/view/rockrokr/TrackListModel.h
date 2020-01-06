@@ -32,6 +32,18 @@ public:
 
     void showFavorites();
 
+    void showArtistTracks(const QString &artistName, int limitNum = 0);
+
+    void showAlbumTracks(const QString  &albumName, int limitNum = 0);
+
+    void showGenreTracks(const QString &genreName, int limitNum = 0);
+
+    /*!
+     * \brief resetToDefalutState
+     * Reset mode to current ViewMode type with current limitNum
+     */
+    void resetToDefalutState();
+
 public:
     enum ModelRoles {
         RoleFilePath = Qt::UserRole + 1,
@@ -91,7 +103,10 @@ private:
     enum ViewMode {
         ModeUndefined = 0x0,
         ModeShowAllTracks,
-        ModeShowFavorites
+        ModeShowFavorites,
+        ModeShowArtistTracks,
+        ModeShowAlbumTracks,
+        ModeShowGenreTracks
     };
 
 private:
@@ -101,6 +116,8 @@ private:
     AudioMetaList                       m_dataList;
     QModelIndex                         m_curIdx;
     ViewMode                            m_viewMode          = ViewMode::ModeUndefined;
+    int                                 m_trackNumLimitForMode = 0;
+    QString                             m_keyForTrackGroupName;
 };
 
 

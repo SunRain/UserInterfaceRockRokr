@@ -6,42 +6,19 @@
 #include "BaseTrackView.h"
 
 namespace PhoenixPlayer {
-namespace UserInterface {
-namespace RockRokr {
 
-    class RKTableHeaderItem;
-    class TrackListModel;
+    namespace MusicLibrary {
+        class MusicLibraryManager;
+    }
 
-class CategoryDetailViewDataProvider : public BaseTrackViewDataProvider
-{
-public:
-    explicit CategoryDetailViewDataProvider();
-    virtual ~CategoryDetailViewDataProvider() override;
+    namespace UserInterface {
 
-    // BaseTrackViewDataProvider interface
-public:
-    RKTableHeaderItem *headerItem() const Q_DECL_OVERRIDE;
-    TrackListModel *dataModel() const Q_DECL_OVERRIDE;
-    void resetDataModelToDefalutState() const Q_DECL_OVERRIDE;
+        namespace RockRokr {
 
-private:
-    RKTableHeaderItem           *m_header  = Q_NULLPTR;
-    TrackListModel              *m_dataModel = Q_NULLPTR;
-};
+            class RKTableHeaderItem;
+            class TrackListModel;
 
-class CategoryDetailTrackView : public BaseTrackView
-{
-    Q_OBJECT
-public:
-    explicit CategoryDetailTrackView(QWidget *parent = Q_NULLPTR);
-    virtual ~CategoryDetailTrackView() override;
-
-    // BaseTrackView interface
-protected:
-    void showContextMenu(const QPoint &pos) Q_DECL_OVERRIDE;
-    void onClicked(const QModelIndex &index) Q_DECL_OVERRIDE;
-};
-
+class CategoryDetailTrackView;
 class CategoryDetailView : public QFrame
 {
     Q_OBJECT
@@ -49,13 +26,20 @@ public:
     explicit CategoryDetailView(QWidget *parent = Q_NULLPTR);
     virtual ~CategoryDetailView() override;
 
+    void showArtistTracks(const QString &artistName);
+    void showAlbumTracks(const QString  &albumName);
+    void showGenreTracks(const QString &genreName);
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 protected:
     void initUserInterface();
 
 
 private:
-    CategoryDetailTrackView       *m_trackView = Q_NULLPTR;
-
+    CategoryDetailTrackView     *m_trackView = Q_NULLPTR;
 };
 
 } //namespace RockRokr

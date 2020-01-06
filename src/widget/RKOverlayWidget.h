@@ -52,8 +52,8 @@ public slots:
 
 private:
     QWidget         *m_backgroundWidget = Q_NULLPTR;
-    QWidget         *m_content = Q_NULLPTR;
-    QStackedLayout  *m_stack = Q_NULLPTR;
+    QWidget         *m_shadowWidget     = Q_NULLPTR;
+    QStackedLayout  *m_stack            = Q_NULLPTR;
     QPixmap         m_bgPixmap;
 };
 

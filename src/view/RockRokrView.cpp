@@ -6,6 +6,7 @@
 #include <DThemeManager>
 
 #include "rockrokr_global.h"
+#include "ViewUtility.h"
 #include "leftbar/LeftBar.h"
 #include "leftbar/LBListItem.h"
 #include "view/titlebar/RKTitleBar.h"
@@ -17,6 +18,8 @@
 #include "rockrokr/GenresCategoryView.h"
 #include "rockrokr/AllTrackView.h"
 #include "rockrokr/FavoriteTrackView.h"
+#include "rockrokr/CategoryModel.h"
+#include "rockrokr/CategoryDetailView.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -30,6 +33,8 @@ RockRokrView::RockRokrView(QWidget *parent)
 {
     this->setObjectName("RockRokrView");
     DThemeManager::instance()->registerWidget(this);
+
+    m_ctgDetailView = new CategoryDetailView;
 
     m_leftbar = new LeftBar;
     m_titlebar = new RKTitleBar;
@@ -76,6 +81,75 @@ RockRokrView::RockRokrView(QWidget *parent)
         } else {
             m_stack->setCurrentIndex(item->extraData().toInt(), RKStackedWidget::TopToBottom);
         }
+    });
+
+    /** ArtistCategoryView ***/
+    connect(m_artistCategory, &ArtistCategoryView::recentListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showArtistTracks(name);
+        ViewUtility::showOverlayView();
+    });
+
+    connect(m_artistCategory, &ArtistCategoryView::recommendedListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showArtistTracks(name);
+        ViewUtility::showOverlayView();
+
+    });
+
+    connect(m_artistCategory, &ArtistCategoryView::allListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showArtistTracks(name);
+        ViewUtility::showOverlayView();
+    });
+
+    /** AlbumCategoryView ***/
+    connect(m_albumCategory, &AlbumCategoryView::recentListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showAlbumTracks(name);
+        ViewUtility::showOverlayView();
+    });
+
+    connect(m_albumCategory, &AlbumCategoryView::recommendedListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showAlbumTracks(name);
+        ViewUtility::showOverlayView();
+
+    });
+
+    connect(m_albumCategory, &ArtistCategoryView::allListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showAlbumTracks(name);
+        ViewUtility::showOverlayView();
+    });
+
+    /** GenresCategoryView ***/
+    connect(m_genresCategory, &GenresCategoryView::recentListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showGenreTracks(name);
+        ViewUtility::showOverlayView();
+    });
+
+    connect(m_genresCategory, &GenresCategoryView::recommendedListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showGenreTracks(name);
+        ViewUtility::showOverlayView();
+
+    });
+
+    connect(m_genresCategory, &GenresCategoryView::allListViewClicked,
+            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
+        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
+        m_ctgDetailView->showGenreTracks(name);
+        ViewUtility::showOverlayView();
     });
 }
 

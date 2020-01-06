@@ -4,6 +4,8 @@
 #include <QFrame>
 #include "AudioMetaObject.h"
 
+#include "TrackListModel.h"
+
 class QMenu;
 
 namespace PhoenixPlayer {
@@ -27,11 +29,14 @@ class BaseTrackViewDataProvider
 {
 public:
     BaseTrackViewDataProvider() {}
-    virtual ~BaseTrackViewDataProvider();
+    virtual ~BaseTrackViewDataProvider() {};
 
     virtual RKTableHeaderItem *headerItem() const = 0;
     virtual TrackListModel *dataModel() const = 0;
-    virtual void resetDataModelToDefalutState() const = 0;
+    virtual void resetDataModelToDefalutState()
+    {
+        dataModel()->resetToDefalutState();
+    }
 };
 
 class BaseTrackView : public QFrame
@@ -40,6 +45,13 @@ class BaseTrackView : public QFrame
 public:
     explicit BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent = nullptr);
     virtual ~BaseTrackView() override;
+
+    /*!
+     * \brief setInternalListViewSize
+     * Set listview size or use default size
+     * \param size
+     */
+//    void setInternalListViewSize(const QSize &size);
 
     // QWidget interface
 protected:

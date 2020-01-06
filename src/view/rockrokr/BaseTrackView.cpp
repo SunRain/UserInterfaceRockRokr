@@ -129,8 +129,12 @@ BaseTrackView::~BaseTrackView()
 
 void BaseTrackView::resizeEvent(QResizeEvent *event)
 {
-    QWidget::resizeEvent(event);
+    qDebug()<<" --------------- "<<event->size();
+
     m_provider->headerItem()->setFixedWidth(event->size().width());
+
+    QWidget::resizeEvent(event);
+//    m_provider->headerItem()->setFixedWidth(event->size().width());
 }
 
 void BaseTrackView::initUserInterface()
@@ -142,6 +146,11 @@ void BaseTrackView::initUserInterface()
     layout->addWidget(m_listView);
     this->setLayout(layout);
 }
+
+//void BaseTrackView::setInternalListViewSize(const QSize &size)
+//{
+//    m_listView->setFixedSize(size);
+//}
 
 RKTableHeaderItem *BaseTrackView::getHeaderItem() const
 {
@@ -215,13 +224,6 @@ void BaseTrackView::menuTrackInfo(QMenu *menu, const AudioMetaObject &obj)
 QModelIndex BaseTrackView::indexAtPos(const QPoint &pos) const
 {
     return m_listView->indexAt(pos);
-}
-
-
-
-BaseTrackViewDataProvider::~BaseTrackViewDataProvider()
-{
-
 }
 
 
