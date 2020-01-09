@@ -66,6 +66,7 @@ public:
     enum ModelRoles {
         RoleCategoryName = Qt::UserRole + 1,
         RoleCategorySubName,
+        RoleCategorySubNameList,
         RoleTrackNum,                           //size of tracks in this category
         RoleImageUri,
         RoleCurIdx,

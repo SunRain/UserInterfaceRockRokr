@@ -83,72 +83,78 @@ RockRokrView::RockRokrView(QWidget *parent)
         }
     });
 
+#define GET_SHOW_PARA \
+    const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString(); \
+    const QString sub = model->data(index, BaseCategoryModel::RoleCategorySubNameList).toStringList().join(", "); \
+    const QUrl img = model->data(index, BaseCategoryModel::RoleImageUri).toUrl(); \
+    const int num = model->data(index, BaseCategoryModel::RoleTrackNum).toInt();
+
     /** ArtistCategoryView ***/
     connect(m_artistCategory, &ArtistCategoryView::recentListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showArtistTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showArtistTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
     });
 
     connect(m_artistCategory, &ArtistCategoryView::recommendedListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showArtistTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showArtistTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
 
     });
 
     connect(m_artistCategory, &ArtistCategoryView::allListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showArtistTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showArtistTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
     });
 
     /** AlbumCategoryView ***/
     connect(m_albumCategory, &AlbumCategoryView::recentListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showAlbumTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showAlbumTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
     });
 
     connect(m_albumCategory, &AlbumCategoryView::recommendedListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showAlbumTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showAlbumTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
 
     });
 
     connect(m_albumCategory, &ArtistCategoryView::allListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showAlbumTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showAlbumTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
     });
 
     /** GenresCategoryView ***/
     connect(m_genresCategory, &GenresCategoryView::recentListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showGenreTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showGenreTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
     });
 
     connect(m_genresCategory, &GenresCategoryView::recommendedListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showGenreTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showGenreTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
 
     });
 
     connect(m_genresCategory, &GenresCategoryView::allListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString();
-        m_ctgDetailView->showGenreTracks(name);
+        GET_SHOW_PARA
+        m_ctgDetailView->showGenreTracks(name, sub, img, num);
         ViewUtility::showOverlayView();
     });
 }

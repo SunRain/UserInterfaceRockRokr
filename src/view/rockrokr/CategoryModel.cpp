@@ -113,7 +113,14 @@ public:
     {
         d.data()->extraData = data;
     }
-
+    inline QStringList subNameList() const
+    {
+        return d.data()->subNameList;
+    }
+    inline void setSubNameList(const QStringList &list)
+    {
+        d.data()->subNameList = list;
+    }
 private:
     class Priv : public QSharedData
     {
@@ -122,6 +129,7 @@ private:
         int     trackNum = 0;
         QString name = QString();
         QString subName = QString();
+        QStringList subNameList = QStringList();
         QUrl    imgUri = QUrl();
         QVariant extraData = QVariant();
     };
@@ -184,6 +192,10 @@ QVariant BaseCategoryModel::data(const QModelIndex &index, int role) const
         }
         case RoleCategorySubName: {
             return obj.subName();
+        }
+        case RoleCategorySubNameList: {
+            return obj.subNameList();
+
         }
         case RoleTrackNum: {
             return obj.trackNum();
@@ -251,6 +263,7 @@ QHash<int, QByteArray> BaseCategoryModel::roleNames() const
      role.insert(ModelRoles::RoleCurIdx, "RoleCurIdx");
      role.insert(ModelRoles::RolePlayingState, "RolePlayingState");
      role.insert(ModelRoles::RoleTrackDuration, "RoleTrackDuration");
+     role.insert(ModelRoles::RoleCategorySubNameList, "RoleCategorySubNameList");
      return role;
 }
 
@@ -378,6 +391,14 @@ void RecommendedAlbumCategoryModel::onInitData()
                 break;
             }
         }
+        QStringList subList;
+        foreach(const auto &it, go.list()) {
+            if (subList.contains(it.artistMeta().name())) {
+                continue;
+            }
+            subList.append(it.artistMeta().name());
+        }
+        ca.setSubNameList(subList);
         ca.setSubName(getPreferArtistName(go));
         ca.setTrackNum(go.list().size());
         ca.setImgUri(getPreferImgUri(go));
@@ -390,6 +411,14 @@ void RecommendedAlbumCategoryModel::onInitData()
             }
             abnList.append(o.name());
             CategoryObject obj;
+            QStringList subList;
+            foreach(const auto &it, o.list()) {
+                if (subList.contains(it.artistMeta().name())) {
+                    continue;
+                }
+                subList.append(it.artistMeta().name());
+            }
+            obj.setSubNameList(subList);
             obj.setName(o.name());
             obj.setSubName(getPreferArtistName(o));
             obj.setImgUri(getPreferImgUri(o));
@@ -419,6 +448,14 @@ void AllAlbumCategoryModel::onInitData()
     AudioMetaGroupList list = this->libraryMgr()->albumList();
     foreach(const AudioMetaGroupObject &o, list) {
         CategoryObject obj;
+        QStringList subList;
+        foreach(const auto &it, o.list()) {
+            if (subList.contains(it.artistMeta().name())) {
+                continue;
+            }
+            subList.append(it.artistMeta().name());
+        }
+        obj.setSubNameList(subList);
         obj.setName(o.name());
         obj.setSubName(getPreferArtistName(o));
         obj.setImgUri(getPreferImgUri(o));
@@ -567,6 +604,14 @@ void RecommendedArtistCategoryModel::onInitData()
                 break;
             }
         }
+        QStringList subList;
+        foreach(const auto &it, go.list()) {
+            if (subList.contains(it.albumMeta().name())) {
+                continue;
+            }
+            subList.append(it.albumMeta().name());
+        }
+        ca.setSubNameList(subList);
         ca.setSubName(getPreferAlbumName(go));
         ca.setTrackNum(go.list().size());
         ca.setImgUri(getPreferImgUri(go));
@@ -579,6 +624,14 @@ void RecommendedArtistCategoryModel::onInitData()
             }
             abnList.append(o.name());
             CategoryObject obj;
+            QStringList subList;
+            foreach(const auto &it, o.list()) {
+                if (subList.contains(it.albumMeta().name())) {
+                    continue;
+                }
+                subList.append(it.albumMeta().name());
+            }
+            obj.setSubNameList(subList);
             obj.setName(o.name());
             obj.setSubName(getPreferAlbumName(o));
             obj.setImgUri(getPreferImgUri(o));
@@ -632,6 +685,14 @@ void RecommendedGenresCategoryModel::onInitData()
                 break;
             }
         }
+        QStringList subList;
+        foreach(const auto &it, go.list()) {
+            if (subList.contains(it.artistMeta().name())) {
+                continue;
+            }
+            subList.append(it.artistMeta().name());
+        }
+        ca.setSubNameList(subList);
         ca.setSubName(getPreferArtistName(go));
         ca.setTrackNum(go.list().size());
         ca.setImgUri(getPreferImgUri(go));
@@ -644,6 +705,14 @@ void RecommendedGenresCategoryModel::onInitData()
             }
             abnList.append(o.name());
             CategoryObject obj;
+            QStringList subList;
+            foreach(const auto &it, o.list()) {
+                if (subList.contains(it.artistMeta().name())) {
+                    continue;
+                }
+                subList.append(it.artistMeta().name());
+            }
+            obj.setSubNameList(subList);
             obj.setName(o.name());
             obj.setSubName(getPreferArtistName(o));
             obj.setImgUri(getPreferImgUri(o));
@@ -673,6 +742,14 @@ void AllArtistCategoryModel::onInitData()
     AudioMetaGroupList list = this->libraryMgr()->artistList();
     foreach(const AudioMetaGroupObject &o, list) {
         CategoryObject obj;
+        QStringList subList;
+        foreach(const auto &it, o.list()) {
+            if (subList.contains(it.albumMeta().name())) {
+                continue;
+            }
+            subList.append(it.albumMeta().name());
+        }
+        obj.setSubNameList(subList);
         obj.setName(o.name());
         obj.setSubName(getPreferAlbumName(o));
         obj.setImgUri(getPreferImgUri(o));
@@ -698,6 +775,14 @@ void AllGenresCategoryModel::onInitData()
     AudioMetaGroupList list = this->libraryMgr()->genreList();
     foreach(const AudioMetaGroupObject &o, list) {
         CategoryObject obj;
+        QStringList subList;
+        foreach(const auto &it, o.list()) {
+            if (subList.contains(it.artistMeta().name())) {
+                continue;
+            }
+            subList.append(it.artistMeta().name());
+        }
+        obj.setSubNameList(subList);
         obj.setName(o.name());
         obj.setSubName(getPreferArtistName(o));
         obj.setImgUri(getPreferImgUri(o));
@@ -705,6 +790,7 @@ void AllGenresCategoryModel::onInitData()
         dataListPtr()->append(obj);
     }
 }
+
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer

@@ -67,6 +67,11 @@ protected:
     RKTableHeaderItem *getHeaderItem() const;
     TrackListModel *getModel() const;
 
+    inline BaseTrackViewDataProvider *dataProvider() const
+    {
+        return m_provider;
+    }
+
     void menuAddToQueue(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
     void menuAddToPlaylist(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
     void menuShowInFileMgr(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);

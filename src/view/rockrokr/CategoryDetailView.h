@@ -2,6 +2,7 @@
 #define CATEGORYDETAILVIEW_H
 
 #include <QFrame>
+#include <QLabel>
 
 #include "BaseTrackView.h"
 
@@ -15,6 +16,7 @@ namespace PhoenixPlayer {
 
         namespace RockRokr {
 
+            class RKImage;
             class RKTableHeaderItem;
             class TrackListModel;
 
@@ -26,9 +28,9 @@ public:
     explicit CategoryDetailView(QWidget *parent = Q_NULLPTR);
     virtual ~CategoryDetailView() override;
 
-    void showArtistTracks(const QString &artistName);
-    void showAlbumTracks(const QString  &albumName);
-    void showGenreTracks(const QString &genreName);
+    void showArtistTracks(const QString &artistName, const QString &subName, const QUrl &preferImg, int totalNum);
+    void showAlbumTracks(const QString  &albumName, const QString &subName, const QUrl &preferImg, int totalNum);
+    void showGenreTracks(const QString &genreName, const QString &subName, const QUrl &preferImg, int totalNum);
 
     // QWidget interface
 protected:
@@ -36,10 +38,17 @@ protected:
 
 protected:
     void initUserInterface();
-
+    void setTitle(const QString &text);
+    void setText(const QString &text);
 
 private:
-    CategoryDetailTrackView     *m_trackView = Q_NULLPTR;
+    CategoryDetailTrackView     *m_trackView    = Q_NULLPTR;
+    RKImage                     *m_imageView    = Q_NULLPTR;
+    QLabel                      *m_titleLabel   = Q_NULLPTR;
+    QLabel                      *m_textLabel    = Q_NULLPTR;
+    QLabel                      *m_numLabel     = Q_NULLPTR;
+    QString                     m_name;
+    QUrl                        m_imgUri;
 };
 
 } //namespace RockRokr
