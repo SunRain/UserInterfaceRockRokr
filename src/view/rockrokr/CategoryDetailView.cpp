@@ -2,18 +2,22 @@
 
 #include <QVBoxLayout>
 #include <QStyle>
+#include <QStyleFactory>
 #include <QFont>
 #include <QFontMetrics>
 #include <QPalette>
+#include <QMenu>
 
 #include <DThemeManager>
 #include <DHiDPIHelper>
 
 #include "MusicLibrary/MusicLibraryManager.h"
+#include "PlayerCore/PlayerCore.h"
 
 #include "rockrokr_global.h"
 #include "widget/RKImage.h"
 #include "widget/RKTableHeaderItem.h"
+#include "view/ViewUtility.h"
 #include "TrackListModel.h"
 
 DWIDGET_USE_NAMESPACE
@@ -68,17 +72,23 @@ private:
 class CategoryDetailTrackView : public BaseTrackView
 {
     Q_OBJECT
-
-//    friend class CategoryDetailView;
 public:
     explicit CategoryDetailTrackView(QWidget *parent = Q_NULLPTR)
         : BaseTrackView(new CategoryDetailViewDataProvider, parent)
     {
-
+        m_playerCore = new PlayerCore(this);
+        m_libMgr = new MusicLibrary::MusicLibraryManager(this);
     }
     virtual ~CategoryDetailTrackView() override
     {
-
+        if (m_playerCore) {
+            m_playerCore->deleteLater();
+            m_playerCore = Q_NULLPTR;
+        }
+        if (m_libMgr) {
+            m_libMgr->deleteLater();
+            m_libMgr = Q_NULLPTR;
+        }
     }
 
     void showArtistTracks(const QString &artistName)
@@ -98,11 +108,39 @@ public:
 protected:
     void showContextMenu(const QPoint &pos) Q_DECL_OVERRIDE
     {
+        const QModelIndex idx = indexAtPos(pos);
+        if (!idx.isValid()) {
+            qWarning()<<"Invalid QModelIndex!!";
+            return;
+        }
+        const QString hash = getModel()->data(idx, TrackListModel::RoleHash).toString();
+        const AudioMetaObject obj = m_libMgr->trackFromHash(hash);
+        if (obj.isHashEmpty()) {
+             ViewUtility::showToast(tr("Empty audio meta object !!"));
+            return;
+        }
+        QMenu menu;
+        menu.setStyle(QStyleFactory::create("dlight"));
 
+        menuAddToQueue(&menu, obj);
+        menuAddToPlaylist(&menu, obj);
+        menu.addSeparator();
+        menuRemoveObject(&menu, obj);
+        menuShowInFileMgr(&menu, obj);
+        menu.addSeparator();
+        menuTrackInfo(&menu, obj);
+
+        menu.exec(this->mapToGlobal(pos));
     }
     void onClicked(const QModelIndex &index) Q_DECL_OVERRIDE
     {
+        const QString hash = index.data(TrackListModel::ModelRoles::RoleHash).toString();
+        m_playerCore->playFromLibrary(hash);
     }
+
+private:
+    PlayerCore                          *m_playerCore = Q_NULLPTR;
+    MusicLibrary::MusicLibraryManager   *m_libMgr = Q_NULLPTR;
 };
 
 /*************************************************************************
