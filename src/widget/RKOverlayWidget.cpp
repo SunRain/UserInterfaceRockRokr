@@ -1,13 +1,14 @@
 #include "RKOverlayWidget.h"
 
-#include <DThemeManager>
-
 #include <QPainter>
 #include <QImage>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QMouseEvent>
+#include <QVBoxLayout>
 #include <QtMath>
+
+#include <DThemeManager>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
@@ -54,14 +55,31 @@ RKOverlayWidget::RKOverlayWidget(QWidget *parent)
         this->setLayout(ly);
     }
 
-    m_stack = new QStackedLayout(m_backgroundWidget);
-    m_stack->setSpacing(0);
+    m_animation = new QPropertyAnimation(m_shadowWidget, "geometry", this);
+    m_animation->setDuration(400);
+    m_animation->setEasingCurve(QEasingCurve::Linear);
+
+    connect(m_animation, &QPropertyAnimation::finished,
+            this, [&](){
+        m_backgroundWidget->setFixedSize(m_shadowWidget->size());
+        m_backgroundWidget->setGeometry(m_shadowWidget->geometry());
+    });
+
+    connect(m_animation, &QPropertyAnimation::valueChanged,
+            this, [&](const QVariant &value){
+        Q_UNUSED(value);
+        m_backgroundWidget->setFixedSize(m_shadowWidget->size());
+        m_backgroundWidget->setGeometry(m_shadowWidget->geometry());
+    });
+
+
+    m_stack = new QStackedWidget(m_backgroundWidget);
     m_stack->setContentsMargins(0, 0, 0, 0);
 
-    connect(m_stack, &QStackedLayout::currentChanged,
+    connect(m_stack, &QStackedWidget::currentChanged,
             this, &RKOverlayWidget::currentChanged);
 
-    connect(m_stack, &QStackedLayout::widgetRemoved,
+    connect(m_stack, &QStackedWidget::widgetRemoved,
             this, &RKOverlayWidget::widgetRemoved);
 }
 
@@ -99,20 +117,6 @@ void RKOverlayWidget::removeWidget(QWidget *widget)
 {
     m_stack->removeWidget(widget);
 }
-
-//void RKOverlayWidget::addContent(QWidget *content, Qt::AlignmentFlag flag)
-//{
-//    if (m_content) {
-//        m_content->close();
-//        m_content->deleteLater();
-//    }
-//    m_content = content;
-//    if (m_content) {
-//        m_backgroundWidget->setFixedSize(m_content->size().width() + 10,
-//                                         m_content->size().height() +10);
-//    }
-//    m_contentLayout->addWidget(m_content, 0, flag);
-//}
 
 void RKOverlayWidget::mousePressEvent(QMouseEvent *event)
 {
@@ -179,12 +183,22 @@ void RKOverlayWidget::setCurrentIndex(int index)
         qDebug()<<"Can't find widget at index";
         return;
     }
-    m_backgroundWidget->setFixedSize(widget->size().width(),
-                                     widget->size().height());
-    m_shadowWidget->setFixedSize(m_backgroundWidget->size());
-    m_shadowWidget->setGeometry(m_backgroundWidget->geometry());
-
     m_stack->setCurrentIndex(index);
+
+    const int width = widget->size().width();
+    const int height = widget->size().height();
+    const int x = (this->width() - widget->width()) / 2;
+    const int y = (this->height() - widget->height()) / 2;
+
+    m_animation->setStartValue(QRect(x + width/4,
+                                     y + height/4,
+                                     width/2,
+                                     height/2));
+    m_animation->setEndValue(QRect(x,
+                                   y,
+                                   width,
+                                   height));
+    m_animation->start();
 }
 
 void RKOverlayWidget::setCurrentWidget(QWidget *widget)
@@ -196,19 +210,25 @@ void RKOverlayWidget::setCurrentWidget(QWidget *widget)
         qDebug()<<"Can't find current widget";
         return;
     }
-    m_backgroundWidget->setFixedSize(widget->size().width(),
-                                     widget->size().height());
-    m_shadowWidget->setFixedSize(m_backgroundWidget->size());
-    m_shadowWidget->setGeometry(m_backgroundWidget->geometry());
-
     m_stack->setCurrentWidget(widget);
+
+    const int width = widget->size().width();
+    const int height = widget->size().height();
+    const int x = (this->width() - widget->width()) / 2;
+    const int y = (this->height() - widget->height()) / 2;
+
+    m_animation->setStartValue(QRect(x + width/4,
+                                     y + height/4,
+                                     width/2,
+                                     height/2));
+    m_animation->setEndValue(QRect(x,
+                                   y,
+                                   width,
+                                   height));
+    m_animation->start();
 }
-
-
-
 
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer
-
 

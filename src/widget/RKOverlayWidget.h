@@ -3,7 +3,8 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <QStackedLayout>
+#include <QStackedWidget>
+#include <QPropertyAnimation>
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -51,10 +52,13 @@ public slots:
     void setCurrentWidget(QWidget *widget);
 
 private:
-    QWidget         *m_backgroundWidget = Q_NULLPTR;
-    QWidget         *m_shadowWidget     = Q_NULLPTR;
-    QStackedLayout  *m_stack            = Q_NULLPTR;
-    QPixmap         m_bgPixmap;
+    QWidget             *m_backgroundWidget = Q_NULLPTR;
+    QWidget             *m_shadowWidget     = Q_NULLPTR;
+    QStackedWidget      *m_stack            = Q_NULLPTR;
+    QPropertyAnimation  *m_animation        = Q_NULLPTR;
+    QPixmap             m_bgPixmap;
+
+    Q_DISABLE_COPY(RKOverlayWidget)
 };
 
 } //namespace RockRokr

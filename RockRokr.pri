@@ -130,12 +130,12 @@ SOURCES += \
     $$PWD/src/widget/RKOverlayWidget.cpp \
     $$PWD/src/widget/RKSearchEdit.cpp \
     $$PWD/src/widget/RKSlider.cpp \
-    $$PWD/src/widget/RKStackWidget.cpp \
     $$PWD/src/widget/RKTableHeaderItem.cpp \
     $$PWD/src/widget/filter.cpp \
     $$PWD/src/widget/qtmaterialoverlaywidget.cpp \
     $$PWD/src/widget/qtmaterialripple.cpp \
-    $$PWD/src/widget/qtmaterialrippleoverlay.cpp
+    $$PWD/src/widget/qtmaterialrippleoverlay.cpp \
+    $$PWD/src/widget/RKStackWidget.cpp \
 
 RESOURCES += \
     $$PWD/src/resources/theme/theme.qrc
