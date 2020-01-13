@@ -64,7 +64,6 @@ private:
     QWidget                             *m_headerLine;
     DArrowButton                        *m_arrowBtn;
     DImageButton                        *m_ImgBtn;
-    DToast                              *m_toast;
     RKVBoxWidget                        *m_listWidget;
     PhoenixPlayer::PlayListMetaMgr      *m_plsMetaMgr;
 };

@@ -27,6 +27,7 @@
 #include "LBListItem.h"
 #include "widget/RKListWidget.h"
 #include "widget/RKBoxWidget.h"
+#include "view/ViewUtility.h"
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -37,7 +38,7 @@ LBPlaylistView::LBPlaylistView(QWidget *parent)
       m_headerLine(new QWidget),
       m_arrowBtn(new DArrowButton),
       m_ImgBtn(new DImageButton),
-      m_toast(Q_NULLPTR),
+//      m_toast(Q_NULLPTR),
       m_listWidget(new RKVBoxWidget),
       m_plsMetaMgr(new PlayListMetaMgr(this))
 {
@@ -163,30 +164,7 @@ LBPlaylistView::LBPlaylistView(QWidget *parent)
                          <<" with new name "<<newMeta.getFileName();
             }
         } else {
-            QWidget *pp = this;
-            QWidget *p = this->parentWidget();
-            do {
-                if (p) {
-                    pp = p;
-                    p = pp->parentWidget();
-                } else {
-                    break;
-                }
-            } while (true);
-            if (!p) {
-                p = pp;
-            }
-            if (m_toast) {
-                m_toast->pack();
-                m_toast->deleteLater();
-            }
-            m_toast = new DToast(p);
-            m_toast->setText(tr("Rename name conflict!"));
-            QTimer::singleShot(500, [&, p]() {
-                m_toast->pop();
-                m_toast->move((p->width() - m_toast->width()) / 2,
-                            (p->height() - m_toast->height()) / 2);
-            });
+            ViewUtility::showToast(tr("Rename name conflict!"));
             item->setEditMode(true);
         }
     });
@@ -194,11 +172,7 @@ LBPlaylistView::LBPlaylistView(QWidget *parent)
 
 LBPlaylistView::~LBPlaylistView()
 {
-    if (m_toast) {
-        m_toast->pack();
-        m_toast->deleteLater();
-        m_toast = Q_NULLPTR;
-    }
+
 }
 
 
