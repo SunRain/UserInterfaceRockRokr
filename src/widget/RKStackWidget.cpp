@@ -1,5 +1,6 @@
 #include "RKStackWidget.h"
 
+#include <QtGlobal>
 #include <QDebug>
 #include <QPixmap>
 #include <QPainter>
@@ -11,87 +12,60 @@ namespace UserInterface {
 namespace RockRokr {
 
 RKStackedWidget::RKStackedWidget(QWidget *parent)
-    : QStackedWidget (parent)
+    : QStackedWidget (parent),
+      d_ptr(new RKStackedWidgetPrivate(this))
 {
-    m_curve = QEasingCurve::Linear;
-    m_currentValue = 0;
-    m_currentIndex = -1;
-    m_previousIndex = -1;
-    m_fade = true;
-    m_type = AnimationType::LeftToRight;
 
-    m_animation = new QPropertyAnimation(this);
-    m_animation->setTargetObject(this);
-    m_animation->setPropertyName("currentValue");
-    m_animation->setDuration(100);
-    m_animation->setEasingCurve(m_curve);
-    m_animation->setStartValue(0);
-    m_animation->setEndValue(0);
-
-    connect(m_animation, &QPropertyAnimation::finished,
-            this, &RKStackedWidget::animationFinished);
-
-    connect(m_animation, &QPropertyAnimation::valueChanged,
-            this, [&](const QVariant &value){
-                this->update();
-            });
 }
 
 RKStackedWidget::~RKStackedWidget()
 {
-    if (m_animation->state() == QPropertyAnimation::State::Running) {
-        m_animation->stop();
-        m_animation->deleteLater();
-    }
 }
 
-qreal RKStackedWidget::currentValue() const
-{
-    return m_currentValue;
-}
 
 void RKStackedWidget::setDuration(int duration)
 {
-    m_animation->setDuration(duration);
+    d_func()->m_animation->setDuration(duration);
 }
 
 int RKStackedWidget::duration() const
 {
-    return m_animation->duration();
+    return d_func()->m_animation->duration();
 }
 
 void RKStackedWidget::setFadeEnable(bool fade)
 {
-    m_fade = fade;
+    d_func()->m_fade = fade;
 }
 
 bool RKStackedWidget::fadeEnable() const
 {
-    return m_fade;
+    return d_func()->m_fade;
 }
 
-void RKStackedWidget::addWidget(QWidget *widget)
+int RKStackedWidget::addWidget(QWidget *widget)
 {
     if (!widget) {
-        return;
+        return -1;
     }
     widget->hide();
-    QStackedWidget::addWidget(widget);
+    return QStackedWidget::addWidget(widget);
 }
 
 int RKStackedWidget::previousIndex() const
 {
-    return m_previousIndex;
+    return d_func()->m_previousIndex;
 }
 
 int RKStackedWidget::currentIndex() const
 {
-    return m_currentIndex;
+    return d_func()->m_currentIndex;
 }
 
 void RKStackedWidget::paintEvent(QPaintEvent *event)
 {
-    if (m_animation->state() == QAbstractAnimation::State::Running) {
+    Q_D(RKStackedWidget);
+    if (d->m_animation->state() == QAbstractAnimation::State::Running) {
         QPainter painter(this);
         painter.setRenderHints(QPainter::Antialiasing |
                                QPainter::HighQualityAntialiasing |
@@ -104,46 +78,47 @@ void RKStackedWidget::paintEvent(QPaintEvent *event)
     }
 }
 
-void RKStackedWidget::animationFinished()
-{
-    this->widget(m_currentIndex)->show();
-    m_currentValue = 0;
-}
 
 void RKStackedWidget::renderPreviousWidget(QPainter *painter, QTransform *transform)
 {
+    Q_D(RKStackedWidget);
+
     painter->save();
-    switch (m_type) {
+    switch (d->m_type) {
     case BottomToTop: {
-        painter->translate(0, -(this->height() - qAbs(m_currentValue)));
-        if (m_fade){
-            painter->setOpacity(qAbs((qreal)m_currentValue)/(qreal)this->height());
+        painter->translate(0, -(this->height() - qAbs(d->m_currentValue)));
+        if (d->m_fade){
+            painter->setOpacity(qAbs((qreal)d->m_currentValue)/(qreal)this->height());
         }
-        painter->drawPixmap(0, 0, m_privPixmap);
+        painter->drawPixmap(0, 0, d->m_privPixmap);
         break;
     }
     case TopToBottom: {
-        painter->translate(0, m_currentValue);
-        if (m_fade) {
-            painter->setOpacity(1.0 - qAbs((qreal)m_currentValue)/(qreal)this->height());
+        painter->translate(0, d->m_currentValue);
+        if (d->m_fade) {
+            painter->setOpacity(1.0 - qAbs((qreal)d->m_currentValue)/(qreal)this->height());
         }
-        painter->drawPixmap(0, 0, m_privPixmap);
+        painter->drawPixmap(0, 0, d->m_privPixmap);
         break;
     }
     case LeftToRight:{
-        painter->translate(m_currentValue, 0);
-        if (m_fade) {
-            painter->setOpacity(1.0 - (qreal)m_currentValue/(qreal)this->width());
+        painter->translate(d->m_currentValue, 0);
+        if (d->m_fade) {
+            painter->setOpacity(1.0 - (qreal)d->m_currentValue/(qreal)this->width());
         }
-        painter->drawPixmap(0, 0, m_privPixmap);
+        painter->drawPixmap(0, 0, d->m_privPixmap);
         break;
     }
     case RightToLeft: {
-        painter->translate(qAbs(m_currentValue) - this->width(), 0);
-        if (m_fade) {
-            painter->setOpacity(qAbs((qreal)m_currentValue)/(qreal)this->width());
+        painter->translate(qAbs(d->m_currentValue) - this->width(), 0);
+        if (d->m_fade) {
+            painter->setOpacity(qAbs((qreal)d->m_currentValue)/(qreal)this->width());
         }
-        painter->drawPixmap(0, 0, m_privPixmap);
+        painter->drawPixmap(0, 0, d->m_privPixmap);
+        break;
+    }
+    case Center: {
+        painter->drawPixmap(0, 0, d->m_privPixmap);
         break;
     }
     default:
@@ -154,39 +129,53 @@ void RKStackedWidget::renderPreviousWidget(QPainter *painter, QTransform *transf
 
 void RKStackedWidget::renderCurrentWidget(QPainter *painter, QTransform *transform)
 {
+    Q_D(RKStackedWidget);
     painter->save();
-    switch (m_type) {
+    switch (d->m_type) {
     case BottomToTop: {
-        painter->translate(0, qAbs(m_currentValue));
-        if (m_fade) {
-            painter->setOpacity(1.0 - qAbs((qreal)m_currentValue)/(qreal)this->height());
+        painter->translate(0, qAbs(d->m_currentValue));
+        if (d->m_fade) {
+            painter->setOpacity(1.0 - qAbs((qreal)d->m_currentValue)/(qreal)this->height());
         }
-        painter->drawPixmap(0, 0, m_currentPixmap);
+        painter->drawPixmap(0, 0, d->m_currentPixmap);
         break;
     }
     case TopToBottom: {
-        painter->translate(0, m_currentValue - this->height());
-        if (m_fade) {
-            painter->setOpacity(qAbs((qreal)this->currentValue())/(qreal)this->height());
+        painter->translate(0, d->m_currentValue - this->height());
+        if (d->m_fade) {
+            painter->setOpacity(qAbs((qreal)d->currentValue())/(qreal)this->height());
         }
-        painter->drawPixmap(0, 0, m_currentPixmap);
+        painter->drawPixmap(0, 0, d->m_currentPixmap);
         break;
     }
     case LeftToRight:{
-        painter->translate(m_currentValue - this->width(), 0);
-        if (m_fade) {
-            painter->setOpacity((qreal)m_currentValue/(qreal)this->width());
+        painter->translate(d->m_currentValue - this->width(), 0);
+        if (d->m_fade) {
+            painter->setOpacity((qreal)d->m_currentValue/(qreal)this->width());
         }
-        painter->drawPixmap(0, 0, m_currentPixmap);
+        painter->drawPixmap(0, 0, d->m_currentPixmap);
         break;
     }
     case RightToLeft: {
-        painter->translate(qAbs(m_currentValue), 0);
-        if (m_fade) {
-            painter->setOpacity(1.0 - qAbs((qreal)m_currentValue)/(qreal)this->width());
+        painter->translate(qAbs(d->m_currentValue), 0);
+        if (d->m_fade) {
+            painter->setOpacity(1.0 - qAbs((qreal)d->m_currentValue)/(qreal)this->width());
         }
-        painter->drawPixmap(0, 0, m_currentPixmap);
+        painter->drawPixmap(0, 0, d->m_currentPixmap);
         break;
+    }
+    case Center: {
+        const qreal ratio = d->m_currentValue / d->m_currentPixmap.height();
+        const int width = (qreal)this->width() * ratio;
+        const int height = (qreal)this->height() * ratio;
+        const int x = (this->width() - width) /2;
+        const int y = (this->height() - height) /2;
+        painter->translate(x, y);
+        if (d->m_fade) {
+            painter->setOpacity(ratio);
+        }
+        QPixmap pixmap = d->m_currentPixmap.scaled(width, height);
+        painter->drawPixmap(0, 0, pixmap);
     }
     default:
         break;
@@ -196,19 +185,20 @@ void RKStackedWidget::renderCurrentWidget(QPainter *painter, QTransform *transfo
 
 void RKStackedWidget::setCurrentIndex(int index, RKStackedWidget::AnimationType type)
 {
+    Q_D(RKStackedWidget);
     if (index < 0 || index >= this->count()) { //invalid index
         return;
     }
-    if (index == m_currentIndex) {
+    if (index == d->m_currentIndex) {
         return;
     }
     if (type == AnimationType::AnimationTypeNone) {
-        m_previousIndex = m_currentIndex;
-        m_currentIndex = index;
-        if (m_animation->state() == QAbstractAnimation::Running) {
+        d->m_previousIndex = d->m_currentIndex;
+        d->m_currentIndex = index;
+        if (d->m_animation->state() == QAbstractAnimation::Running) {
             stopAndResetAnimation();
         }
-        auto w = widget(m_previousIndex);
+        auto w = widget(d->m_previousIndex);
         if (w) {
             w->hide();
         }
@@ -217,13 +207,13 @@ void RKStackedWidget::setCurrentIndex(int index, RKStackedWidget::AnimationType 
         w->show();
         return;
     }
-    m_type = type;
-    m_previousIndex = m_currentIndex;
-    m_currentIndex = index;
-    if (m_animation->state() == QAbstractAnimation::Running) {
+    d->m_type = type;
+    d->m_previousIndex = d->m_currentIndex;
+    d->m_currentIndex = index;
+    if (d->m_animation->state() == QAbstractAnimation::Running) {
         stopAndResetAnimation();
 
-        auto w = widget(m_previousIndex);
+        auto w = widget(d->m_previousIndex);
         w->hide();
 
         w = widget(index);
@@ -233,7 +223,7 @@ void RKStackedWidget::setCurrentIndex(int index, RKStackedWidget::AnimationType 
     }
     int animStart = 0;
     int animEnd = 0;
-    switch (m_type) {
+    switch (d->m_type) {
     case LeftToRight: {
         animStart = 0;
         animEnd = this->width();
@@ -254,25 +244,34 @@ void RKStackedWidget::setCurrentIndex(int index, RKStackedWidget::AnimationType 
         animEnd = 0;
         break;
     }
+    case Center: {
+        animStart = 0;
+        animEnd = this->height();
+    }
     default:
         break;
     }
-    QWidget *w = this->widget(m_previousIndex);
+    QWidget *w = this->widget(d->m_previousIndex);
     if (w) {
-        m_privPixmap = w->grab(w->rect());
+        d->m_privPixmap = w->grab(w->rect());
     } else {
-        m_privPixmap = QPixmap();
+        d->m_privPixmap = QPixmap();
     }
 
-    w = this->widget(m_currentIndex);
+    w = this->widget(d->m_currentIndex);
     Q_ASSERT(w);
     QStackedWidget::setCurrentWidget(w);
     w->hide();
-    m_currentPixmap = w->grab(w->rect());
+    d->m_currentPixmap = w->grab(w->rect());
 
-    m_animation->setStartValue(animStart);
-    m_animation->setEndValue(animEnd);
-    m_animation->start();
+    // use half size to make visual sense better
+//    if (d->m_type == AnimationType::Center) {
+//        animStart = d->m_currentPixmap.height() / 2;
+//    }
+
+    d->m_animation->setStartValue(animStart);
+    d->m_animation->setEndValue(animEnd);
+    d->m_animation->start();
 }
 
 void RKStackedWidget::setCurrentWidget(QWidget *w, RKStackedWidget::AnimationType type)
@@ -284,17 +283,53 @@ void RKStackedWidget::setCurrentWidget(QWidget *w, RKStackedWidget::AnimationTyp
     this->setCurrentIndex(idx, type);
 }
 
-void RKStackedWidget::setCurrentValue(int currentValue)
-{
-    m_currentValue = currentValue;
-}
 
 void RKStackedWidget::stopAndResetAnimation()
 {
-    m_animation->stop();
+    Q_D(RKStackedWidget);
+    d->m_animation->stop();
+    d->m_currentValue = 0;
+}
+
+RKStackedWidgetPrivate::RKStackedWidgetPrivate(RKStackedWidget *parent)
+    : q_ptr(parent)
+{
+    m_animation = new QPropertyAnimation(this);
+    m_animation->setTargetObject(this);
+    m_animation->setPropertyName("currentValue");
+    m_animation->setDuration(100);
+    m_animation->setEasingCurve(m_curve);
+    m_animation->setStartValue(0);
+    m_animation->setEndValue(0);
+
+    connect(m_animation, &QPropertyAnimation::finished,
+            this, &RKStackedWidgetPrivate::animationFinished);
+
+    connect(m_animation, &QPropertyAnimation::valueChanged,
+            this, [&](const QVariant &value){
+        Q_UNUSED(value);
+        Q_Q(RKStackedWidget);
+        q->update();
+    });
+}
+
+RKStackedWidgetPrivate::~RKStackedWidgetPrivate()
+{
+    if (m_animation->state() == QPropertyAnimation::State::Running) {
+        m_animation->stop();
+        m_animation->deleteLater();
+    }
+}
+
+void RKStackedWidgetPrivate::animationFinished()
+{
+    Q_Q(RKStackedWidget);
+    q->widget(m_currentIndex)->show();
     m_currentValue = 0;
 }
 
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer
+
+
