@@ -63,6 +63,7 @@ RKOverlayWidget::RKOverlayWidget(QWidget *parent)
             this, [&](){
         m_backgroundWidget->setFixedSize(m_shadowWidget->size());
         m_backgroundWidget->setGeometry(m_shadowWidget->geometry());
+        m_stack->setFixedSize(m_backgroundWidget->size());
     });
 
     connect(m_animation, &QPropertyAnimation::valueChanged,
