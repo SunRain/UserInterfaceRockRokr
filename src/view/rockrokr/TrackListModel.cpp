@@ -6,6 +6,7 @@
 #include "PPUtility.h"
 #include "PlayerCore/PlayerCore.h"
 #include "PlayerCore/RecentPlayedQueue.h"
+#include "PlayerCore/PlayListObject.h"
 #include "MusicLibrary/MusicLibraryManager.h"
 
 namespace PhoenixPlayer {
@@ -128,6 +129,23 @@ void TrackListModel::showGenreTracks(const QString &genreName, int limitNum)
     endInsertRows();
 }
 
+void TrackListModel::showPlaylist(const PlayListMeta &meta)
+{
+    m_plsMeta = meta;
+    m_viewMode = ViewMode::ModeShowPlaylist;
+
+    clearList();
+
+    PlayListObject obj(m_plsMeta);
+    if (obj.open()) {
+        m_dataList.append(obj.currentList());
+    } else {
+        qWarning()<<"Open ["<<meta.getFileName()<<"] error!!";
+    }
+    beginInsertRows(QModelIndex(), 0, m_dataList.size() -1);
+    endInsertRows();
+}
+
 void TrackListModel::resetToDefalutState()
 {
     switch (m_viewMode) {
@@ -146,6 +164,9 @@ void TrackListModel::resetToDefalutState()
     case ModeShowGenreTracks:
         showGenreTracks(m_keyForTrackGroupName, m_trackNumLimitForMode);
         break;
+    case ModeShowPlaylist:
+        showPlaylist(m_plsMeta);
+        break;
     default:
         break;
     }
@@ -153,6 +174,7 @@ void TrackListModel::resetToDefalutState()
 
 int TrackListModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return m_dataList.size();
 }
 

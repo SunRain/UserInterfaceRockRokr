@@ -239,15 +239,8 @@ void LBPlaylistView::connectLBListItemSignals(LBListItem *item)
         return;
     }
     connect(item, &LBListItem::leftBtnClicked,
-            this, [&, item](LBListItem *i){
-        qDebug()<<"LBListItem::clicked item clicked";
-        UserInterface::UserInterfaceMgr mgr;
-        UserInterfaceRockRokr *rk = qobject_cast<UserInterfaceRockRokr*>(mgr.usedInterface());
-        RKMainWindow *w = rk->mainWindow();
-        w->showOverlay();
+            this, &LBPlaylistView::leftBtnClicked);
 
-        //TODO left click to show playlist view
-    });
     connect(item, &LBListItem::rename,
             this, [&, item](const QString &text){
         qDebug()<<"LBListItem::renam  rename to "<<text;

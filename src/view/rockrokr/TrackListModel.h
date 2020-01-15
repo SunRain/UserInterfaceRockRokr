@@ -5,6 +5,7 @@
 #include <QSortFilterProxyModel>
 
 #include "AudioMetaObject.h"
+#include "PlayerCore/PlayListMeta.h"
 
 #include "CategoryModelImageProvider.h"
 
@@ -37,6 +38,8 @@ public:
     void showAlbumTracks(const QString  &albumName, int limitNum = 0);
 
     void showGenreTracks(const QString &genreName, int limitNum = 0);
+
+    void showPlaylist(const PlayListMeta &meta);
 
     /*!
      * \brief resetToDefalutState
@@ -106,7 +109,8 @@ private:
         ModeShowFavorites,
         ModeShowArtistTracks,
         ModeShowAlbumTracks,
-        ModeShowGenreTracks
+        ModeShowGenreTracks,
+        ModeShowPlaylist
     };
 
 private:
@@ -118,6 +122,7 @@ private:
     ViewMode                            m_viewMode          = ViewMode::ModeUndefined;
     int                                 m_trackNumLimitForMode = 0;
     QString                             m_keyForTrackGroupName;
+    PlayListMeta                        m_plsMeta;
 };
 
 

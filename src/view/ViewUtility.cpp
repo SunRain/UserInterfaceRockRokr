@@ -123,11 +123,17 @@ void ViewUtility::showTip(QWidget *baseWidget, const QString &text, int delaySho
     s_mainWindow->showTip(baseWidget, text, delayShowMilliseconds);
 }
 
-void ViewUtility::showOverlayView()
+void ViewUtility::showCategoryDetailView()
 {
     chkMainWindow();
 
-    s_mainWindow->showOverlay();
+    s_mainWindow->showCategoryDetailView();
+}
+
+void ViewUtility::showPlaylistDetailView()
+{
+    chkMainWindow();
+    s_mainWindow->showPlaylistDetailView();
 }
 
 } //namespace RockRokr

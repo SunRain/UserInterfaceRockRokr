@@ -11,8 +11,6 @@
 
 #include "widget/RKExpand.h"
 
-
-
 class QLabel;
 
 DWIDGET_BEGIN_NAMESPACE
@@ -53,6 +51,9 @@ public:
 
 protected:
     void showPlaylistRightClickMenu(LBListItem *item, const QPoint &pos);
+
+signals:
+    void leftBtnClicked(LBListItem *item);
 
 private:
     void showDeleteDlg(LBListItem *item);

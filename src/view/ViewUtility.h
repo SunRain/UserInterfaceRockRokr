@@ -5,6 +5,7 @@
 #include <QImage>
 
 #include "AudioMetaObject.h"
+#include "PlayerCore/PlayListMeta.h"
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -23,7 +24,9 @@ public:
 
     static void showTip(QWidget *baseWidget, const QString &text, int delayShowMilliseconds = 0);
 
-    static void showOverlayView();
+    static void showCategoryDetailView();
+
+    static void showPlaylistDetailView();
 };
 
 } //namespace RockRokr

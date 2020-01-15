@@ -18,6 +18,7 @@ class GenresCategoryView;
 class AllTrackView;
 class FavoriteTrackView;
 class CategoryDetailView;
+class PlayListDetailView;
 class RockRokrView : public QFrame
 {
     Q_OBJECT
@@ -35,6 +36,11 @@ protected:
         return m_ctgDetailView;
     }
 
+    inline PlayListDetailView *playListDetailView()
+    {
+        return m_plsDetailView;
+    }
+
 private:
     LBListItem          *m_preLeftBarItem   = Q_NULLPTR;
     LeftBar             *m_leftbar          = Q_NULLPTR;
@@ -47,7 +53,7 @@ private:
     AllTrackView        *m_allTrackView     = Q_NULLPTR;
     FavoriteTrackView   *m_favTrackView     = Q_NULLPTR;
     CategoryDetailView  *m_ctgDetailView    = Q_NULLPTR;
-
+    PlayListDetailView  *m_plsDetailView    = Q_NULLPTR;
 };
 
 } //namespace RockRokr

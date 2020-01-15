@@ -31,6 +31,7 @@
 #include "view/RockRokrView.h"
 #include "view/titlebar/RKTitleBar.h"
 #include "view/rockrokr/CategoryDetailView.h"
+#include "view/rockrokr/PlayListDetailView.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -65,9 +66,15 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_loadingWidget = new LoadingWidget;
     m_rkView = new RockRokrView;
 
-    m_overlayWidget = new RKOverlayWidget;
-    m_rkView->categoryDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
-    m_overlayWidget->addWidget(m_rkView->categoryDetailView());
+    {
+        m_overlayWidget = new RKOverlayWidget;
+
+        m_rkView->categoryDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+        m_overlayWidget->addWidget(m_rkView->categoryDetailView());
+
+        m_rkView->playListDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+        m_overlayWidget->addWidget(m_rkView->playListDetailView());
+    }
 
     m_stack->addWidget(m_importView);
     m_stack->addWidget(m_loadingWidget);
@@ -259,13 +266,20 @@ void RKMainWindow::showToast(const QString &text)
     });
 }
 
-void RKMainWindow::showOverlay()
+void RKMainWindow::showCategoryDetailView()
 {
     m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
 
     m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
     m_overlayWidget->setCurrentWidget(m_rkView->categoryDetailView());
+}
 
+void RKMainWindow::showPlaylistDetailView()
+{
+    m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
+
+    m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
+    m_overlayWidget->setCurrentWidget(m_rkView->playListDetailView());
 }
 
 } //namespace RockRokr

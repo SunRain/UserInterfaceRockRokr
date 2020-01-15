@@ -20,6 +20,7 @@
 #include "rockrokr/FavoriteTrackView.h"
 #include "rockrokr/CategoryModel.h"
 #include "rockrokr/CategoryDetailView.h"
+#include "rockrokr/PlayListDetailView.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -35,6 +36,7 @@ RockRokrView::RockRokrView(QWidget *parent)
     DThemeManager::instance()->registerWidget(this);
 
     m_ctgDetailView = new CategoryDetailView;
+    m_plsDetailView = new PlayListDetailView;
 
     m_leftbar = new LeftBar;
     m_titlebar = new RKTitleBar;
@@ -62,10 +64,12 @@ RockRokrView::RockRokrView(QWidget *parent)
         qDebug()<<"LeftBar::itemClicked item type "<<item->itemType()
                <<" "<<item->enumToStr("ItemType", item->itemType());
         if (item->itemType() == LBListItem::ItemType::TypePlaylist) {
-            //TODO playlist
-
+            const PlayListMeta meta = PlayListMeta::fromMap(item->extraData().toMap());
+            m_plsDetailView->showPlayList(meta);
+            ViewUtility::showPlaylistDetailView();
             return;
         }
+        //TODO addon && service item
         bool ok = false;
         const int nowIdx = item->extraData().toInt(&ok);
         qDebug()<<"LeftBar::itemClicked extraData "<<nowIdx<<" ok "<<ok;
@@ -94,14 +98,14 @@ RockRokrView::RockRokrView(QWidget *parent)
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showArtistTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
     });
 
     connect(m_artistCategory, &ArtistCategoryView::recommendedListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showArtistTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
 
     });
 
@@ -109,7 +113,7 @@ RockRokrView::RockRokrView(QWidget *parent)
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showArtistTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
     });
 
     /** AlbumCategoryView ***/
@@ -117,14 +121,14 @@ RockRokrView::RockRokrView(QWidget *parent)
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showAlbumTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
     });
 
     connect(m_albumCategory, &AlbumCategoryView::recommendedListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showAlbumTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
 
     });
 
@@ -132,7 +136,7 @@ RockRokrView::RockRokrView(QWidget *parent)
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showAlbumTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
     });
 
     /** GenresCategoryView ***/
@@ -140,14 +144,14 @@ RockRokrView::RockRokrView(QWidget *parent)
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showGenreTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
     });
 
     connect(m_genresCategory, &GenresCategoryView::recommendedListViewClicked,
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showGenreTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
 
     });
 
@@ -155,7 +159,7 @@ RockRokrView::RockRokrView(QWidget *parent)
             this, [&](BaseCategoryModel *model, const QModelIndex &index) {
         GET_SHOW_PARA
         m_ctgDetailView->showGenreTracks(name, sub, img, num);
-        ViewUtility::showOverlayView();
+        ViewUtility::showCategoryDetailView();
     });
 }
 

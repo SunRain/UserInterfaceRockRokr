@@ -58,6 +58,7 @@ HEADERS += \
     $$PWD/src/view/rockrokr/CategoryViewDataProvider.h \
     $$PWD/src/view/rockrokr/FavoriteTrackView.h \
     $$PWD/src/view/rockrokr/GenresCategoryView.h \
+    $$PWD/src/view/rockrokr/PlayListDetailView.h \
     $$PWD/src/view/rockrokr/TrackListModel.h \
     $$PWD/src/view/rockrokr/TrackListViewDelegate.h \
     $$PWD/src/view/titlebar/RKTitleBar.h \
@@ -115,6 +116,7 @@ SOURCES += \
     $$PWD/src/view/rockrokr/CategoryViewDataProvider.cpp \
     $$PWD/src/view/rockrokr/FavoriteTrackView.cpp \
     $$PWD/src/view/rockrokr/GenresCategoryView.cpp \
+    $$PWD/src/view/rockrokr/PlayListDetailView.cpp \
     $$PWD/src/view/rockrokr/TrackListModel.cpp \
     $$PWD/src/view/rockrokr/TrackListViewDelegate.cpp \
     $$PWD/src/view/titlebar/RKTitleBar.cpp \

@@ -65,7 +65,9 @@ public:
 
     void showToast(const QString &text);
 
-    void showOverlay();
+    void showCategoryDetailView();
+
+    void showPlaylistDetailView();
 
 private:
     QWidget                             *m_mainWidget       = Q_NULLPTR;

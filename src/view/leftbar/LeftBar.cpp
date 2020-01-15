@@ -69,6 +69,9 @@ LeftBar::LeftBar(QWidget *parent)
 //        emit itemClicked(lbi);
 //    });
 
+    connect(m_plsView, &LBPlaylistView::leftBtnClicked,
+            this, &LeftBar::itemClicked);
+
     connect(m_listWidget, &QListWidget::currentItemChanged,
             this, [&](QListWidgetItem *current, QListWidgetItem *previous) {
         qDebug()<<"---- currentItemChanged ---";

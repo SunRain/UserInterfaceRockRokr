@@ -188,9 +188,12 @@ void BaseTrackView::menuAddToPlaylist(QMenu *menu, const AudioMetaObject &obj)
                                   Qt::ElideMiddle, _to_px(160));
         subMenu->addAction(text, [&, meta, obj](){
             PlayListObject po(meta);
+            if (!po.open()) {
+                ViewUtility::showToast(QString(tr("Can't open to add playlist %1!")).arg(meta.getFileName()));
+                return;
+            }
             po.addTrack(obj);
             if (!po.save()) {
-//                m_ui->mainWindow()->showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
                 ViewUtility::showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
             }
         });
