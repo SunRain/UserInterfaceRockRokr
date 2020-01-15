@@ -81,5 +81,6 @@
         <file>light/image/KEY_SERVICE.svg</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--RKOverlayWidget.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--CategoryDetailView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--PlayListDetailView.theme</file>
     </qresource>
 </RCC>

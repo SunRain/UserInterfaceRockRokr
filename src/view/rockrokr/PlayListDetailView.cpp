@@ -13,6 +13,7 @@
 
 #include "MusicLibrary/MusicLibraryManager.h"
 #include "PlayerCore/PlayerCore.h"
+#include "PlayerCore/PlayListMetaMgr.h"
 
 #include "rockrokr_global.h"
 #include "widget/RKImage.h"
@@ -157,6 +158,33 @@ PlayListDetailView::~PlayListDetailView()
 
 void PlayListDetailView::showPlayList(const PlayListMeta &meta)
 {
+    const int w = this->width() - m_imgView->width()
+                  - 5*2
+                  - 10;
+
+#define SET_FONT(label, height, fontSize, text, width) \
+    label->setFixedHeight(height); \
+    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter); \
+    QFont f(label->font()); \
+    f.setPixelSize(fontSize); \
+    label->setFont(f); \
+    QFontMetrics fm(f); \
+    label->setText(fm.elidedText(text, Qt::ElideRight, width));
+
+    {
+        SET_FONT(m_title, _to_px(24), _to_font_px(14), meta.getFileName(), w)
+    }
+    {
+        const QString st = PlayListMetaMgr::formatTimeStamp(meta, QString("yyyy-MM-dd"));
+        SET_FONT(m_time, _to_px(18), _to_font_px(12), tr("TimeStamp:")+" "+st, w);
+    }
+    {
+        SET_FONT(m_tag, _to_px(18), _to_font_px(12), tr("Tag:")+" "+meta.getTag(), w);
+    }
+    {
+         SET_FONT(m_ant, _to_px(18), _to_font_px(12), tr("Annotation:")+" "+meta.getAnnotation(), w);
+    }
+
     m_trackView->showPlaylist(meta);
 }
 
@@ -165,8 +193,51 @@ void PlayListDetailView::initUserInterface()
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(5, 5, 5, 5);
     layout->setSpacing(0);
+    {
+        QHBoxLayout *hb = new QHBoxLayout;
+        hb->setContentsMargins(0, 0, 0, 0);
+        hb->setSpacing(0);
 
+        if (!m_imgView) {
+            m_imgView = new RKImage;
+        }
+        m_imgView->setFixedSize(_to_px(96), _to_px(96));
+        hb->addWidget(m_imgView);
 
+        QVBoxLayout *vb = new QVBoxLayout;
+        vb->setContentsMargins(0, 0, 0, 0);
+        vb->setSpacing(10);
+
+        if (!m_title) {
+            m_title = new QLabel;
+            m_title->setObjectName("Title");
+        }
+        vb->addWidget(m_title);
+
+        if (!m_time) {
+            m_time = new QLabel;
+            m_time->setObjectName("Time");
+        }
+        vb->addWidget(m_time);
+
+        if (!m_tag) {
+            m_tag = new QLabel;
+            m_tag->setObjectName("Tag");
+        }
+        vb->addWidget(m_tag);
+
+        if (!m_ant) {
+            m_ant = new QLabel;
+            m_ant->setObjectName("Annotation");
+        }
+        vb->addWidget(m_ant);
+
+        hb->addSpacing(10);
+        hb->addLayout(vb);
+
+        layout->addLayout(hb);
+    }
+    layout->addSpacing(10);
     layout->addWidget(m_trackView, Qt::AlignCenter);
     this->setLayout(layout);
 }

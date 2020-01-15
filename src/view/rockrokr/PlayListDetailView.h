@@ -2,6 +2,8 @@
 #define PLAYLISTDETAILVIEW_H
 
 #include <QFrame>
+#include <QLabel>
+#include <QLineEdit>
 
 #include "PlayerCore/PlayListMeta.h"
 
@@ -36,6 +38,11 @@ protected:
 
 private:
     PlayListDetailTrackView     *m_trackView    = Q_NULLPTR;
+    RKImage                     *m_imgView      = Q_NULLPTR;
+    QLabel                      *m_title        = Q_NULLPTR;
+    QLabel                      *m_time         = Q_NULLPTR;
+    QLabel                      *m_tag          = Q_NULLPTR;
+    QLabel                      *m_ant          = Q_NULLPTR;
 
 
 
