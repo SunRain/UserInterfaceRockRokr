@@ -69,6 +69,7 @@ HEADERS += \
     $$PWD/src/widget/RKIconButton.h \
     $$PWD/src/widget/RKImage.h \
     $$PWD/src/widget/RKImageProxy.h \
+    $$PWD/src/widget/RKLineEdit.h \
     $$PWD/src/widget/RKListView.h \
     $$PWD/src/widget/RKListWidget.h \
     $$PWD/src/widget/RKOverlayWidget.h \
@@ -127,6 +128,7 @@ SOURCES += \
     $$PWD/src/widget/RKIconButton.cpp \
     $$PWD/src/widget/RKImage.cpp \
     $$PWD/src/widget/RKImageProxy.cpp \
+    $$PWD/src/widget/RKLineEdit.cpp \
     $$PWD/src/widget/RKListView.cpp \
     $$PWD/src/widget/RKListWidget.cpp \
     $$PWD/src/widget/RKOverlayWidget.cpp \

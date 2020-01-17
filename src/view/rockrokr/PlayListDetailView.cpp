@@ -10,6 +10,7 @@
 
 #include <DThemeManager>
 #include <DHiDPIHelper>
+#include <dimagebutton.h>
 
 #include "MusicLibrary/MusicLibraryManager.h"
 #include "PlayerCore/PlayerCore.h"
@@ -18,6 +19,7 @@
 #include "rockrokr_global.h"
 #include "widget/RKImage.h"
 #include "widget/RKTableHeaderItem.h"
+#include "widget/RKLineEdit.h"
 #include "view/ViewUtility.h"
 #include "TrackListModel.h"
 
@@ -148,6 +150,76 @@ PlayListDetailView::PlayListDetailView(QWidget *parent)
     m_trackView = new PlayListDetailTrackView;
     m_trackView->setObjectName("TrackView");
 
+    m_imgView = new RKImage;
+
+    m_title = new QLabel;
+    m_title->setObjectName("Title");
+
+    m_time = new QLabel;
+    m_time->setObjectName("Time");
+
+    m_taglb = new QLabel;
+    m_taglb->setObjectName("Tag");
+    m_taglb->setText(tr("Tag:"));
+
+    m_antlb = new QLabel;
+    m_antlb->setObjectName("Annotation");
+    m_antlb->setText(tr("Annotation:"));
+
+    m_tagedt = new RKLineEdit;
+    m_tagedt->setReadOnly(true);
+    m_tagedt->setObjectName("TagEditor");
+
+    m_tagBtn = new DImageButton;
+    m_tagBtn->setCheckable(true);
+    m_tagBtn->setChecked(false);
+    m_tagBtn->setFixedSize(_to_px(18), _to_px(18));
+    m_tagBtn->setNormalPic(":/light/image/ic_pls_detail_view_mode_edit_normal.svg");
+    m_tagBtn->setPressPic(":/light/image/ic_pls_detail_view_mode_edit_normal.svg");
+    m_tagBtn->setHoverPic(":/light/image/ic_pls_detail_view_mode_edit_normal.svg");
+    m_tagBtn->setCheckedPic(":/light/image/ic_pls_detail_view_mode_check_normal.svg");
+
+    m_antedt = new RKLineEdit;
+    m_antedt->setObjectName("AnnotationEditor");
+    m_antedt->setReadOnly(true);
+
+    m_antBtn = new DImageButton;
+    m_antBtn->setCheckable(true);
+    m_antBtn->setChecked(false);
+    m_antBtn->setFixedSize(_to_px(18), _to_px(18));
+    m_antBtn->setNormalPic(":/light/image/ic_pls_detail_view_mode_edit_normal.svg");
+    m_antBtn->setPressPic(":/light/image/ic_pls_detail_view_mode_edit_normal.svg");
+    m_antBtn->setHoverPic(":/light/image/ic_pls_detail_view_mode_edit_normal.svg");
+    m_antBtn->setCheckedPic(":/light/image/ic_pls_detail_view_mode_check_normal.svg");
+
+    connect(m_tagBtn, &DImageButton::clicked,
+            this, [&]() {
+        m_tagedt->setReadOnly(!m_tagBtn->isChecked());
+    });
+
+    connect(m_antBtn, &DImageButton::clicked,
+            this, [&]() {
+        m_antedt->setReadOnly(!m_antBtn->isChecked());
+    });
+
+    connect(m_tagedt, &RKLineEdit::editingFinished,
+            this, [&]() {
+        PlayListMeta old = m_meta;
+        m_meta.setTag(m_tagedt->text());
+        PlayListMetaMgr mgr;
+        mgr.updateMeta(old, m_meta, true);
+        mgr.saveToDatabase();
+    });
+
+    connect(m_antedt, &RKLineEdit::editingFinished,
+            this, [&]() {
+        PlayListMeta old = m_meta;
+        m_meta.setAnnotation(m_antedt->text());
+        PlayListMetaMgr mgr;
+        mgr.updateMeta(old, m_meta, true);
+        mgr.saveToDatabase();
+    });
+
     initUserInterface();
 }
 
@@ -158,6 +230,7 @@ PlayListDetailView::~PlayListDetailView()
 
 void PlayListDetailView::showPlayList(const PlayListMeta &meta)
 {
+    m_meta = meta;
     const int w = this->width() - m_imgView->width()
                   - 5*2
                   - 10;
@@ -179,10 +252,10 @@ void PlayListDetailView::showPlayList(const PlayListMeta &meta)
         SET_FONT(m_time, _to_px(18), _to_font_px(12), tr("TimeStamp:")+" "+st, w);
     }
     {
-        SET_FONT(m_tag, _to_px(18), _to_font_px(12), tr("Tag:")+" "+meta.getTag(), w);
+        SET_FONT(m_tagedt, _to_px(18), _to_font_px(12), meta.getTag(), w-20);
     }
     {
-         SET_FONT(m_ant, _to_px(18), _to_font_px(12), tr("Annotation:")+" "+meta.getAnnotation(), w);
+         SET_FONT(m_antedt, _to_px(18), _to_font_px(12), meta.getAnnotation(), w-20);
     }
 
     m_trackView->showPlaylist(meta);
@@ -198,9 +271,6 @@ void PlayListDetailView::initUserInterface()
         hb->setContentsMargins(0, 0, 0, 0);
         hb->setSpacing(0);
 
-        if (!m_imgView) {
-            m_imgView = new RKImage;
-        }
         m_imgView->setFixedSize(_to_px(96), _to_px(96));
         hb->addWidget(m_imgView);
 
@@ -208,30 +278,33 @@ void PlayListDetailView::initUserInterface()
         vb->setContentsMargins(0, 0, 0, 0);
         vb->setSpacing(10);
 
-        if (!m_title) {
-            m_title = new QLabel;
-            m_title->setObjectName("Title");
-        }
         vb->addWidget(m_title);
-
-        if (!m_time) {
-            m_time = new QLabel;
-            m_time->setObjectName("Time");
-        }
         vb->addWidget(m_time);
 
-        if (!m_tag) {
-            m_tag = new QLabel;
-            m_tag->setObjectName("Tag");
-        }
-        vb->addWidget(m_tag);
+        {
+            QHBoxLayout *l = new QHBoxLayout;
+            l->setContentsMargins(0, 0, 0, 0);
+            l->setSpacing(0);
 
-        if (!m_ant) {
-            m_ant = new QLabel;
-            m_ant->setObjectName("Annotation");
+            l->addWidget(m_taglb);
+            l->addSpacing(5);
+            l->addWidget(m_tagedt);
+            l->addSpacing(5);
+            l->addWidget(m_tagBtn);
+            vb->addLayout(l);
         }
-        vb->addWidget(m_ant);
+        {
+            QHBoxLayout *l = new QHBoxLayout;
+            l->setContentsMargins(0, 0, 0, 0);
+            l->setSpacing(0);
 
+            l->addWidget(m_antlb);
+            l->addSpacing(5);
+            l->addWidget(m_antedt);
+            l->addSpacing(5);
+            l->addWidget(m_antBtn);
+            vb->addLayout(l);
+        }
         hb->addSpacing(10);
         hb->addLayout(vb);
 

@@ -5,9 +5,14 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include "PlayerCore/PlayListMeta.h"
+#include <dtkwidget_global.h>
 
+#include "PlayerCore/PlayListMeta.h"
 #include "BaseTrackView.h"
+
+DWIDGET_BEGIN_NAMESPACE
+class DImageButton;
+DWIDGET_END_NAMESPACE
 
 namespace PhoenixPlayer {
 
@@ -22,6 +27,7 @@ namespace PhoenixPlayer {
             class RKImage;
             class RKTableHeaderItem;
             class TrackListModel;
+            class RKLineEdit;
 
 class PlayListDetailTrackView;
 class PlayListDetailView : public QFrame
@@ -37,15 +43,18 @@ protected:
     void initUserInterface();
 
 private:
-    PlayListDetailTrackView     *m_trackView    = Q_NULLPTR;
-    RKImage                     *m_imgView      = Q_NULLPTR;
-    QLabel                      *m_title        = Q_NULLPTR;
-    QLabel                      *m_time         = Q_NULLPTR;
-    QLabel                      *m_tag          = Q_NULLPTR;
-    QLabel                      *m_ant          = Q_NULLPTR;
+    PlayListDetailTrackView             *m_trackView    = Q_NULLPTR;
+    RKImage                             *m_imgView      = Q_NULLPTR;
+    QLabel                              *m_title        = Q_NULLPTR;
+    QLabel                              *m_time         = Q_NULLPTR;
+    QLabel                              *m_taglb        = Q_NULLPTR;
+    QLabel                              *m_antlb        = Q_NULLPTR;
+    RKLineEdit                          *m_tagedt       = Q_NULLPTR;
+    RKLineEdit                          *m_antedt       = Q_NULLPTR;
+    DTK_WIDGET_NAMESPACE::DImageButton  *m_tagBtn       = Q_NULLPTR;
+    DTK_WIDGET_NAMESPACE::DImageButton  *m_antBtn       = Q_NULLPTR;
 
-
-
+    PlayListMeta                        m_meta;
 };
 
 } //namespace RockRokr
