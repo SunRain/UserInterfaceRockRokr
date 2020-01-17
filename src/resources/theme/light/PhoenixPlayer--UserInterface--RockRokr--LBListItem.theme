@@ -25,12 +25,14 @@
     background-color: #336CFB;
 }
 
+/*
 #LBListItem[editableStatus="active"] {
     border: 1px solid rgba(51, 108, 251, 0.2);
     border-radius: 8px;
     padding: 0px;
     background-color: rgba(51, 108, 251, 0.8);
 }
+*/
 
 #TitleIconLabel {
     background: transparent;
@@ -65,27 +67,6 @@
 #TitleIconLabel[iconName="TypeService"] {
     image: url(:/light/image/KEY_SERVICE.svg);
 }
-
-/*
-#TitleTextEdit[status="active"] {
-  color: green;
-  background-color: black;
-}
-
-#TitleTextEdit:focus[status="active"] {
-  color: red;
-  background-color: white;
-  border-radius: 4.0px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-*/
-
-/*
-#TitleTextEdit[hoverState="active"] {
-    color: #F4F6FF;
-    background-color: transparent;
-}
-*/
 
 #TitleTextEdit {
     color: #1F2022;

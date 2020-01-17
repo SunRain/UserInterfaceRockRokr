@@ -11,10 +11,10 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
     
+class RKLineEdit;
 class LBListItem : public QFrame
 {
     Q_OBJECT
-    Q_ENUMS(ItemType)
 public:
     enum ItemType {
         TypeArtist = 0x0,
@@ -24,8 +24,10 @@ public:
         TypeFavorites,
         TypePlaylist,
         TypeAddon,
-        TypeService
+        TypeService,
+        TypeUndefined
     };
+    Q_ENUMS(ItemType)
     explicit LBListItem(const ItemType &type, const QString &text, QWidget *parent = Q_NULLPTR);
     virtual ~LBListItem() override;
 
@@ -56,11 +58,11 @@ signals:
     void rename(const QString &text);
 
 private:
-    QLineEdit       *m_textEdit;
-    QLabel          *m_iconLabel;
-    bool            m_editMode;
-    bool            m_keepHover;
-    ItemType        m_itemType;
+    RKLineEdit      *m_textEdit     = Q_NULLPTR;
+    QLabel          *m_iconLabel    = Q_NULLPTR;
+    bool            m_editMode      = false;
+    bool            m_keepHover     = false;
+    ItemType        m_itemType      = ItemType::TypeUndefined;
     QString         m_text;
     QVariant        m_extraData;
 };

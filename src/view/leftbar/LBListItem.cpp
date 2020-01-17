@@ -15,7 +15,7 @@
 #include <DThemeManager>
 
 #include "rockrokr_global.h"
-
+#include "widget/RKLineEdit.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -25,16 +25,14 @@ namespace RockRokr {
 
 LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QWidget *parent)
     : QFrame(parent),
-      m_textEdit(new QLineEdit),
-      m_iconLabel(new QLabel),
-      m_editMode(false),
-      m_keepHover(false),
       m_itemType(type),
       m_text(text)
 {
     this->setObjectName("LBListItem");
-
     DThemeManager::instance()->registerWidget(this);
+
+    m_textEdit = new RKLineEdit;
+    m_iconLabel = new QLabel;
 
     this->setFrameStyle(QFrame::NoFrame);
     this->setContentsMargins(0, 0, 0, 0);
@@ -64,6 +62,8 @@ LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QW
     m_textEdit->setProperty("EditValue", m_text);
     QFont f(m_textEdit->font());
     f.setPixelSize(LEFT_BAR_FONT_SIZE_NORMAL);
+    m_textEdit->setFont(f);
+
     QFontMetrics fm(f);
 
     if (m_itemType == ItemType::TypePlaylist) {
@@ -83,7 +83,6 @@ LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QW
     }
 
     layout->addWidget(m_iconLabel);
-//    layout->addSpacing(LEFT_BAR_ITEM_CONTENT_MARGIN);
     layout->addWidget(m_textEdit);
 
     this->setLayout(layout);
@@ -103,14 +102,15 @@ LBListItem::LBListItem(const LBListItem::ItemType &type, const QString &text, QW
 
             QFont f(m_textEdit->font());
             f.setPixelSize(LEFT_BAR_FONT_SIZE_NORMAL);
+            m_textEdit->setFont(f);
+
             QFontMetrics fm(f);
             const int maxw = LEFT_BAR_ITEM_W - LEFT_BAR_ITEM_CONTENT_MARGIN*2;
             m_textEdit->setText(fm.elidedText(m_text, Qt::TextElideMode::ElideRight, maxw));
 
             m_textEdit->setFixedWidth(maxw);
-//            emit this->rename(m_textEdit->text());
         }
-        emit this->rename(m_textEdit->text());
+        Q_EMIT this->rename(m_textEdit->text());
     });
 
     connect(m_textEdit, &QLineEdit::returnPressed,
@@ -221,10 +221,10 @@ void LBListItem::mousePressEvent(QMouseEvent *event)
 {
     QFrame::mousePressEvent(event);
     if (event->button() == Qt::MouseButton::LeftButton && !m_editMode) {
-        emit leftBtnClicked(this);
+        Q_EMIT leftBtnClicked(this);
     }
     if (event->button() == Qt::MouseButton::RightButton) {
-        emit rightBtnClicked(this, event->pos());
+        Q_EMIT rightBtnClicked(this, event->pos());
     }
 //        QFrame::mousePressEvent(event);
 }
