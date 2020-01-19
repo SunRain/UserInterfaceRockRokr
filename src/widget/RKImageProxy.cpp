@@ -39,39 +39,11 @@ RKImageProivder::~RKImageProivder()
     }
 }
 
-void RKImageProivder::registerAvailableDataCachePath(RKImageProxy *proxy, const QString &path)
-{
-    if (!proxy || path.isEmpty()) {
-        return;
-    }
-    if (m_cachePathList->keys().contains(proxy)) {
-        QStringList list = m_cachePathList->value(proxy);
-        if (!list.contains(path)) {
-            list.append(path);
-            m_cachePathList->insert(proxy, list);
-        }
-    } else {
-        QStringList list;
-        list.append(path);
-        m_cachePathList->insert(proxy, list);
-    }
-}
-
-void RKImageProivder::unRegisterAvailableDataCachePath(RKImageProxy *proxy)
-{
-    if (!proxy) {
-        return;
-    }
-    if (m_cachePathList->keys().contains(proxy)) {
-        m_cachePathList->remove(proxy);
-    }
-}
-
 void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
 {
     if (!uri.isValid()) {
         qWarning()<<"Invalid uri : "<<uri;
-        proxy->onImageFile(QByteArray(), proxy);
+        proxy->onImageFile(QByteArray(), proxy, true);
         return;
     }
     if (!proxy) {
@@ -80,8 +52,8 @@ void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
     }
     {
         QStringList paths;
-        if (m_cachePathList->contains(proxy)) {
-            paths.append(m_cachePathList->value(proxy));
+        if (!proxy->extraCacheSearchPath().isEmpty()) {
+            paths.append(proxy->extraCacheSearchPath());
         }
         if (!proxy->dataCachePath().isEmpty()) {
             paths.append(proxy->dataCachePath());
@@ -96,7 +68,7 @@ void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
                     path = QString("%1/%2").arg(dirPath).arg(hash);;
                 }
                 if (QFile::exists(path)) {
-                    proxy->onImageFile(path.toUtf8(), proxy);
+                    proxy->onImageFile(path.toUtf8(), proxy, false);
                     return;
                 }
             }
@@ -164,22 +136,22 @@ void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
                     file = QString("%1/%2").arg(path).arg(hash);;
                 }
                 if (QFile::exists(file)) {
-                    pp->onImageFile(file.toUtf8(), pp);
+                    pp->onImageFile(file.toUtf8(), pp, false);
                     return;
                 } else {
                     QFile f(file);
                     if (!f.open(QIODevice::WriteOnly)) {
                         qDebug()<<"Open file error: "<<file;
-                        pp->onImageFile(data, pp);
+                        pp->onImageFile(data, pp, true);
                         return;
                     }
                     f.write(data);
                     f.flush();
                     f.close();
-                    pp->onImageFile(file.toUtf8(), pp);
+                    pp->onImageFile(file.toUtf8(), pp, false);
                 }
             } else {
-                pp->onImageFile(data, pp);
+                pp->onImageFile(data, pp, true);
             }
         } else {
             reply->deleteLater();
@@ -206,10 +178,8 @@ RKImageProxy::~RKImageProxy()
     qDebug()<<" ---------------";
     if (getProvider()) {
         getProvider()->unRegisterProxy(this);
-        getProvider()->unRegisterAvailableDataCachePath(this);
     } else {
         RKImageProivder::instance()->unRegisterProxy(this);
-        RKImageProivder::instance()->unRegisterAvailableDataCachePath(this);
     }
 }
 
@@ -220,6 +190,14 @@ void RKImageProxy::startRequest(const QUrl &uri)
     } else {
         RKImageProivder::instance()->startRequest(uri, this);
     }
+}
+
+void RKImageProxy::addExtraCacheSearchPath(const QString &path)
+{
+    if (path.isEmpty() || m_extraCachePath.contains(path)) {
+        return;
+    }
+    m_extraCachePath.append(path);
 }
 
 } //namespace RockRokr

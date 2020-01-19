@@ -29,14 +29,6 @@ public:
     static RKImageProivder *instance();
     virtual ~RKImageProivder();
 
-    /*!
-     * \brief registerAvailableDataCachePath add extra path for image cache searching
-     * \param path
-     */
-    void registerAvailableDataCachePath(RKImageProxy *proxy, const QString &path);
-
-    void unRegisterAvailableDataCachePath(RKImageProxy *proxy);
-
 protected:
     virtual void startRequest(const QUrl &uri, RKImageProxy *proxy);
 
@@ -46,7 +38,6 @@ protected:
 private:
     QCurl::QCNetworkAccessManager       *m_mgr;
     QList<RKImageProxy *>               *m_dataList;
-    QMap<RKImageProxy*, QStringList>    *m_cachePathList;
 };
 
 class RKImageProxy
@@ -80,10 +71,11 @@ protected:
     /*!
      * \brief onImageFile
      * \param data filePath or file data
-     * if dataCachePath is not empty, data will be file path, or the data of file
      * \param proxy
+     * \param isBinaryData indicate if data is file path or binary data
+     * True for binary data, false for file path
      */
-    virtual void onImageFile(const QByteArray &data, RKImageProxy *proxy) = 0;
+    virtual void onImageFile(const QByteArray &data, RKImageProxy *proxy, bool isBinaryData) = 0;
 
     /*!
      * \brief dataCachePath
@@ -93,6 +85,13 @@ protected:
     virtual QString dataCachePath() const
     {
         return QString();
+    }
+
+    void addExtraCacheSearchPath(const QString &path);
+
+    inline QStringList extraCacheSearchPath() const
+    {
+        return m_extraCachePath;
     }
 
     inline void setReply(QCurl::QCNetworkAsyncReply *reply)
@@ -126,6 +125,7 @@ protected:
 private:
     QCurl::QCNetworkAsyncReply      *m_reply = Q_NULLPTR;
     RKImageProivder                 *m_provider = Q_NULLPTR;
+    QStringList                     m_extraCachePath;
 };
 
 } //namespace RockRokr
