@@ -3,9 +3,11 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
+#include <qcompilerdetection.h>
 
 #include "SingletonPointer.h"
 #include "PPUtility.h"
+#include "PPSettings.h"
 
 #include "QCNetworkAccessManager.h"
 #include "QCNetworkRequest.h"
@@ -148,8 +150,23 @@ void CategoryModelImageProvider::startRequest(const QUrl &uri, const QModelIndex
     reply->perform();
 }
 
+static QString s_sys_cache_dir;
 QString CategoryModelImageProvider::getFile(const QUrl &uri) const
 {
+    if (Q_UNLIKELY(s_sys_cache_dir.isEmpty())) {
+        PPSettings set;
+        s_sys_cache_dir = set.musicImageCachePath();
+        if (s_sys_cache_dir.endsWith("/")) {
+            s_sys_cache_dir = s_sys_cache_dir.left(s_sys_cache_dir.length() - 1);
+        }
+    }
+    if (uri.isRelative()) {
+        const QString file = QString("%1/%2").arg(s_sys_cache_dir).arg(uri.toString());
+        if (QFile::exists(file)) {
+            return file;
+        }
+    }
+
     const QString hash = PPUtility::calculateHash(m_dataCache + uri.toString());
     QString path = QString("%1/%2").arg(m_dataCache).arg(hash);
     return path;
