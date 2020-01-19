@@ -153,6 +153,10 @@ void CategoryModelImageProvider::startRequest(const QUrl &uri, const QModelIndex
 static QString s_sys_cache_dir;
 QString CategoryModelImageProvider::getFile(const QUrl &uri) const
 {
+    if (QFile::exists(uri.toString())) {
+        return uri.toString();
+    }
+
     if (Q_UNLIKELY(s_sys_cache_dir.isEmpty())) {
         PPSettings set;
         s_sys_cache_dir = set.musicImageCachePath();
