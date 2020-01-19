@@ -8,9 +8,9 @@
 
 class QFile;
 
-namespace QCurl {
-    class QCNetworkAsyncReply;
-}
+//namespace QCurl {
+//    class QCNetworkAsyncReply;
+//}
 
 namespace PhoenixPlayer {
 
@@ -21,7 +21,7 @@ namespace PhoenixPlayer {
         namespace RockRokr {
 
 // copy from Cover in deepin-music with some modifaction
-class RKImage : public QFrame
+class RKImage : public QFrame, RKImageProxy
 {
     Q_OBJECT
     Q_PROPERTY(int radius READ radius WRITE setRadius)
@@ -49,13 +49,11 @@ signals:
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+    // RKImageProxy interface
 protected:
-    void downloadFile(const QUrl &uri);
+    void onImageFile(const QByteArray &data, RKImageProxy *proxy, bool isBinaryData) Q_DECL_OVERRIDE;
 
 private:
-//    PhoenixPlayer::PPSettings   *m_settings = Q_NULLPTR;
-    QCurl::QCNetworkAsyncReply  *m_reply    = Q_NULLPTR;
-    QFile                       *m_file     = Q_NULLPTR;
     int                         m_radius;
     QColor                      m_borderColor;
     QColor                      m_shadowColor;

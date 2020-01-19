@@ -23,12 +23,8 @@ namespace RockRokr {
 
 static auto borderPenWidth = 1.0;
 
-static QCurl::QCNetworkAccessManager *s_mgr = Q_NULLPTR;// = new QCurl::QCNetworkAccessManager();
-
 RKImage::RKImage(QWidget *parent)
     : QFrame(parent),
-      m_reply(Q_NULLPTR),
-      m_file(Q_NULLPTR),
       m_radius(4),
       m_borderColor(QColor(255, 0, 0, 152)),
       m_shadowColor(QColor(0, 255, 0, 126)),
@@ -37,25 +33,11 @@ RKImage::RKImage(QWidget *parent)
     this->setObjectName("RKImage");
     DThemeManager::instance()->registerWidget(this);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
-
-//    m_settings = phoenixPlayerLib->settings();
 }
 
 RKImage::~RKImage()
 {
     qDebug()<<"-----------------------";
-    if (m_reply) {
-        if (m_reply->isRunning()) {
-            m_reply->abort();
-        }
-        m_reply->deleteLater();
-        m_reply = Q_NULLPTR;
-    }
-    if (m_file) {
-        m_file->close();
-        m_file->deleteLater();
-        m_file = Q_NULLPTR;
-    }
 }
 int RKImage::radius() const
 {
@@ -116,72 +98,32 @@ void RKImage::paintEvent(QPaintEvent *)
     painter.strokePath(outerBorderPath, outerBorderPen);
 }
 
-void RKImage::downloadFile(const QUrl &uri)
+void RKImage::onImageFile(const QByteArray &data, RKImageProxy *proxy, bool isBinaryData)
 {
-    if (uri.isEmpty() || !uri.isValid()) {
-        qDebug()<<"Empty or invalid uri "<<uri;
+    if (proxy != this) {
+        qWarning()<<"Not same proxy ?? This "<<this<<" proxy "<<proxy;
+    }
+    if (data.isEmpty()) {
+        qWarning()<<"Empty data !";
         return;
     }
-    QString path = RKUtility::coverCacheDir();
-    QString hash = PPUtility::calculateHash(path + uri.toString());
-    path = QString("%1/%2").arg(path).arg(hash);
-    if (QFile::exists(path)) {
-        this->setUri(path);
+    QImage img;
+    if (isBinaryData) {
+        img = QImage::fromData(data);
+    } else if (!img.load(data)) {
+        qWarning()<<"Can't load file ["<<data<<"] as image .";
         return;
     }
-    if (m_reply) {
-        if (m_reply->isRunning()) {
-            m_reply->abort();
-        }
-        m_reply->deleteLater();
-        m_reply = Q_NULLPTR;
+    if (img.isNull()) {
+        qWarning()<<"Finally image is null";
+        return;
     }
-    if (m_file) {
-        m_file->close();
-        m_file->remove();
-        m_file->deleteLater();
-        m_file = Q_NULLPTR;
+    QPixmap pixmap = QPixmap::fromImage(img);
+    if (pixmap.isNull()) {
+        qWarning()<<"Can't load pixmap from image.";
+        return;
     }
-    m_file = new QFile(path);
-    if (!m_file->open(QIODevice::WriteOnly)) {
-        qDebug()<<"open to write to path ["<<path<<"] error";
-        m_file->deleteLater();
-        m_file = Q_NULLPTR;
-    }
-    QCurl::QCNetworkRequest req(uri);
-    if (Q_UNLIKELY(!s_mgr)) {
-        s_mgr = new QCurl::QCNetworkAccessManager();
-    }
-    s_mgr->setCookieFilePath(RKUtility::httpCookieFile());
-    m_reply = s_mgr->get(req);
-    connect(m_reply, &QCurl::QCNetworkAsyncReply::finished, this, [&, uri, path]() {
-        const QCurl::NetworkError error = m_reply->error();
-        if (error != QCurl::NetworkNoError) {
-            qDebug()<<"download cover image from uri ["<<uri<<"] error: "<<m_reply->errorString();
-            m_file->close();
-            m_file->deleteLater();
-            m_file = Q_NULLPTR;
-        } else {
-            QByteArray qba = m_reply->readAll();
-            QByteArray hba = m_reply->rawHeaderData();
-            const int idx = qba.indexOf(hba);
-            if (idx >= 0) {
-                qba = qba.remove(idx, hba.size());
-            }
-            m_file->write(qba);
-            m_file->flush();
-            m_file->close();
-            m_file->deleteLater();
-            m_file = Q_NULLPTR;
-            if (m_reply->isRunning()) {
-                m_reply->abort();
-            }
-            m_reply->deleteLater();
-            m_reply = Q_NULLPTR;
-            this->setUri(path);
-        }
-    });
-    m_reply->perform();
+    this->setPixmap(pixmap);
 }
 
 void RKImage::setPixmap(const QPixmap &pixmap)
@@ -237,26 +179,29 @@ void RKImage::setUri(const QUrl &uri)
         qWarning()<<"No suitable path for uri ["<<uri<<"]";
         return;
     }
-    if (uri.scheme().startsWith("http") || uri.scheme().startsWith("ftp")) { //url
-        downloadFile(uri);
-        return;
-    }
+//    if (uri.scheme().startsWith("http") || uri.scheme().startsWith("ftp")) { //url
+////        downloadFile(uri);
+//        startRequest(uri);
+//        return;
+//    }
     //remove qrc: from file uri to fix image load
-     if (path.startsWith("qrc:")) {
-         path = path.mid(3, path.length() - 3);
-     }
-     QImage img(path);
-     if (img.isNull()) {
-         qWarning()<<"Can't load img for uri "<<uri
-                  <<" with path "<<path;
-         return;
-     }
-     QPixmap pixmap = QPixmap::fromImage(img);
-     if (pixmap.isNull()) {
-         qWarning()<<"Can't load pixmap from image uri "<<uri;
-         return;
-     }
-     this->setPixmap(pixmap);
+    if (path.startsWith("qrc:")) {
+        path = path.mid(3, path.length() - 3);
+        QImage img(path);
+        if (img.isNull()) {
+            qWarning()<<"Can't load img for uri "<<uri
+                     <<" with path "<<path;
+            return;
+        }
+        QPixmap pixmap = QPixmap::fromImage(img);
+        if (pixmap.isNull()) {
+            qWarning()<<"Can't load pixmap from image uri "<<uri;
+            return;
+        }
+        this->setPixmap(pixmap);
+    } else {
+        startRequest(uri);
+    }
 }
 
 void RKImage::setRadius(int radius)
