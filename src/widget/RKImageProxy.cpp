@@ -39,6 +39,34 @@ RKImageProivder::~RKImageProivder()
     }
 }
 
+void RKImageProivder::registerAvailableDataCachePath(RKImageProxy *proxy, const QString &path)
+{
+    if (!proxy || path.isEmpty()) {
+        return;
+    }
+    if (m_cachePathList->keys().contains(proxy)) {
+        QStringList list = m_cachePathList->value(proxy);
+        if (!list.contains(path)) {
+            list.append(path);
+            m_cachePathList->insert(proxy, list);
+        }
+    } else {
+        QStringList list;
+        list.append(path);
+        m_cachePathList->insert(proxy, list);
+    }
+}
+
+void RKImageProivder::unRegisterAvailableDataCachePath(RKImageProxy *proxy)
+{
+    if (!proxy) {
+        return;
+    }
+    if (m_cachePathList->keys().contains(proxy)) {
+        m_cachePathList->remove(proxy);
+    }
+}
+
 void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
 {
     if (!uri.isValid()) {
@@ -50,18 +78,28 @@ void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
         qWarning()<<"proxy is nullptr !!!";
         return;
     }
-    const QString dirPath = proxy->dataCachePath();
-    if (!dirPath.isEmpty()) {
-        const QString hash = PPUtility::calculateHash(dirPath + uri.toString());
-        QString path;
-        if (dirPath.endsWith("/")) {
-            path = QString("%1%2").arg(dirPath).arg(hash);
-        } else {
-            path = QString("%1/%2").arg(dirPath).arg(hash);;
+    {
+        QStringList paths;
+        if (m_cachePathList->contains(proxy)) {
+            paths.append(m_cachePathList->value(proxy));
         }
-        if (QFile::exists(path)) {
-            proxy->onImageFile(path.toUtf8(), proxy);
-            return;
+        if (!proxy->dataCachePath().isEmpty()) {
+            paths.append(proxy->dataCachePath());
+        }
+        foreach (const auto &dirPath, paths) {
+            if (!dirPath.isEmpty()) {
+                const QString hash = PPUtility::calculateHash(dirPath + uri.toString());
+                QString path;
+                if (dirPath.endsWith("/")) {
+                    path = QString("%1%2").arg(dirPath).arg(hash);
+                } else {
+                    path = QString("%1/%2").arg(dirPath).arg(hash);;
+                }
+                if (QFile::exists(path)) {
+                    proxy->onImageFile(path.toUtf8(), proxy);
+                    return;
+                }
+            }
         }
     }
 
@@ -120,10 +158,10 @@ void RKImageProivder::startRequest(const QUrl &uri, RKImageProxy *proxy)
                 const QString path = pp->dataCachePath();
                 const QString hash = PPUtility::calculateHash(path + uri.toString());
                 QString file;
-                if (dirPath.endsWith("/")) {
-                    file = QString("%1%2").arg(dirPath).arg(hash);
+                if (path.endsWith("/")) {
+                    file = QString("%1%2").arg(path).arg(hash);
                 } else {
-                    file = QString("%1/%2").arg(dirPath).arg(hash);;
+                    file = QString("%1/%2").arg(path).arg(hash);;
                 }
                 if (QFile::exists(file)) {
                     pp->onImageFile(file.toUtf8(), pp);
@@ -168,8 +206,10 @@ RKImageProxy::~RKImageProxy()
     qDebug()<<" ---------------";
     if (getProvider()) {
         getProvider()->unRegisterProxy(this);
+        getProvider()->unRegisterAvailableDataCachePath(this);
     } else {
         RKImageProivder::instance()->unRegisterProxy(this);
+        RKImageProivder::instance()->unRegisterAvailableDataCachePath(this);
     }
 }
 

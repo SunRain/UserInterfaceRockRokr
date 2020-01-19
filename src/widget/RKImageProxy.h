@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHash>
 #include <QUrl>
+#include <QMap>
 
 namespace QCurl {
     class QCNetworkAccessManager;
@@ -28,10 +29,16 @@ public:
     static RKImageProivder *instance();
     virtual ~RKImageProivder();
 
+    /*!
+     * \brief registerAvailableDataCachePath add extra path for image cache searching
+     * \param path
+     */
+    void registerAvailableDataCachePath(RKImageProxy *proxy, const QString &path);
+
+    void unRegisterAvailableDataCachePath(RKImageProxy *proxy);
+
 protected:
     virtual void startRequest(const QUrl &uri, RKImageProxy *proxy);
-
-//    void registerProxy(RKImageProxy *proxy);
 
     virtual void unRegisterProxy(RKImageProxy *proxy);
 
@@ -39,6 +46,7 @@ protected:
 private:
     QCurl::QCNetworkAccessManager       *m_mgr;
     QList<RKImageProxy *>               *m_dataList;
+    QMap<RKImageProxy*, QStringList>    *m_cachePathList;
 };
 
 class RKImageProxy
@@ -51,36 +59,37 @@ public:
     void startRequest(const QUrl &uri);
 
 protected:
-    ///
-    /// \brief keepConnetction
-    /// \return true if not remove this from RKImageProivder
-    ///
+    /*!
+     * \brief keepRegister
+     * \return true if not remove this from RKImageProivder
+     */
     virtual bool keepRegister()
     {
         return false;
     }
-    ///
-    /// \brief cookieFile
-    /// \return empty if not use cookie or filepaht used to save cookie data
-    ///
+
+    /*!
+     * \brief cookieFile
+     * \return empty if not use cookie or filepaht used to save cookie data
+     */
     virtual QString cookieFile() const
     {
         return QString();
     }
 
-    ///
-    /// \brief onImageFile
-    /// \param data filePath or file data
-    /// if dataCachePath is empty, data will be file path, or the data of file
-    /// \param proxy
-    ///
+    /*!
+     * \brief onImageFile
+     * \param data filePath or file data
+     * if dataCachePath is not empty, data will be file path, or the data of file
+     * \param proxy
+     */
     virtual void onImageFile(const QByteArray &data, RKImageProxy *proxy) = 0;
 
-    ///
-    /// \brief dataCachePath
-    /// \return dir to save dowloaded file
-    /// if return empty the onImageFile will file data, or the full path of file saved
-    ///
+    /*!
+     * \brief dataCachePath
+     * \return dir to save dowloaded file
+     * if return empty the onImageFile will file data, or the full path of file saved
+     */
     virtual QString dataCachePath() const
     {
         return QString();
@@ -96,19 +105,19 @@ protected:
         return m_reply;
     }
 
-    ///
-    /// \brief setProvider
-    /// If no custom provider set, will use default provider
-    /// \param provider if use custom provider
-    ///
+    /*!
+     * \brief setProvider
+     * If no custom provider set, will use default provider
+     * \param provider
+     */
     inline void setProvider(RKImageProivder *provider) {
         m_provider = provider;
     }
 
-    ///
-    /// \brief getProvider
-    /// \return nullptr is no curstom provider set
-///
+    /*!
+     * \brief getProvider
+     * \return nullptr is no curstom provider set
+     */
     inline RKImageProivder *getProvider()
     {
         return m_provider;
