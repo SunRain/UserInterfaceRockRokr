@@ -49,7 +49,7 @@ void CategoryRecommendedViewDelegate::paint(QPainter *painter, const QStyleOptio
         color.setNamedColor("#336CFB");
         painter->setPen(color);
         painter->setBrush(color);
-        painter->drawRoundRect(rect, m_radius, m_radius);
+        painter->drawRoundedRect(rect, m_radius, m_radius);
     } else {
         painter->fillRect(option.rect, Qt::GlobalColor::transparent);
     }
@@ -127,7 +127,7 @@ void CategoryRecommendedViewDelegate::paint(QPainter *painter, const QStyleOptio
     // text
     QTextOption textOpt;
     textOpt.setAlignment(Qt::AlignmentFlag::AlignVCenter | Qt::AlignmentFlag::AlignLeft);
-    textOpt.setWrapMode(QTextOption::WrapMode::WordWrap);
+    textOpt.setWrapMode(QTextOption::WrapMode::NoWrap);
 
     const int textWidth = /*rect.width()*/innerSize.width() - _to_px(4);
     const int innerMargin = /*rect.height()*/innerSize.height()
