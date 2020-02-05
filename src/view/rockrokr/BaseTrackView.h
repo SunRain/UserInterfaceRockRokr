@@ -10,9 +10,6 @@ class QMenu;
 
 namespace PhoenixPlayer {
 
-    class PlayerCore;
-    class PlayListMetaMgr;
-
     namespace UserInterface {
 
         class UserInterfaceMgr;;
@@ -72,11 +69,11 @@ protected:
         return m_provider;
     }
 
-    void menuAddToQueue(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
-    void menuAddToPlaylist(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
-    void menuShowInFileMgr(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
-    void menuRemoveObject(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
-    void menuTrackInfo(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+//    void menuAddToQueue(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+//    void menuAddToPlaylist(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+//    void menuShowInFileMgr(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+//    void menuRemoveObject(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+//    void menuTrackInfo(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
 
     QModelIndex indexAtPos(const QPoint &pos) const;
 
@@ -86,8 +83,8 @@ protected:
 //    }
 
 private:
-    PlayerCore                  *m_playerCore = Q_NULLPTR;
-    PlayListMetaMgr             *m_plsMetaMgr = Q_NULLPTR;
+//    PlayerCore                  *m_playerCore = Q_NULLPTR;
+//    PlayListMetaMgr             *m_plsMetaMgr = Q_NULLPTR;
 
     RKListView                  *m_listView = Q_NULLPTR;
     TrackListViewDelegate       *m_delegate = Q_NULLPTR;

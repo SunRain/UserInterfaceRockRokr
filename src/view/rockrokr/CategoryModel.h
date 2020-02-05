@@ -71,7 +71,8 @@ public:
         RoleImageUri,
         RoleCurIdx,
         RolePlayingState,
-        RoleTrackDuration
+        RoleTrackDuration,
+        RoleTrackHash
     };
 
 public slots:

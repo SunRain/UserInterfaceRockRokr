@@ -6,6 +6,7 @@
 namespace PhoenixPlayer {
 
     class PlayerCore;
+    class PlayListMetaMgr;
 
     namespace MusicLibrary {
         class MusicLibraryManager;
@@ -56,6 +57,7 @@ private:
     UserInterfaceMgr                    *m_uiMgr        = Q_NULLPTR;
     UserInterfaceRockRokr               *m_ui           = Q_NULLPTR;
     PlayerCore                          *m_playerCore   = Q_NULLPTR;
+    PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
     MusicLibrary::MusicLibraryManager   *m_libMgr       = Q_NULLPTR;
 
 };

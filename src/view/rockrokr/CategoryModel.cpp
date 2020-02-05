@@ -248,6 +248,17 @@ QVariant BaseCategoryModel::data(const QModelIndex &index, int role) const
             }
             return obj.trackMeta().duration();
         }
+        case RoleTrackHash: {
+            QVariant data = obj.getExtraData();
+            if (!data.isValid() || data.isNull()) {
+                return QString();
+            }
+            AudioMetaObject obj = AudioMetaObject::fromMap(data.toMap());
+            if (obj.isHashEmpty()) {
+                return QString();
+            }
+            return obj.hash();
+        }
         default:
             return QVariant();
     }
@@ -264,6 +275,7 @@ QHash<int, QByteArray> BaseCategoryModel::roleNames() const
      role.insert(ModelRoles::RolePlayingState, "RolePlayingState");
      role.insert(ModelRoles::RoleTrackDuration, "RoleTrackDuration");
      role.insert(ModelRoles::RoleCategorySubNameList, "RoleCategorySubNameList");
+     role.insert(ModelRoles::RoleTrackHash, "RoleTrackHash");
      return role;
 }
 

@@ -7,9 +7,14 @@
 #include "AudioMetaObject.h"
 #include "PlayerCore/PlayListMeta.h"
 
+class QMenu;
 namespace PhoenixPlayer {
-namespace UserInterface {
-namespace RockRokr {
+    class PlayerCore;
+    class PlayListMetaMgr;
+
+    namespace UserInterface {
+
+        namespace RockRokr {
 
 class ViewUtility
 {
@@ -27,6 +32,17 @@ public:
     static void showCategoryDetailView();
 
     static void showPlaylistDetailView();
+
+    static void menuAddToQueue(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj, PlayerCore *core);
+
+    static void menuAddToPlaylist(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj, PlayListMetaMgr *mgr);
+
+    static void menuShowInFileMgr(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+
+    static void menuRemoveObject(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+
+    static void menuTrackInfo(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
+
 };
 
 } //namespace RockRokr

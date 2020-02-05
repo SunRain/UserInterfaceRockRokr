@@ -75,15 +75,30 @@ void FavoriteTrackViewDataProvider::resetDataModelToDefalutState()
 FavoriteTrackView::FavoriteTrackView(QWidget *parent)
     : BaseTrackView (new FavoriteTrackViewDataProvider, parent)
 {
+    m_playerCore = new PlayerCore(this);
+    m_plsMetaMgr = new PlayListMetaMgr(this);
     m_libraryMgr = new MusicLibrary::MusicLibraryManager(this);
 }
 
 FavoriteTrackView::~FavoriteTrackView()
 {
+    if (m_playerCore) {
+        m_playerCore->deleteLater();
+        m_playerCore = Q_NULLPTR;
+    }
+    if (m_plsMetaMgr) {
+        m_plsMetaMgr->deleteLater();
+        m_plsMetaMgr = Q_NULLPTR;
+    }
     if (m_libraryMgr) {
         m_libraryMgr->deleteLater();
         m_libraryMgr = Q_NULLPTR;
     }
+}
+
+void FavoriteTrackView::onClicked(const QModelIndex &index)
+{
+    //TODO
 }
 
 void FavoriteTrackView::showContextMenu(const QPoint &pos)
@@ -108,13 +123,13 @@ void FavoriteTrackView::showContextMenu(const QPoint &pos)
         getModel()->showFavorites();
     });
 
-    menuAddToQueue(&menu, obj);
-    menuAddToPlaylist(&menu, obj);
+    ViewUtility::menuAddToQueue(&menu, obj, m_playerCore);
+    ViewUtility::menuAddToPlaylist(&menu, obj, m_plsMetaMgr);
     menu.addSeparator();
-    menuRemoveObject(&menu, obj);
-    menuShowInFileMgr(&menu, obj);
+    ViewUtility::menuRemoveObject(&menu, obj);
+    ViewUtility::menuShowInFileMgr(&menu, obj);
     menu.addSeparator();
-    menuTrackInfo(&menu, obj);
+    ViewUtility::menuTrackInfo(&menu, obj);
 
     menu.exec(this->mapToGlobal(pos));
 }

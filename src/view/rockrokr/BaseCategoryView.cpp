@@ -37,6 +37,7 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
     {
         m_recommendedListView = new RKListView;
         initListViewParameter(m_recommendedListView);
+        m_recommendedListView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         m_recommendedListView->setFixedHeight(MAIN_VIEW_HL_VIEW_H);
         m_recommendedListView->setDefaultItemSize(QSize(MAIN_VIEW_HL_COVER_W, MAIN_VIEW_HL_COVER_H));
         m_recommendedListView->setSpacing(10);
@@ -54,6 +55,7 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
     {
         m_recentListView = new RKListView;
         initListViewParameter(m_recentListView);
+        m_recentListView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         m_recentListView->setFixedWidth(MAIN_VIEW_V_LISTVIEW_W);
         m_recentListView->setSpacing(8);
         m_recentListView->setScrollBarOrientation(Qt::Vertical);
@@ -67,6 +69,7 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
     {
         m_allListView = new RKListView;
         initListViewParameter(m_allListView);
+        m_allListView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 //        m_allListView->setFixedHeight(MAIN_VIEW_HL_VIEW_H);
         m_allListView->setDefaultItemSize(QSize(MAIN_VIEW_R_VIEW_COVER_W, MAIN_VIEW_R_VIEW_COVER_H));
         m_allListView->setSpacing(10);
@@ -85,9 +88,9 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
 
     initUI();
 
+    /**************************/
     connect(m_recommendedListView, &RKListView::entered,
             this, [&](const QModelIndex &idx) {
-//                qDebug()<<Q_FUNC_INFO<<" entered "<<idx;
                 BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recommendedModel());
                 Q_ASSERT(model != Q_NULLPTR);
                 model->setCurIdx(idx);
@@ -97,12 +100,24 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
            this, [&](const QModelIndex &index) {
        BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recommendedModel());
        Q_ASSERT(model != Q_NULLPTR);
-       Q_EMIT(recommendedListViewClicked(model, index));
+       Q_EMIT viewClicked(ViewTypeRecommended, model, index);
    });
 
+   connect(m_recommendedListView, &RKListView::customContextMenuRequested,
+           this, [&](const QPoint &pos) {
+       BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recommendedModel());
+       Q_ASSERT(model != Q_NULLPTR);
+       const QModelIndex idx = m_recentListView->indexAt(pos);
+       if (!idx.isValid()) {
+           qWarning()<<"Invalid QModelIndex!!";
+           return;
+       }
+       Q_EMIT customContextMenuRequested(ViewTypeRecommended, model, idx, m_recommendedListView->mapToGlobal(pos));
+   });
+
+   /**************************/
     connect(m_recentListView, &RKListView::entered,
             this, [&](const QModelIndex &idx) {
-//                qDebug()<<Q_FUNC_INFO<<" entered "<<idx;
                 BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recentModel());
                 Q_ASSERT(model != Q_NULLPTR);
                 model->setCurIdx(idx);
@@ -111,12 +126,24 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
             this, [&](const QModelIndex &index) {
         BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recentModel());
         Q_ASSERT(model != Q_NULLPTR);
-        Q_EMIT(recentListViewClicked(model, index));
+        Q_EMIT viewClicked(ViewTypeRecent, model, index);
     });
 
+    connect(m_recentListView, &RKListView::customContextMenuRequested,
+            this, [&](const QPoint &pos) {
+        BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->recentModel());
+        Q_ASSERT(model != Q_NULLPTR);
+        const QModelIndex idx = m_recentListView->indexAt(pos);
+        if (!idx.isValid()) {
+            qWarning()<<"Invalid QModelIndex!!";
+            return;
+        }
+        Q_EMIT customContextMenuRequested(ViewTypeRecent, model, idx, m_recentListView->mapToGlobal(pos));
+    });
+
+   /**************************/
     connect(m_allListView, &RKListView::entered,
             this, [&](const QModelIndex &idx) {
-//                qDebug()<<Q_FUNC_INFO<<" entered "<<idx;
                 BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->allListModel());
                 Q_ASSERT(model != Q_NULLPTR);
                 model->setCurIdx(idx);
@@ -125,9 +152,20 @@ BaseCategoryView::BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent
             this, [&](const QModelIndex &index) {
         BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->allListModel());
         Q_ASSERT(model != Q_NULLPTR);
-        Q_EMIT(allListViewClicked(model, index));
+        Q_EMIT viewClicked(ViewTypeAllList, model, index);
     });
 
+    connect(m_allListView, &RKListView::customContextMenuRequested,
+            this, [&](const QPoint &pos) {
+        BaseCategoryModel *model = qobject_cast<BaseCategoryModel*>(m_dataProvider->allListModel());
+        Q_ASSERT(model != Q_NULLPTR);
+        const QModelIndex idx = m_allListView->indexAt(pos);
+        if (!idx.isValid()) {
+            qWarning()<<"Invalid QModelIndex!!";
+            return;
+        }
+        Q_EMIT customContextMenuRequested(ViewTypeAllList, model, idx, m_allListView->mapToGlobal(pos));
+    });
 
 }
 

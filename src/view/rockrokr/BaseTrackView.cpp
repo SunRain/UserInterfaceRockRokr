@@ -44,8 +44,8 @@ BaseTrackView::BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent)
     this->setObjectName("BaseTrackView");
     DThemeManager::instance()->registerWidget(this);
 
-    m_playerCore = new PlayerCore(this);
-    m_plsMetaMgr = new PlayListMetaMgr(this);
+//    m_playerCore = new PlayerCore(this);
+//    m_plsMetaMgr = new PlayListMetaMgr(this);
 //    m_uiMgr = new UserInterfaceMgr(this);
 //    m_ui = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
 
@@ -108,14 +108,14 @@ BaseTrackView::BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent)
 
 BaseTrackView::~BaseTrackView()
 {
-    if (m_playerCore) {
-        m_playerCore->deleteLater();
-        m_playerCore = Q_NULLPTR;
-    }
-    if (m_plsMetaMgr) {
-        m_plsMetaMgr->deleteLater();
-        m_plsMetaMgr = Q_NULLPTR;
-    }
+//    if (m_playerCore) {
+//        m_playerCore->deleteLater();
+//        m_playerCore = Q_NULLPTR;
+//    }
+//    if (m_plsMetaMgr) {
+//        m_plsMetaMgr->deleteLater();
+//        m_plsMetaMgr = Q_NULLPTR;
+//    }
 //    if (m_uiMgr) {
 //        m_uiMgr->deleteLater();
 //        m_uiMgr = Q_NULLPTR;
@@ -129,8 +129,6 @@ BaseTrackView::~BaseTrackView()
 
 void BaseTrackView::resizeEvent(QResizeEvent *event)
 {
-    qDebug()<<" --------------- "<<event->size();
-
     m_provider->headerItem()->setFixedWidth(event->size().width());
 
     QWidget::resizeEvent(event);
@@ -162,67 +160,67 @@ TrackListModel *BaseTrackView::getModel() const
     return m_provider->dataModel();
 }
 
-void BaseTrackView::menuAddToQueue(QMenu *menu, const AudioMetaObject &obj)
-{
-    menu->addAction(tr("Add to queue"), [&, obj](){
-        m_playerCore->playQueue()->addTrack(obj);
-    });
-}
+//void BaseTrackView::menuAddToQueue(QMenu *menu, const AudioMetaObject &obj)
+//{
+//    menu->addAction(tr("Add to queue"), [&, obj](){
+//        m_playerCore->playQueue()->addTrack(obj);
+//    });
+//}
 
-void BaseTrackView::menuAddToPlaylist(QMenu *menu, const AudioMetaObject &obj)
-{
-    QMenu *subMenu = new QMenu(menu);
-    subMenu->setStyle(QStyleFactory::create("dlight"));
-    subMenu->addAction(QIcon(":/light/image/playlist_add.svg"), tr("New playlist"), [&](){
-        PlayListMeta meta = m_plsMetaMgr->create();
-        m_plsMetaMgr->tryAdd(meta);
-    });
+//void BaseTrackView::menuAddToPlaylist(QMenu *menu, const AudioMetaObject &obj)
+//{
+//    QMenu *subMenu = new QMenu(menu);
+//    subMenu->setStyle(QStyleFactory::create("dlight"));
+//    subMenu->addAction(QIcon(":/light/image/playlist_add.svg"), tr("New playlist"), [&](){
+//        PlayListMeta meta = m_plsMetaMgr->create();
+//        m_plsMetaMgr->tryAdd(meta);
+//    });
 
-    subMenu->addSeparator();
+//    subMenu->addSeparator();
 
-    auto metalist = m_plsMetaMgr->metaList();
-    QFont font(subMenu->font());
-    QFontMetrics fm(font);
-    foreach(const PlayListMeta &meta, metalist) {
-        auto text = fm.elidedText(QString(meta.getFileName().replace("&", "&&")),
-                                  Qt::ElideMiddle, _to_px(160));
-        subMenu->addAction(text, [&, meta, obj](){
-            PlayListObject po(meta);
-            if (!po.open()) {
-                ViewUtility::showToast(QString(tr("Can't open to add playlist %1!")).arg(meta.getFileName()));
-                return;
-            }
-            po.addTrack(obj);
-            if (!po.save()) {
-                ViewUtility::showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
-            }
-        });
-    }
-    menu->addAction(tr("Add to playlist"))->setMenu(subMenu);
-}
+//    auto metalist = m_plsMetaMgr->metaList();
+//    QFont font(subMenu->font());
+//    QFontMetrics fm(font);
+//    foreach(const PlayListMeta &meta, metalist) {
+//        auto text = fm.elidedText(QString(meta.getFileName().replace("&", "&&")),
+//                                  Qt::ElideMiddle, _to_px(160));
+//        subMenu->addAction(text, [&, meta, obj](){
+//            PlayListObject po(meta);
+//            if (!po.open()) {
+//                ViewUtility::showToast(QString(tr("Can't open to add playlist %1!")).arg(meta.getFileName()));
+//                return;
+//            }
+//            po.addTrack(obj);
+//            if (!po.save()) {
+//                ViewUtility::showToast(QString(tr("save to %1 error!")).arg(meta.getFileName()));
+//            }
+//        });
+//    }
+//    menu->addAction(tr("Add to playlist"))->setMenu(subMenu);
+//}
 
-void BaseTrackView::menuShowInFileMgr(QMenu *menu, const AudioMetaObject &obj)
-{
-    menu->addAction(tr("Display in file manager"), [&, obj](){
-        QString file = QString("%1/%2").arg(obj.path()).arg(obj.name());
-        QUrl uri = QUrl::fromLocalFile(file);
-        DDesktopServices::showFileItem(uri);
-    });
-}
+//void BaseTrackView::menuShowInFileMgr(QMenu *menu, const AudioMetaObject &obj)
+//{
+//    menu->addAction(tr("Display in file manager"), [&, obj](){
+//        QString file = QString("%1/%2").arg(obj.path()).arg(obj.name());
+//        QUrl uri = QUrl::fromLocalFile(file);
+//        DDesktopServices::showFileItem(uri);
+//    });
+//}
 
-void BaseTrackView::menuRemoveObject(QMenu *menu, const AudioMetaObject &obj)
-{
-    menu->addAction(tr("Remove"), [&, obj]() {
-       ViewUtility::showTrackRemoveDialog(obj);
-    });
-}
+//void BaseTrackView::menuRemoveObject(QMenu *menu, const AudioMetaObject &obj)
+//{
+//    menu->addAction(tr("Remove"), [&, obj]() {
+//       ViewUtility::showTrackRemoveDialog(obj);
+//    });
+//}
 
-void BaseTrackView::menuTrackInfo(QMenu *menu, const AudioMetaObject &obj)
-{
-    menu->addAction(tr("Track info"), [&, obj](){
-        ViewUtility::showTrackInfoDialog(obj);
-    });
-}
+//void BaseTrackView::menuTrackInfo(QMenu *menu, const AudioMetaObject &obj)
+//{
+//    menu->addAction(tr("Track info"), [&, obj](){
+//        ViewUtility::showTrackInfoDialog(obj);
+//    });
+//}
 
 QModelIndex BaseTrackView::indexAtPos(const QPoint &pos) const
 {

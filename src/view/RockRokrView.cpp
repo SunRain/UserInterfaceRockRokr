@@ -2,8 +2,13 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QStyleFactory>
 
 #include <DThemeManager>
+
+#include "PlayerCore/PlayerCore.h"
+#include "PlayerCore/PlayListMetaMgr.h"
+#include "MusicLibrary/MusicLibraryManager.h"
 
 #include "rockrokr_global.h"
 #include "ViewUtility.h"
@@ -34,6 +39,10 @@ RockRokrView::RockRokrView(QWidget *parent)
 {
     this->setObjectName("RockRokrView");
     DThemeManager::instance()->registerWidget(this);
+
+    m_playerCore = new PlayerCore(this);
+    m_libMgr = new MusicLibrary::MusicLibraryManager (this);
+    m_plsMetaMgr = new PlayListMetaMgr(this);
 
     m_ctgDetailView = new CategoryDetailView;
     m_plsDetailView = new PlayListDetailView;
@@ -93,79 +102,81 @@ RockRokrView::RockRokrView(QWidget *parent)
     const QUrl img = model->data(index, BaseCategoryModel::RoleImageUri).toUrl(); \
     const int num = model->data(index, BaseCategoryModel::RoleTrackNum).toInt();
 
+#define PLAY_TRACK \
+    const QString hash = model->data(index, BaseCategoryModel::RoleTrackHash).toString(); \
+    if (hash.isEmpty()) { \
+        qWarning()<<"Can't find hash for index "<<index; \
+        return; \
+    } \
+    m_playerCore->playFromLibrary(hash);
+
     /** ArtistCategoryView ***/
-    connect(m_artistCategory, &ArtistCategoryView::recentListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showArtistTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
+    connect(m_artistCategory, &ArtistCategoryView::viewClicked,
+            this, [&](BaseCategoryView::ViewType type, BaseCategoryModel *model, const QModelIndex &index) {
+        if (type == BaseCategoryView::ViewTypeRecent) {
+            PLAY_TRACK
+        } else {
+            GET_SHOW_PARA
+            m_ctgDetailView->showArtistTracks(name, sub, img, num);
+            ViewUtility::showCategoryDetailView();
+        }
     });
 
-    connect(m_artistCategory, &ArtistCategoryView::recommendedListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showArtistTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
-
-    });
-
-    connect(m_artistCategory, &ArtistCategoryView::allListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showArtistTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
+    connect(m_artistCategory, &ArtistCategoryView::customContextMenuRequested,
+            this, [&](BaseCategoryView::ViewType type, BaseCategoryModel *model,
+                        const QModelIndex &index, const QPoint &pos) {
+        if (type == BaseCategoryView::ViewTypeRecent) {
+            showContextMenu(model, index, pos);
+        }
     });
 
     /** AlbumCategoryView ***/
-    connect(m_albumCategory, &AlbumCategoryView::recentListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showAlbumTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
+    connect(m_albumCategory, &AlbumCategoryView::viewClicked,
+            this, [&](BaseCategoryView::ViewType type, BaseCategoryModel *model, const QModelIndex &index) {
+        if (type == BaseCategoryView::ViewTypeRecent) {
+            PLAY_TRACK
+        } else {
+            GET_SHOW_PARA
+            m_ctgDetailView->showAlbumTracks(name, sub, img, num);
+            ViewUtility::showCategoryDetailView();
+        }
     });
 
-    connect(m_albumCategory, &AlbumCategoryView::recommendedListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showAlbumTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
-
-    });
-
-    connect(m_albumCategory, &ArtistCategoryView::allListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showAlbumTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
+    connect(m_albumCategory, &AlbumCategoryView::customContextMenuRequested,
+            this, [&](BaseCategoryView::ViewType type, BaseCategoryModel *model,
+                        const QModelIndex &index, const QPoint &pos) {
+        if (type == BaseCategoryView::ViewTypeRecent) {
+            showContextMenu(model, index, pos);
+        }
     });
 
     /** GenresCategoryView ***/
-    connect(m_genresCategory, &GenresCategoryView::recentListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showGenreTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
+    connect(m_genresCategory, &GenresCategoryView::viewClicked,
+            this, [&](BaseCategoryView::ViewType type, BaseCategoryModel *model, const QModelIndex &index) {
+        if (type == BaseCategoryView::ViewTypeRecent) {
+            PLAY_TRACK
+        } else {
+            GET_SHOW_PARA
+            m_ctgDetailView->showGenreTracks(name, sub, img, num);
+            ViewUtility::showCategoryDetailView();
+        }
     });
 
-    connect(m_genresCategory, &GenresCategoryView::recommendedListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showGenreTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
-
-    });
-
-    connect(m_genresCategory, &GenresCategoryView::allListViewClicked,
-            this, [&](BaseCategoryModel *model, const QModelIndex &index) {
-        GET_SHOW_PARA
-        m_ctgDetailView->showGenreTracks(name, sub, img, num);
-        ViewUtility::showCategoryDetailView();
+    connect(m_genresCategory, &GenresCategoryView::customContextMenuRequested,
+            this, [&](BaseCategoryView::ViewType type, BaseCategoryModel *model,
+                        const QModelIndex &index, const QPoint &pos) {
+        if (type == BaseCategoryView::ViewTypeRecent) {
+            showContextMenu(model, index, pos);
+        }
     });
 }
 
 RockRokrView::~RockRokrView()
 {
-
+    if (m_playerCore) {
+        m_playerCore->deleteLater();
+        m_playerCore = Q_NULLPTR;
+    }
 }
 
 void RockRokrView::initUI()
@@ -195,6 +206,28 @@ void RockRokrView::initUI()
         vbox->addWidget(m_playbar, 0, Qt::AlignBottom);
         layout->addLayout(vbox);
     }
+}
+
+void RockRokrView::showContextMenu(BaseCategoryModel *model, const QModelIndex &index, const QPoint &pos)
+{
+    const QString hash = model->data(index, BaseCategoryModel::RoleTrackHash).toString();
+    const AudioMetaObject obj = m_libMgr->trackFromHash(hash);
+    if (obj.isHashEmpty()) {
+         ViewUtility::showToast(tr("Empty audio meta object !!"));
+        return;
+    }
+    QMenu menu;
+    menu.setStyle(QStyleFactory::create("dlight"));
+
+    ViewUtility::menuAddToQueue(&menu, obj, m_playerCore);
+    ViewUtility::menuAddToPlaylist(&menu, obj, m_plsMetaMgr);
+    menu.addSeparator();
+    ViewUtility::menuRemoveObject(&menu, obj);
+    ViewUtility::menuShowInFileMgr(&menu, obj);
+    menu.addSeparator();
+    ViewUtility::menuTrackInfo(&menu, obj);
+
+    menu.exec(/*this->mapToGlobal(pos)*/pos);
 }
 
 } //namespace RockRokr

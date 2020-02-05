@@ -47,6 +47,7 @@ AllTrackView::AllTrackView(QWidget *parent)
     m_ui = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
     m_playerCore = new PlayerCore(this);
     m_libMgr = new MusicLibrary::MusicLibraryManager(this);
+    m_plsMetaMgr = new PlayListMetaMgr(this);
 }
 
 AllTrackView::~AllTrackView()
@@ -63,6 +64,10 @@ AllTrackView::~AllTrackView()
     if (m_libMgr) {
         m_libMgr->deleteLater();
         m_libMgr = Q_NULLPTR;
+    }
+    if (m_plsMetaMgr) {
+        m_plsMetaMgr->deleteLater();
+        m_plsMetaMgr = Q_NULLPTR;
     }
 }
 
@@ -82,13 +87,13 @@ void AllTrackView::showContextMenu(const QPoint &pos)
     QMenu menu;
     menu.setStyle(QStyleFactory::create("dlight"));
 
-    menuAddToQueue(&menu, obj);
-    menuAddToPlaylist(&menu, obj);
+    ViewUtility::menuAddToQueue(&menu, obj, m_playerCore);
+    ViewUtility::menuAddToPlaylist(&menu, obj, m_plsMetaMgr);
     menu.addSeparator();
-    menuRemoveObject(&menu, obj);
-    menuShowInFileMgr(&menu, obj);
+    ViewUtility::menuRemoveObject(&menu, obj);
+    ViewUtility::menuShowInFileMgr(&menu, obj);
     menu.addSeparator();
-    menuTrackInfo(&menu, obj);
+    ViewUtility::menuTrackInfo(&menu, obj);
 
     menu.exec(this->mapToGlobal(pos));
 }

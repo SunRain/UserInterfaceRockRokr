@@ -4,6 +4,8 @@
 #include "BaseTrackView.h"
 
 namespace PhoenixPlayer {
+    class PlayerCore;
+    class PlayListMetaMgr;
 
     namespace MusicLibrary {
         class MusicLibraryManager;
@@ -40,14 +42,17 @@ class FavoriteTrackView : public BaseTrackView
 {
 public:
     FavoriteTrackView(QWidget *parent = Q_NULLPTR);
-    ~FavoriteTrackView() override;
+    virtual ~FavoriteTrackView() override;
 
     // BaseTrackView interface
 protected:
+    void onClicked(const QModelIndex &index) Q_DECL_OVERRIDE;
     void showContextMenu(const QPoint &pos) Q_DECL_OVERRIDE;
 
 private:
-    MusicLibrary::MusicLibraryManager       *m_libraryMgr   = Q_NULLPTR;
+    PlayerCore                          *m_playerCore   = Q_NULLPTR;
+    PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
+    MusicLibrary::MusicLibraryManager   *m_libraryMgr   = Q_NULLPTR;
 };
 
 } //namespace RockRokr

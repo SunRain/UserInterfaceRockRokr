@@ -6,10 +6,16 @@
 #include <QRadioButton>
 #include <QFont>
 #include <QWidget>
+#include <QMenu>
 
 #include <ddialog.h>
+#include <DDesktopServices>
 
 #include "LibPhoenixPlayerMain.h"
+#include "PlayerCore/PlayerCore.h"
+#include "PlayerCore/MusicQueue.h"
+#include "PlayerCore/PlayListMeta.h"
+#include "PlayerCore/PlayListMetaMgr.h"
 #include "MusicLibrary/MusicLibraryManager.h"
 #include "UserInterface/UserInterfaceMgr.h"
 
@@ -134,6 +140,68 @@ void ViewUtility::showPlaylistDetailView()
 {
     chkMainWindow();
     s_mainWindow->showPlaylistDetailView();
+}
+
+void ViewUtility::menuAddToQueue(QMenu *menu, const AudioMetaObject &obj, PlayerCore *core)
+{
+    menu->addAction(QObject::tr("Add to queue"), [core, obj]() {
+        core->playQueue()->addTrack(obj);
+    });
+}
+
+void ViewUtility::menuAddToPlaylist(QMenu *menu, const AudioMetaObject &obj, PlayListMetaMgr *mgr)
+{
+    QMenu *subMenu = new QMenu(menu);
+    subMenu->setStyle(QStyleFactory::create("dlight"));
+    subMenu->addAction(QIcon(":/light/image/playlist_add.svg"), QObject::tr("New playlist"), [mgr](){
+        PlayListMeta meta = mgr->create();
+        mgr->tryAdd(meta);
+    });
+
+    subMenu->addSeparator();
+
+    auto metalist = mgr->metaList();
+    QFont font(subMenu->font());
+    QFontMetrics fm(font);
+    foreach(const PlayListMeta &meta, metalist) {
+        auto text = fm.elidedText(QString(meta.getFileName().replace("&", "&&")),
+                                  Qt::ElideMiddle, _to_px(160));
+        subMenu->addAction(text, [meta, obj](){
+            PlayListObject po(meta);
+            if (!po.open()) {
+                ViewUtility::showToast(QString(QObject::tr("Can't open to add playlist %1!")).arg(meta.getFileName()));
+                return;
+            }
+            po.addTrack(obj);
+            if (!po.save()) {
+                ViewUtility::showToast(QString(QObject::tr("save to %1 error!")).arg(meta.getFileName()));
+            }
+        });
+    }
+    menu->addAction(QObject::tr("Add to playlist"))->setMenu(subMenu);
+}
+
+void ViewUtility::menuShowInFileMgr(QMenu *menu, const AudioMetaObject &obj)
+{
+    menu->addAction(QObject::tr("Display in file manager"), [obj](){
+        QString file = QString("%1/%2").arg(obj.path()).arg(obj.name());
+        QUrl uri = QUrl::fromLocalFile(file);
+        DDesktopServices::showFileItem(uri);
+    });
+}
+
+void ViewUtility::menuRemoveObject(QMenu *menu, const AudioMetaObject &obj)
+{
+    menu->addAction(QObject::tr("Remove"), [obj]() {
+       ViewUtility::showTrackRemoveDialog(obj);
+    });
+}
+
+void ViewUtility::menuTrackInfo(QMenu *menu, const AudioMetaObject &obj)
+{
+    menu->addAction(QObject::tr("Track info"), [obj](){
+        ViewUtility::showTrackInfoDialog(obj);
+    });
 }
 
 } //namespace RockRokr

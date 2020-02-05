@@ -4,6 +4,11 @@
 #include <QFrame>
 
 namespace PhoenixPlayer {
+    class PlayerCore;
+    class PlayListMetaMgr;
+    namespace MusicLibrary {
+        class MusicLibraryManager;
+    }
 namespace UserInterface {
 namespace RockRokr {
 
@@ -19,6 +24,7 @@ class AllTrackView;
 class FavoriteTrackView;
 class CategoryDetailView;
 class PlayListDetailView;
+class BaseCategoryModel;
 class RockRokrView : public QFrame
 {
     Q_OBJECT
@@ -41,7 +47,9 @@ protected:
         return m_plsDetailView;
     }
 
+    void showContextMenu(BaseCategoryModel *model, const QModelIndex &index, const QPoint &pos);
 private:
+    PlayerCore          *m_playerCore       = Q_NULLPTR;
     LBListItem          *m_preLeftBarItem   = Q_NULLPTR;
     LeftBar             *m_leftbar          = Q_NULLPTR;
     RKTitleBar          *m_titlebar         = Q_NULLPTR;
@@ -54,6 +62,8 @@ private:
     FavoriteTrackView   *m_favTrackView     = Q_NULLPTR;
     CategoryDetailView  *m_ctgDetailView    = Q_NULLPTR;
     PlayListDetailView  *m_plsDetailView    = Q_NULLPTR;
+    PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
+    MusicLibrary::MusicLibraryManager   *m_libMgr       = Q_NULLPTR;
 };
 
 } //namespace RockRokr

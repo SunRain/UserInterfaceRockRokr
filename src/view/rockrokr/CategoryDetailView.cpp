@@ -13,6 +13,7 @@
 
 #include "MusicLibrary/MusicLibraryManager.h"
 #include "PlayerCore/PlayerCore.h"
+#include "PlayerCore/PlayListMetaMgr.h"
 
 #include "rockrokr_global.h"
 #include "widget/RKImage.h"
@@ -78,6 +79,7 @@ public:
     {
         m_playerCore = new PlayerCore(this);
         m_libMgr = new MusicLibrary::MusicLibraryManager(this);
+        m_plsMetaMgr = new PlayListMetaMgr(this);
     }
     virtual ~CategoryDetailTrackView() override
     {
@@ -88,6 +90,10 @@ public:
         if (m_libMgr) {
             m_libMgr->deleteLater();
             m_libMgr = Q_NULLPTR;
+        }
+        if (m_plsMetaMgr) {
+            m_plsMetaMgr->deleteLater();
+            m_plsMetaMgr = Q_NULLPTR;
         }
     }
 
@@ -122,13 +128,13 @@ protected:
         QMenu menu;
         menu.setStyle(QStyleFactory::create("dlight"));
 
-        menuAddToQueue(&menu, obj);
-        menuAddToPlaylist(&menu, obj);
+        ViewUtility::menuAddToQueue(&menu, obj, m_playerCore);
+        ViewUtility::menuAddToPlaylist(&menu, obj, m_plsMetaMgr);
         menu.addSeparator();
-        menuRemoveObject(&menu, obj);
-        menuShowInFileMgr(&menu, obj);
+        ViewUtility::menuRemoveObject(&menu, obj);
+        ViewUtility::menuShowInFileMgr(&menu, obj);
         menu.addSeparator();
-        menuTrackInfo(&menu, obj);
+        ViewUtility::menuTrackInfo(&menu, obj);
 
         menu.exec(this->mapToGlobal(pos));
     }
@@ -139,8 +145,9 @@ protected:
     }
 
 private:
-    PlayerCore                          *m_playerCore = Q_NULLPTR;
-    MusicLibrary::MusicLibraryManager   *m_libMgr = Q_NULLPTR;
+    PlayerCore                          *m_playerCore   = Q_NULLPTR;
+    PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
+    MusicLibrary::MusicLibraryManager   *m_libMgr       = Q_NULLPTR;
 };
 
 /*************************************************************************

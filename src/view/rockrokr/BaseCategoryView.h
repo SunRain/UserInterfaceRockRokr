@@ -20,6 +20,13 @@ class BaseCategoryView : public QFrame
 {
     Q_OBJECT
 public:
+    enum ViewType {
+        ViewTypeRecommended = 0x0,
+        ViewTypeRecent,
+        ViewTypeAllList
+    };
+    Q_ENUM(ViewType)
+
     explicit BaseCategoryView(CategoryViewDataProvider *pr, QWidget *parent = Q_NULLPTR);
     virtual ~BaseCategoryView() override;
 
@@ -28,11 +35,10 @@ public:
     void initListViewParameter(QListView *view);
 
 Q_SIGNALS:
-    void recommendedListViewClicked(BaseCategoryModel *model, const QModelIndex &index);
+    void viewClicked(ViewType type, BaseCategoryModel *model, const QModelIndex &index);
 
-    void recentListViewClicked(BaseCategoryModel *model, const QModelIndex &index);
-
-    void allListViewClicked(BaseCategoryModel *model, const QModelIndex &index);
+    void customContextMenuRequested(ViewType type, BaseCategoryModel *model,
+                                    const QModelIndex &index, const QPoint &globalPos);
 
 private:
     RKListView                          *m_recommendedListView      = Q_NULLPTR;
