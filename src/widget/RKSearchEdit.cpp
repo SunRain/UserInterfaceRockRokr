@@ -80,12 +80,13 @@ RKSearchEdit::RKSearchEdit(QWidget *parent)
 
     connect(m_clearBtn, &DImageButton::clicked, m_edt, static_cast<void (QLineEdit::*)()>(&QLineEdit::setFocus));
     connect(m_clearBtn, &DImageButton::clicked, this, &RKSearchEdit::clear);
-    connect(m_edt, &QLineEdit::textChanged, [&]() {
-        qDebug()<<"------------- text chagned "<<m_edt->text().isEmpty();
+    connect(m_edt, &QLineEdit::textChanged,
+            this, [&]() {
         m_clearBtn->setVisible(!m_edt->text().isEmpty());
-    });
+        Q_EMIT textChanged();
+    }, Qt::DirectConnection);
 
-    connect(m_edt, &QLineEdit::textChanged, this, &RKSearchEdit::textChanged, Qt::DirectConnection);
+//    connect(m_edt, &QLineEdit::textChanged, this, &RKSearchEdit::textChanged, Qt::DirectConnection);
     connect(m_edt, &QLineEdit::editingFinished, this, &RKSearchEdit::editingFinished, Qt::DirectConnection);
     connect(m_edt, &QLineEdit::returnPressed, this, &RKSearchEdit::returnPressed, Qt::DirectConnection);
 //    connect(m_searchBtn, &DImageButton::clicked, this, &DSearchEdit::toEditMode);

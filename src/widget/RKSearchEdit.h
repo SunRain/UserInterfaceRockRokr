@@ -57,6 +57,8 @@ private Q_SLOTS:
 
 private:
     void initInsideFrame();
+
+protected:
     void resizeEvent(QResizeEvent *e);
     bool event(QEvent *e);
 

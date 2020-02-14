@@ -25,6 +25,7 @@ class FavoriteTrackView;
 class CategoryDetailView;
 class PlayListDetailView;
 class BaseCategoryModel;
+class SearchResultView;
 class RockRokrView : public QFrame
 {
     Q_OBJECT
@@ -62,6 +63,7 @@ private:
     FavoriteTrackView   *m_favTrackView     = Q_NULLPTR;
     CategoryDetailView  *m_ctgDetailView    = Q_NULLPTR;
     PlayListDetailView  *m_plsDetailView    = Q_NULLPTR;
+    SearchResultView    *m_searchResultView = Q_NULLPTR;
     PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
     MusicLibrary::MusicLibraryManager   *m_libMgr       = Q_NULLPTR;
 };

@@ -20,7 +20,7 @@
 #include "UserInterface/IUserInterface.h"
 
 #include "rockrokr_global.h"
-#include "widget/RKSearchEdit.h"
+#include "SearchEdit.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -42,7 +42,7 @@ RKTitleBar::RKTitleBar(QWidget *parent)
     layout->setSpacing(0);
     layout->setAlignment(Qt::AlignmentFlag::AlignVCenter);
 
-    m_searchEdit = new RKSearchEdit;
+    m_searchEdit = new SearchEdit;
     m_searchEdit->setFixedSize(TITLE_BAR_SEARCH_VIEW_W, TITLE_BAR_SEARCH_VIEW_H);
     m_searchEdit->setPlaceHolder(tr("Search"));
 
@@ -82,6 +82,11 @@ RKTitleBar::RKTitleBar(QWidget *parent)
 RKTitleBar::~RKTitleBar()
 {
 
+}
+
+void RKTitleBar::bindResultView(SearchResultView *view)
+{
+    m_searchEdit->bindResultView(view);
 }
 
 } //namespace RockRokr

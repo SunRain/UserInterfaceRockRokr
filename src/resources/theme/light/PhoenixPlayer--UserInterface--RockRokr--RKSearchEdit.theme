@@ -4,6 +4,7 @@
     padding-bottom: 0px;
     background-color: rgba(235, 235, 235, 0.3);
 }
+
 #DEditInsideFrame {
     border: none;
     background: transparent;

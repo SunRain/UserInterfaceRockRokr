@@ -32,6 +32,7 @@ HEADERS += \
     $$PWD/src/view/ImportView.h \
     $$PWD/src/view/MainWindowBGView.h \
     $$PWD/src/view/RockRokrView.h \
+    $$PWD/src/view/SearchResultView.h \
     $$PWD/src/view/TrackInfoDialog.h \
     $$PWD/src/view/ViewUtility.h \
     $$PWD/src/view/leftbar/LBListItem.h \
@@ -62,6 +63,7 @@ HEADERS += \
     $$PWD/src/view/rockrokr/TrackListModel.h \
     $$PWD/src/view/rockrokr/TrackListViewDelegate.h \
     $$PWD/src/view/titlebar/RKTitleBar.h \
+    $$PWD/src/view/titlebar/SearchEdit.h \
     $$PWD/src/widget/ItemFragment.h \
     $$PWD/src/widget/LoadingWidget.h \
     $$PWD/src/widget/RKBoxWidget.h \
@@ -91,6 +93,7 @@ SOURCES += \
     $$PWD/src/view/ImportView.cpp \
     $$PWD/src/view/MainWindowBGView.cpp \
     $$PWD/src/view/RockRokrView.cpp \
+    $$PWD/src/view/SearchResultView.cpp \
     $$PWD/src/view/TrackInfoDialog.cpp \
     $$PWD/src/view/ViewUtility.cpp \
     $$PWD/src/view/leftbar/LBListItem.cpp \
@@ -121,6 +124,7 @@ SOURCES += \
     $$PWD/src/view/rockrokr/TrackListModel.cpp \
     $$PWD/src/view/rockrokr/TrackListViewDelegate.cpp \
     $$PWD/src/view/titlebar/RKTitleBar.cpp \
+    $$PWD/src/view/titlebar/SearchEdit.cpp \
     $$PWD/src/widget/ItemFragment.cpp \
     $$PWD/src/widget/LoadingWidget.cpp \
     $$PWD/src/widget/RKBoxWidget.cpp \

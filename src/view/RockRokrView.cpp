@@ -12,6 +12,7 @@
 
 #include "rockrokr_global.h"
 #include "ViewUtility.h"
+#include "SearchResultView.h"
 #include "leftbar/LeftBar.h"
 #include "leftbar/LBListItem.h"
 #include "view/titlebar/RKTitleBar.h"
@@ -40,25 +41,27 @@ RockRokrView::RockRokrView(QWidget *parent)
     this->setObjectName("RockRokrView");
     DThemeManager::instance()->registerWidget(this);
 
-    m_playerCore = new PlayerCore(this);
-    m_libMgr = new MusicLibrary::MusicLibraryManager (this);
-    m_plsMetaMgr = new PlayListMetaMgr(this);
+    m_playerCore    = new PlayerCore(this);
+    m_libMgr        = new MusicLibrary::MusicLibraryManager (this);
+    m_plsMetaMgr    = new PlayListMetaMgr(this);
 
-    m_ctgDetailView = new CategoryDetailView;
-    m_plsDetailView = new PlayListDetailView;
+    m_ctgDetailView     = new CategoryDetailView;
+    m_plsDetailView     = new PlayListDetailView;
+    m_searchResultView  = new SearchResultView(this);
 
-    m_leftbar = new LeftBar;
-    m_titlebar = new RKTitleBar;
-    m_playbar = new PlayBar;
-    m_stack = new RKStackedWidget;
+    m_leftbar   = new LeftBar;
+    m_titlebar  = new RKTitleBar;
+    m_titlebar->bindResultView(m_searchResultView);
+    m_playbar   = new PlayBar;
+    m_stack     = new RKStackedWidget;
     m_stack->setDuration(500);
 
     // order based on the order of enum in LBListItem(ItemType);
-    m_artistCategory = new ArtistCategoryView;
-    m_albumCategory = new AlbumCategoryView;
-    m_genresCategory = new GenresCategoryView;
-    m_allTrackView = new AllTrackView;
-    m_favTrackView = new FavoriteTrackView;
+    m_artistCategory    = new ArtistCategoryView;
+    m_albumCategory     = new AlbumCategoryView;
+    m_genresCategory    = new GenresCategoryView;
+    m_allTrackView      = new AllTrackView;
+    m_favTrackView      = new FavoriteTrackView;
 
     m_stack->addWidget(m_artistCategory);
     m_stack->addWidget(m_albumCategory);
@@ -198,7 +201,7 @@ void RockRokrView::initUI()
             vv->setSpacing(0);
 
             vv->addWidget(m_titlebar, 0, Qt::AlignTop);
-            vv->addSpacing(_to_px(32));
+            vv->addSpacing(32);
             vv->addWidget(m_stack);
             vbox->addLayout(vv);
         }
