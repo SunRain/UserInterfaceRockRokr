@@ -32,7 +32,8 @@ HEADERS += \
     $$PWD/src/view/ImportView.h \
     $$PWD/src/view/MainWindowBGView.h \
     $$PWD/src/view/RockRokrView.h \
-    $$PWD/src/view/SearchResultView.h \
+    $$PWD/src/view/titlebar/SearchResultItem.h \
+    $$PWD/src/view/titlebar/SearchResultView.h \
     $$PWD/src/view/TrackInfoDialog.h \
     $$PWD/src/view/ViewUtility.h \
     $$PWD/src/view/leftbar/LBListItem.h \
@@ -74,6 +75,7 @@ HEADERS += \
     $$PWD/src/widget/RKLineEdit.h \
     $$PWD/src/widget/RKListView.h \
     $$PWD/src/widget/RKListWidget.h \
+    $$PWD/src/widget/RKMarqueeLabel.h \
     $$PWD/src/widget/RKOverlayWidget.h \
     $$PWD/src/widget/RKSearchEdit.h \
     $$PWD/src/widget/RKSlider.h \
@@ -93,7 +95,8 @@ SOURCES += \
     $$PWD/src/view/ImportView.cpp \
     $$PWD/src/view/MainWindowBGView.cpp \
     $$PWD/src/view/RockRokrView.cpp \
-    $$PWD/src/view/SearchResultView.cpp \
+    $$PWD/src/view/titlebar/SearchResultItem.cpp \
+    $$PWD/src/view/titlebar/SearchResultView.cpp \
     $$PWD/src/view/TrackInfoDialog.cpp \
     $$PWD/src/view/ViewUtility.cpp \
     $$PWD/src/view/leftbar/LBListItem.cpp \
@@ -135,6 +138,7 @@ SOURCES += \
     $$PWD/src/widget/RKLineEdit.cpp \
     $$PWD/src/widget/RKListView.cpp \
     $$PWD/src/widget/RKListWidget.cpp \
+    $$PWD/src/widget/RKMarqueeLabel.cpp \
     $$PWD/src/widget/RKOverlayWidget.cpp \
     $$PWD/src/widget/RKSearchEdit.cpp \
     $$PWD/src/widget/RKSlider.cpp \

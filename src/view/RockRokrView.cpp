@@ -12,7 +12,7 @@
 
 #include "rockrokr_global.h"
 #include "ViewUtility.h"
-#include "SearchResultView.h"
+#include "titlebar/SearchResultView.h"
 #include "leftbar/LeftBar.h"
 #include "leftbar/LBListItem.h"
 #include "view/titlebar/RKTitleBar.h"

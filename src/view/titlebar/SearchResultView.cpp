@@ -3,13 +3,19 @@
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QEvent>
+#include <QListWidgetItem>
 
 #include <DThemeManager>
 
-#include "rockrokr_global.h"
 #include "PluginMgr.h"
 #include "DataProvider/TrackSearchProvider.h"
 #include "DataProvider/ITrackSearch.h"
+
+#include "rockrokr_global.h"
+#include "widget/RKMarqueeLabel.h"
+#include "widget/ItemFragment.h"
+
+#include "SearchResultItem.h"
 
 DWIDGET_USE_NAMESPACE
 using namespace PhoenixPlayer::DataProvider;
@@ -18,6 +24,8 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
+const static int RET_ITEM_H = 40
+                              ;
 class BtnFiler : public QObject
 {
     Q_OBJECT
@@ -26,11 +34,9 @@ public:
         : QObject(parent),
           m_view(view)
     {
-
     }
     virtual ~BtnFiler()
     {
-
     }
 
     // QObject interface
@@ -58,7 +64,7 @@ SearchResultView::SearchResultView(QWidget *parent)
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    m_resultView = new QListView;
+    m_resultView = new QListWidget;
     m_resultView->setObjectName("ResultView");
     m_resultView->setMouseTracking(true);
     m_resultView->setSelectionMode(QListView::SingleSelection);
@@ -66,15 +72,8 @@ SearchResultView::SearchResultView(QWidget *parent)
     m_resultView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_resultView->setFocusPolicy(Qt::NoFocus);
 
-    m_resultModel = new QStringListModel;
-//    {
-//        QStringList a;
-//        for(int i=0; i<9; ++i) {
-//            a.append(QString::number(i));
-//        }
-//        m_resultModel->setStringList(a);
-//    }
-    m_resultView->setModel(m_resultModel);
+//    m_resultModel = new QStringListModel;
+//    m_resultView->setModel(m_resultModel);
 
     m_pluginView = new QListView;
     m_pluginView->setObjectName("PluginView");
@@ -91,7 +90,7 @@ SearchResultView::SearchResultView(QWidget *parent)
     m_searchByAllPluginBtn->installEventFilter(new BtnFiler(this, m_searchByAllPluginBtn));
     m_searchByAllPluginBtn->setCheckable(true);
     m_searchByAllPluginBtn->setObjectName("SearchBtn");
-    m_searchByAllPluginBtn->setFixedHeight(_to_px(25));
+    m_searchByAllPluginBtn->setFixedHeight(_to_px(RET_ITEM_H/2));
 //    m_searchByAllPluginBtn->setText(tr("Search \"%1\" in all plugin").);
 
     layout->addWidget(m_resultView, 0, Qt::AlignHCenter | Qt::AlignTop);
@@ -101,19 +100,22 @@ SearchResultView::SearchResultView(QWidget *parent)
     layout->addWidget(m_searchByAllPluginBtn, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     layout->addSpacing(1);
 
-    this->setMinimumHeight(_to_px(50));
-    m_resultView->setMinimumHeight(_to_px(25));
+    this->setMinimumHeight(_to_px(RET_ITEM_H));
+    m_resultView->setMinimumHeight(_to_px(RET_ITEM_H));
     m_resultView->adjustSize();
-    m_pluginView->setMinimumHeight(_to_px(25));
-    m_pluginView->adjustSize();
 
-    connect(m_resultView, &QListView::clicked,
-            this, [&](const QModelIndex &idx) {
+    connect(m_resultView, &QListWidget::itemClicked,
+            this, [&](QListWidgetItem *item) {
         //TODO
+
+        qDebug()<<" ----------------  m_resultView clicked "<<item;;
     });
-    connect(m_resultView, &QListView::entered,
-            this, [&](const QModelIndex &idx) {
-        m_resultView->setCurrentIndex(idx);
+    connect(m_resultView, &QListWidget::itemEntered,
+            this, [&](QListWidgetItem *item) {
+
+        qDebug()<<" ----------------  m_resultView entered "<<item;;
+
+        m_resultView->setCurrentItem(item);
         m_pluginView->setCurrentIndex(QModelIndex());
         m_searchByAllPluginBtn->setChecked(false);
     });
@@ -125,6 +127,9 @@ SearchResultView::SearchResultView(QWidget *parent)
     });
     connect(m_pluginView, &QListView::entered,
             this, [&](const QModelIndex &idx) {
+
+        qDebug()<<" ----------------  m_pluginView entered "<<idx;
+
         m_pluginView->setCurrentIndex(idx);
         m_resultView->setCurrentIndex(QModelIndex());
         m_searchByAllPluginBtn->setChecked(false);
@@ -145,23 +150,31 @@ SearchResultView::~SearchResultView()
 
 void SearchResultView::calToResize()
 {
-    m_resultView->setFixedHeight(m_resultModel->rowCount() * (_to_px(25)) + 2);
+    m_resultView->setFixedHeight(m_resultObjList.size() * (_to_px(RET_ITEM_H)) + 2);
     m_resultView->setFixedWidth(this->size().width() - 2);
 
-    m_pluginView->setFixedHeight(m_pluginViewModel->rowCount() * (_to_px(25)) + 2);
-    m_pluginView->setFixedWidth(this->size().width() - 2);
+    for(int i=0; i<m_resultView->count(); ++i) {
+        QListWidgetItem *item = m_resultView->item(i);
+        item->setSizeHint(QSize(this->size().width()-2, _to_px(RET_ITEM_H)));
+        SearchResultItem *sm = qobject_cast<SearchResultItem*>(m_resultView->itemWidget(item));
+        sm->setFixedSize(this->width()-2, _to_px(RET_ITEM_H));
+    }
 
-    m_searchByAllPluginBtn->setFixedWidth(this->size().width() - 2);
+    if (m_pluginViewModel->rowCount() > 1) {
+        m_pluginView->setFixedHeight(m_pluginViewModel->rowCount() * (_to_px(RET_ITEM_H)) + 2);
+        m_pluginView->setFixedWidth(this->size().width() - 2);
 
-    qDebug() << m_searchByAllPluginBtn->rect() << m_resultView->rect();
+        m_searchByAllPluginBtn->setFixedWidth(this->size().width() - 2);
+    } else {
+        m_pluginView->setFixedHeight(0);
+    }
 
     this->setFixedHeight(m_resultView->height() + m_pluginView->height() + 25 + 8 + 3);
 
-    m_resultView->setVisible(!(0 == m_resultModel->rowCount()));
+    m_resultView->setVisible(!m_resultObjList.isEmpty());
+    m_pluginView->setVisible(m_pluginViewModel->rowCount() > 1);
 
     this->adjustSize();
-
-    qDebug() << this->height();
 
     m_resultView->raise();
 }
@@ -190,16 +203,22 @@ void SearchResultView::initProvider()
             if (m_searchStr != pattern) {
                 return;
             }
-
+            m_resultView->clear();
             m_resultObjList.clear();
             m_resultObjList.append(objList);
 
-            QStringList ll;
-            foreach (const auto &it, m_resultObjList) {
-                ll.append(it.matchedStr());
-            }
-            m_resultModel->setStringList(ll);
+            foreach(const auto &it, m_resultObjList) {
+                QListWidgetItem *item = new QListWidgetItem(m_resultView);
+                m_resultView->addItem(item);
 
+                SearchResultItem *sm = new SearchResultItem;
+                sm->setObjectName("SearchResultItem");
+                sm->setFixedHeight(_to_px(RET_ITEM_H));
+                sm->setText(it.uri());
+                sm->setSubText(it.matchedStr());
+                m_resultView->setItemWidget(item, sm);
+
+            }
             Q_EMIT searchMatched();
         });
     }
@@ -221,6 +240,8 @@ void SearchResultView::searchByAllPluginBtnEntered()
 
 void SearchResultView::leaveEvent(QEvent *event)
 {
+    qDebug()<<" ---------------- "<<this;
+
     m_resultView->setCurrentIndex(QModelIndex());
     m_pluginView->setCurrentIndex(QModelIndex());
     m_searchByAllPluginBtn->setChecked(false);

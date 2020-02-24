@@ -5,7 +5,7 @@
 #include <QResizeEvent>
 
 #include "rockrokr_global.h"
-#include "view/SearchResultView.h"
+#include "SearchResultView.h"
 
 namespace PhoenixPlayer {
 namespace UserInterface {

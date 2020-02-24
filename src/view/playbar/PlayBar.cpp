@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QEvent>
+#include <QResizeEvent>
 #include <qcompilerdetection.h>
 
 #include <DThemeManager>

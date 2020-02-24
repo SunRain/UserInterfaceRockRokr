@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QListView>
 #include <QStringListModel>
+#include <QListWidget>
 #include <QPushButton>
 
 namespace PhoenixPlayer {
@@ -44,8 +45,8 @@ protected:
     virtual void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QListView           *m_resultView       = Q_NULLPTR;
-    QStringListModel    *m_resultModel      = Q_NULLPTR;
+    QListWidget           *m_resultView       = Q_NULLPTR;
+//    QStringListModel    *m_resultModel      = Q_NULLPTR;
     QListView           *m_pluginView       = Q_NULLPTR;
     QStringListModel    *m_pluginViewModel  = Q_NULLPTR;
     QPushButton         *m_searchByAllPluginBtn = Q_NULLPTR;
