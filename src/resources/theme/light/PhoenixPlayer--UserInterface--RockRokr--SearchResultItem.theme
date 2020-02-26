@@ -1,4 +1,3 @@
-
 #SearchResultItem {
     border: 1px solid #FCFCFC;
     border-radius: 8px;
@@ -6,6 +5,7 @@
     background-color: #FCFCFC;
 }
 
+/*
 #SearchResultItem[hoverState="active"] {
     border: 1px solid #336CFB;
     border-radius: 8px;
@@ -20,4 +20,4 @@
 #SubLabelText {
     background-color: transparent;
 }
-
+*/

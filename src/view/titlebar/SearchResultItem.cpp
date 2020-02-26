@@ -57,22 +57,22 @@ void SearchResultItem::setSubText(const QString &subText)
 
 void SearchResultItem::setHoverState(bool hover)
 {
-    if (hover) {
-        this->setProperty("hoverState", "active");
-        m_lable->setForeground(QColor(252, 252, 252));
-        m_subLabel->setForeground(QColor(252, 252, 252));
-    } else {
-        this->setProperty("hoverState", "");
-        m_lable->setForeground(QColor(31, 32, 34));
-        m_subLabel->setForeground(QColor(31, 32, 34));
-    }
-    this->style()->unpolish(this);
-    this->style()->unpolish(m_lable);
-    this->style()->unpolish(m_subLabel);
-    this->style()->polish(this);
-    this->style()->polish(m_lable);
-    this->style()->polish(m_subLabel);
-    this->update();
+//    if (hover) {
+//        this->setProperty("hoverState", "active");
+////        m_lable->setForeground(QColor(252, 252, 252));
+////        m_subLabel->setForeground(QColor(252, 252, 252));
+//    } else {
+//        this->setProperty("hoverState", "");
+////        m_lable->setForeground(QColor(31, 32, 34));
+////        m_subLabel->setForeground(QColor(31, 32, 34));
+//    }
+//    this->style()->unpolish(this);
+//    this->style()->unpolish(m_lable);
+//    this->style()->unpolish(m_subLabel);
+//    this->style()->polish(this);
+//    this->style()->polish(m_lable);
+//    this->style()->polish(m_subLabel);
+//    this->update();
 }
 
 void SearchResultItem::enterEvent(QEvent *event)
