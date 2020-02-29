@@ -7,7 +7,7 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
-class RKMarqueeLabel;
+class SearchInnerLabel;
 class SearchResultItem : public QFrame
 {
     Q_OBJECT
@@ -28,9 +28,8 @@ protected:
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    RKMarqueeLabel  *m_lable = Q_NULLPTR;
-    RKMarqueeLabel  *m_subLabel = Q_NULLPTR;
-
+    SearchInnerLabel  *m_lable      = Q_NULLPTR;
+    SearchInnerLabel  *m_subLabel   = Q_NULLPTR;
 };
 
 } //namespace RockRokr

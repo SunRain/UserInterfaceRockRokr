@@ -1,18 +1,18 @@
 #SearchResultItem {
     border: 1px solid #FCFCFC;
-    border-radius: 8px;
+    border-radius: 0px;
     padding: 0px;
     background-color: #FCFCFC;
 }
 
-/*
 #SearchResultItem[hoverState="active"] {
     border: 1px solid #336CFB;
-    border-radius: 8px;
+    border-radius: 0px;
     padding: 0px;
     background-color: #336CFB;
 }
 
+/*
 #LabelText {
     background-color: transparent;
 }
