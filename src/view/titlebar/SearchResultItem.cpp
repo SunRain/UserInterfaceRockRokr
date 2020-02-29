@@ -63,14 +63,14 @@ SearchResultItem::SearchResultItem(QWidget *parent)
     m_lable = new SearchInnerLabel;
     m_lable->setObjectName("LabelText");
     m_lable->setTextColor(QColor(FONT_COLOR_TITLE));
-    m_lable->setHoverTextColor(Qt::transparent);
+    m_lable->setHoverTextColor(QColor(HIGHLIGHT_FONT_COLOR));
     m_lable->setBackgroundColor(Qt::transparent);
     m_lable->setHoverBackgroundColor(Qt::transparent);
 
     m_subLabel = new SearchInnerLabel;
     m_subLabel->setObjectName("SubLabelText");
     m_subLabel->setTextColor(QColor(FONT_COLOR_TITLE));
-    m_subLabel->setHoverTextColor(Qt::transparent);
+    m_subLabel->setHoverTextColor(QColor(HIGHLIGHT_FONT_COLOR));
     m_subLabel->setBackgroundColor(Qt::transparent);
     m_subLabel->setHoverBackgroundColor(Qt::transparent);
 
