@@ -61,6 +61,38 @@ void RKMarqueeLabel::setInterval(int interval)
     }
 }
 
+void RKMarqueeLabel::setTextColor(const QColor &color)
+{
+    if (m_textColor != color) {
+        m_textColor = color;
+        this->update();
+    }
+}
+
+void RKMarqueeLabel::setHoverTextColor(const QColor &color)
+{
+    if (m_hoverTextColor != color) {
+        m_hoverTextColor = color;
+        this->update();
+    }
+}
+
+void RKMarqueeLabel::setBackgroundColor(const QColor &color)
+{
+    if (m_bgColor != color) {
+        m_bgColor = color;
+        this->update();
+    }
+}
+
+void RKMarqueeLabel::setHoverBackgroundColor(const QColor &color)
+{
+    if (m_hoverBgColor != color) {
+        m_hoverBgColor = color;
+        this->update();
+    }
+}
+
 void RKMarqueeLabel::setMoveStyle(RKMarqueeLabel::MoveStyle moveStyle)
 {
     if (m_moveStyle != moveStyle) {

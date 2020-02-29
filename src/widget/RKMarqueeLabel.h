@@ -59,7 +59,7 @@ public:
 
     void setTextColor(const QColor &color);
 
-    void setHoverTextColor(const QString &color);
+    void setHoverTextColor(const QColor &color);
 
     void setBackgroundColor(const QColor &color);
 
