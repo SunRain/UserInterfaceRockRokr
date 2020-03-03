@@ -35,6 +35,10 @@ public:
     explicit RockRokrView(QWidget *parent = nullptr);
     virtual ~RockRokrView() override;
 
+    // QWidget interface
+protected:
+    virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 protected:
     void initUI();
 

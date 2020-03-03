@@ -182,6 +182,12 @@ RockRokrView::~RockRokrView()
     }
 }
 
+void RockRokrView::resizeEvent(QResizeEvent *event)
+{
+    QFrame::resizeEvent(event);
+    m_searchResultView->setMaximumHeight(m_stack->height());
+}
+
 void RockRokrView::initUI()
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -230,7 +236,7 @@ void RockRokrView::showContextMenu(BaseCategoryModel *model, const QModelIndex &
     menu.addSeparator();
     ViewUtility::menuTrackInfo(&menu, obj);
 
-    menu.exec(/*this->mapToGlobal(pos)*/pos);
+    menu.exec(pos);
 }
 
 } //namespace RockRokr

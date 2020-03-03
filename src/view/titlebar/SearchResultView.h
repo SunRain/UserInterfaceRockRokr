@@ -39,6 +39,7 @@ protected:
     void initProvider();
 
     void searchByAllPluginBtnEntered();
+    void searchByAllPluginBtnLeave();
 
     // QWidget interface
 protected:

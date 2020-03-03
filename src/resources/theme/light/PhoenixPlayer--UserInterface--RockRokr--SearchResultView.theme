@@ -73,8 +73,7 @@
 #SearchBtn {
   color: black;
   font-size: 12px;
-  padding-left: 9px;
-  text-align: left;
+  text-align: center;
   border: none;
   background-color: transparent;
 }
