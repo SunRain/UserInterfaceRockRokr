@@ -123,6 +123,11 @@ LeftBar::~LeftBar()
 
 }
 
+QSize LeftBar::sizeHint() const
+{
+    return QSize(LEFT_BAR_W, LEFT_BAR_H);
+}
+
 //void LeftBar::paintEvent(QPaintEvent *event)
 //{
 //    QStyleOption opt;

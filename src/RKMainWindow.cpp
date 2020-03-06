@@ -29,7 +29,6 @@
 #include "view/ImportView.h"
 #include "view/MainWindowBGView.h"
 #include "view/RockRokrView.h"
-#include "view/titlebar/RKTitleBar.h"
 #include "view/rockrokr/CategoryDetailView.h"
 #include "view/rockrokr/PlayListDetailView.h"
 
@@ -130,8 +129,6 @@ void RKMainWindow::show()
     this->resize(MAIN_WINDOW_W, MAIN_WINDOW_H);
 
     DMainWindow::show();
-
-    qDebug()<<"------------------";
 
     Dtk::Widget::moveToCenter(this);
 }
@@ -280,6 +277,11 @@ void RKMainWindow::showPlaylistDetailView()
 
     m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
     m_overlayWidget->setCurrentWidget(m_rkView->playListDetailView());
+}
+
+void RKMainWindow::resizeEvent(QResizeEvent *event)
+{
+    m_stack->setFixedSize(event->size());
 }
 
 } //namespace RockRokr

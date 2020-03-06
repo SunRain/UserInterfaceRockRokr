@@ -21,6 +21,11 @@ public:
 
     void setHoverState(bool hover);
 
+    inline bool hoverState() const
+    {
+        return m_hoverState;
+    }
+
     // QWidget interface
 protected:
     virtual void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
@@ -30,6 +35,7 @@ protected:
 private:
     SearchInnerLabel  *m_lable      = Q_NULLPTR;
     SearchInnerLabel  *m_subLabel   = Q_NULLPTR;
+    bool    m_hoverState = false;
 };
 
 } //namespace RockRokr

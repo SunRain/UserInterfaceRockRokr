@@ -39,6 +39,10 @@ public:
     int currentIndex() const;
 
     // QWidget interface
+public:
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+
+    // QWidget interface
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
@@ -56,7 +60,7 @@ private:
 private:
     RKStackedWidgetPrivate *const d_ptr;
     Q_DISABLE_COPY(RKStackedWidget)
-    Q_DECLARE_PRIVATE(RKStackedWidget)
+    Q_DECLARE_PRIVATE(RKStackedWidget)  
 };
 
 

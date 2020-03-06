@@ -9,13 +9,15 @@
 #include "PlayerCore/PlayerCore.h"
 #include "PlayerCore/PlayListMetaMgr.h"
 #include "MusicLibrary/MusicLibraryManager.h"
+#include "UserInterface/UserInterfaceMgr.h"
+#include "UserInterface/IUserInterface.h"
 
 #include "rockrokr_global.h"
 #include "ViewUtility.h"
 #include "titlebar/SearchResultView.h"
 #include "leftbar/LeftBar.h"
 #include "leftbar/LBListItem.h"
-#include "view/titlebar/RKTitleBar.h"
+#include "view/titlebar/RockRokrTitleBar.h"
 #include "view/playbar/PlayBar.h"
 #include "widget/RKStackWidget.h"
 
@@ -50,10 +52,17 @@ RockRokrView::RockRokrView(QWidget *parent)
     m_searchResultView  = new SearchResultView(this);
 
     m_leftbar   = new LeftBar;
-    m_titlebar  = new RKTitleBar;
+    m_leftbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+
+    m_titlebar  = new RockrokrTitleBar;
+    m_titlebar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_titlebar->bindResultView(m_searchResultView);
+
     m_playbar   = new PlayBar;
+    m_playbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
     m_stack     = new RKStackedWidget;
+    m_stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_stack->setDuration(500);
 
     // order based on the order of enum in LBListItem(ItemType);
@@ -70,7 +79,7 @@ RockRokrView::RockRokrView(QWidget *parent)
     m_stack->addWidget(m_favTrackView);
     m_stack->setCurrentWidget(m_artistCategory, RKStackedWidget::AnimationTypeNone);
 
-    initUI();
+    initUserInterface();
 
     connect(m_leftbar, &LeftBar::itemClicked, this, [&](LBListItem *item){
         qDebug()<<"LeftBar::itemClicked item type "<<item->itemType()
@@ -98,6 +107,18 @@ RockRokrView::RockRokrView(QWidget *parent)
             m_stack->setCurrentIndex(item->extraData().toInt(), RKStackedWidget::TopToBottom);
         }
     });
+
+    connect(m_titlebar, &RKTitleBar::buttonClicked, this, [&](RKTitleBar::DisplayedButton button) {
+        if (button == RKTitleBar::DisplayedButton::WindowCloseButton) {
+            UserInterface::UserInterfaceMgr mgr;
+            UserInterface::IUserInterface *us = mgr.usedInterface();
+            if (us) {
+                us->close();
+            }
+        }
+        // TODO
+    });
+
 
 #define GET_SHOW_PARA \
     const QString name = model->data(index, BaseCategoryModel::RoleCategoryName).toString(); \
@@ -188,15 +209,15 @@ void RockRokrView::resizeEvent(QResizeEvent *event)
     m_searchResultView->setMaximumHeight(m_stack->height());
 }
 
-void RockRokrView::initUI()
+void RockRokrView::initUserInterface()
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     {
-        m_leftbar->setFixedWidth(LEFT_BAR_W);
         layout->addWidget(m_leftbar);
     }
+
     {
         QVBoxLayout *vbox = new QVBoxLayout;
         vbox->setContentsMargins(0, LEFT_BAR_BT_TB_MARGIN, 0, 0);
@@ -206,12 +227,14 @@ void RockRokrView::initUI()
             vv->setContentsMargins(RIGHT_PART_L_MARGIN, 0, 0, 0);
             vv->setSpacing(0);
 
-            vv->addWidget(m_titlebar, 0, Qt::AlignTop);
-            vv->addSpacing(32);
+            m_titlebar->getContentWidget()->setFixedSize(TITLE_BAR_SEARCH_VIEW_W,
+                                                         TITLE_BAR_SEARCH_VIEW_H);
+
+            vv->addWidget(m_titlebar);
+            vv->addSpacing(10);
             vv->addWidget(m_stack);
             vbox->addLayout(vv);
         }
-        m_playbar->setFixedHeight(PLAY_BAR_H);
         vbox->addWidget(m_playbar, 0, Qt::AlignBottom);
         layout->addLayout(vbox);
     }

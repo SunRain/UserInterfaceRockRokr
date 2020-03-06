@@ -17,6 +17,10 @@ public:
 
     void bindResultView(SearchResultView *view);
 
+    // QWidget interface
+public:
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+
 protected:
 //    void onFocusIn();
     void onFocusOut();

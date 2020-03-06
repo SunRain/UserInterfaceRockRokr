@@ -273,6 +273,11 @@ void BaseCategoryView::initListViewParameter(QListView *view)
     view->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
 }
 
+QSize BaseCategoryView::sizeHint() const
+{
+    return QSize(300, 300);
+}
+
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer

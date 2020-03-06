@@ -45,6 +45,10 @@ public:
     void showVolumeView();
     void deleyHideVolumeView();
 
+    // QWidget interface
+public:
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+
 protected:
     void initUserInterface();
     void changeVolume(int volume);

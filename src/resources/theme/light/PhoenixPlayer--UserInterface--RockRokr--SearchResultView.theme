@@ -15,25 +15,6 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/*
-#ResultView::item {
-  background-color: rgba(255, 255, 255, 1.0);
-  height: 25px;
-  padding-left: 7px;
-}
-*/
-
-#ResultView::item {
-  background-color: transparent;
-  height: 25px;
-  padding-left: 7px;
-}
-
-#ResultView::item:selected {
-  color: white;
-  background-color: #336CFB;
-}
-
 #PluginView {
   color: black;
   font-size: 12px;
@@ -42,13 +23,6 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/*
-#PluginView::item {
-  background-color: rgba(255, 255, 255, 1.0);
-  height: 25px;
-  padding-left: 7px;
-}
-*/
 #PluginView::item {
   background-color: transparent;
   height: 25px;
@@ -60,16 +34,6 @@
   background-color: #336CFB;
 }
 
-/*
-#SearchBtn {
-  color: black;
-  font-size: 12px;
-  padding-left: 9px;
-  text-align: left;
-  border: none;
-  background-color: rgba(255, 255, 255, 1.0);
-}
-*/
 #SearchBtn {
   color: black;
   font-size: 12px;

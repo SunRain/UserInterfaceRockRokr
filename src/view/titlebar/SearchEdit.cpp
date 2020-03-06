@@ -48,6 +48,11 @@ void SearchEdit::bindResultView(SearchResultView *view)
     });
 }
 
+QSize SearchEdit::sizeHint() const
+{
+    return QSize(TITLE_BAR_SEARCH_VIEW_W, TITLE_BAR_SEARCH_VIEW_H);
+}
+
 void SearchEdit::onFocusOut()
 {
     QTimer::singleShot(50, [this] (){

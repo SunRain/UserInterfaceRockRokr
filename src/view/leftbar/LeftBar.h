@@ -28,11 +28,9 @@ public:
     explicit LeftBar(QWidget *parent = nullptr);
     virtual ~LeftBar() override;
 
-//    void insertAnchorsForChildren(const DAnchorsBase *anchors);
-
     // QWidget interface
-//protected:
-//    void paintEvent(QPaintEvent *event) override;
+public:
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 signals:
     void itemClicked(LBListItem *item);

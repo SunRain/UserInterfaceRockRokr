@@ -64,11 +64,13 @@ SearchResultView::SearchResultView(QWidget *parent)
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, LY_TOP_MARGIN, 0, LY_BOTTOM_MARGIN);
-    layout->setSpacing(2);
+    layout->setSpacing(0);
     this->setLayout(layout);
 
     m_resultView = new QListWidget;
     m_resultView->setObjectName("ResultView");
+    m_resultView->setSpacing(0);
+    m_resultView->setContentsMargins(0, 0, 0, 0);
     m_resultView->setMouseTracking(true);
     m_resultView->setSelectionMode(QListView::SingleSelection);
     m_resultView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -77,6 +79,8 @@ SearchResultView::SearchResultView(QWidget *parent)
 
     m_pluginView = new QListView;
     m_pluginView->setObjectName("PluginView");
+    m_pluginView->setSpacing(0);
+    m_pluginView->setContentsMargins(0, 0, 0, 0);
     m_pluginView->setMouseTracking(true);
     m_pluginView->setSelectionMode(QListView::SingleSelection);
     m_pluginView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -167,17 +171,17 @@ void SearchResultView::calToResize()
               - this->layout()->spacing() * 3; // 3 part sub view (search ret, plugin, button)
 
     m_resultView->setFixedHeight(srH);
-    m_resultView->setFixedWidth(this->size().width());
+    m_resultView->setFixedWidth(this->width());
 
     for(int i=0; i<m_resultView->count(); ++i) {
         QListWidgetItem *item = m_resultView->item(i);
-        item->setSizeHint(QSize(this->size().width(), _to_px(RET_ITEM_H)));
+        item->setSizeHint(QSize(this->width(), _to_px(RET_ITEM_H)));
         SearchResultItem *sm = qobject_cast<SearchResultItem*>(m_resultView->itemWidget(item));
         sm->setFixedSize(this->width(), _to_px(RET_ITEM_H));
     }
 
-    m_pluginView->setFixedSize(this->size().width(), pvH);
-    m_searchByAllPluginBtn->setFixedWidth(this->size().width());
+    m_pluginView->setFixedSize(this->width(), pvH);
+    m_searchByAllPluginBtn->setFixedWidth(this->width());
 
     m_resultView->setVisible(!m_resultObjList.isEmpty());
     m_pluginView->setVisible(m_pluginViewModel->rowCount() > 1);

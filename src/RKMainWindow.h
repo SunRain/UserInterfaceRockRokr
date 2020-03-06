@@ -69,6 +69,10 @@ public:
 
     void showPlaylistDetailView();
 
+    // QWidget interface
+protected:
+    virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 private:
     QWidget                             *m_mainWidget       = Q_NULLPTR;
     QTimer                              *m_tipTimer         = Q_NULLPTR;

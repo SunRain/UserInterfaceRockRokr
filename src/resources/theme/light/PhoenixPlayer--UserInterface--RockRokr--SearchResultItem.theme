@@ -5,6 +5,7 @@
     background-color: #FCFCFC;
 }
 
+/*
 #SearchResultItem[hoverState="active"] {
     border: 1px solid #336CFB;
     border-radius: 0px;
@@ -12,12 +13,4 @@
     background-color: #336CFB;
 }
 
-/*
-#LabelText {
-    background-color: transparent;
-}
-
-#SubLabelText {
-    background-color: transparent;
-}
 */

@@ -14,7 +14,7 @@ namespace RockRokr {
 
 class LBListItem;
 class LeftBar;
-class RKTitleBar;
+class RockrokrTitleBar;
 class PlayBar;
 class RKStackedWidget;
 class AlbumCategoryView;
@@ -40,7 +40,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 protected:
-    void initUI();
+    void initUserInterface();
 
     inline CategoryDetailView *categoryDetailView()
     {
@@ -57,7 +57,7 @@ private:
     PlayerCore          *m_playerCore       = Q_NULLPTR;
     LBListItem          *m_preLeftBarItem   = Q_NULLPTR;
     LeftBar             *m_leftbar          = Q_NULLPTR;
-    RKTitleBar          *m_titlebar         = Q_NULLPTR;
+    RockrokrTitleBar    *m_titlebar         = Q_NULLPTR;
     PlayBar             *m_playbar          = Q_NULLPTR;
     RKStackedWidget     *m_stack            = Q_NULLPTR;
     AlbumCategoryView   *m_albumCategory    = Q_NULLPTR;

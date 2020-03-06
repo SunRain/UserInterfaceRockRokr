@@ -62,6 +62,11 @@ int RKStackedWidget::currentIndex() const
     return d_func()->m_currentIndex;
 }
 
+QSize RKStackedWidget::sizeHint() const
+{
+    return QSize(100, 100);
+}
+
 void RKStackedWidget::paintEvent(QPaintEvent *event)
 {
     Q_D(RKStackedWidget);

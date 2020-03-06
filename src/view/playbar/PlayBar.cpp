@@ -309,6 +309,11 @@ void PlayBar::deleyHideVolumeView()
     m_volumeView->deleyHide();
 }
 
+QSize PlayBar::sizeHint() const
+{
+    return QSize(PLAY_BAR_W, PLAY_BAR_H);
+}
+
 void PlayBar::initUserInterface()
 {
     m_volumeView = new VolumeWidget;

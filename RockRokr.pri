@@ -32,6 +32,8 @@ HEADERS += \
     $$PWD/src/view/ImportView.h \
     $$PWD/src/view/MainWindowBGView.h \
     $$PWD/src/view/RockRokrView.h \
+    $$PWD/src/view/SearchPage.h \
+    $$PWD/src/view/titlebar/RockRokrTitleBar.h \
     $$PWD/src/view/titlebar/SearchResultItem.h \
     $$PWD/src/view/titlebar/SearchResultView.h \
     $$PWD/src/view/TrackInfoDialog.h \
@@ -63,7 +65,6 @@ HEADERS += \
     $$PWD/src/view/rockrokr/PlayListDetailView.h \
     $$PWD/src/view/rockrokr/TrackListModel.h \
     $$PWD/src/view/rockrokr/TrackListViewDelegate.h \
-    $$PWD/src/view/titlebar/RKTitleBar.h \
     $$PWD/src/view/titlebar/SearchEdit.h \
     $$PWD/src/widget/ItemFragment.h \
     $$PWD/src/widget/LoadingWidget.h \
@@ -76,11 +77,13 @@ HEADERS += \
     $$PWD/src/widget/RKListView.h \
     $$PWD/src/widget/RKListWidget.h \
     $$PWD/src/widget/RKMarqueeLabel.h \
+    $$PWD/src/widget/RKNavigationPage.h \
     $$PWD/src/widget/RKOverlayWidget.h \
     $$PWD/src/widget/RKSearchEdit.h \
     $$PWD/src/widget/RKSlider.h \
     $$PWD/src/widget/RKStackWidget.h \
     $$PWD/src/widget/RKTableHeaderItem.h \
+    $$PWD/src/widget/RKTitleBar.h \
     $$PWD/src/widget/filter.h \
     $$PWD/src/widget/qtmaterialiconbutton_p.h \
     $$PWD/src/widget/qtmaterialoverlaywidget.h \
@@ -95,6 +98,8 @@ SOURCES += \
     $$PWD/src/view/ImportView.cpp \
     $$PWD/src/view/MainWindowBGView.cpp \
     $$PWD/src/view/RockRokrView.cpp \
+    $$PWD/src/view/SearchPage.cpp \
+    $$PWD/src/view/titlebar/RockRokrTitleBar.cpp \
     $$PWD/src/view/titlebar/SearchResultItem.cpp \
     $$PWD/src/view/titlebar/SearchResultView.cpp \
     $$PWD/src/view/TrackInfoDialog.cpp \
@@ -126,7 +131,6 @@ SOURCES += \
     $$PWD/src/view/rockrokr/PlayListDetailView.cpp \
     $$PWD/src/view/rockrokr/TrackListModel.cpp \
     $$PWD/src/view/rockrokr/TrackListViewDelegate.cpp \
-    $$PWD/src/view/titlebar/RKTitleBar.cpp \
     $$PWD/src/view/titlebar/SearchEdit.cpp \
     $$PWD/src/widget/ItemFragment.cpp \
     $$PWD/src/widget/LoadingWidget.cpp \
@@ -139,10 +143,12 @@ SOURCES += \
     $$PWD/src/widget/RKListView.cpp \
     $$PWD/src/widget/RKListWidget.cpp \
     $$PWD/src/widget/RKMarqueeLabel.cpp \
+    $$PWD/src/widget/RKNavigationPage.cpp \
     $$PWD/src/widget/RKOverlayWidget.cpp \
     $$PWD/src/widget/RKSearchEdit.cpp \
     $$PWD/src/widget/RKSlider.cpp \
     $$PWD/src/widget/RKTableHeaderItem.cpp \
+    $$PWD/src/widget/RKTitleBar.cpp \
     $$PWD/src/widget/filter.cpp \
     $$PWD/src/widget/qtmaterialoverlaywidget.cpp \
     $$PWD/src/widget/qtmaterialripple.cpp \

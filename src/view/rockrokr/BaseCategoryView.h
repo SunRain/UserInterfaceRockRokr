@@ -34,6 +34,10 @@ public:
 
     void initListViewParameter(QListView *view);
 
+    // QWidget interface
+public:
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+
 Q_SIGNALS:
     void viewClicked(ViewType type, BaseCategoryModel *model, const QModelIndex &index);
 
@@ -48,7 +52,6 @@ private:
     CategoryRecentViewDelegate          *m_recentViewDelegate       = Q_NULLPTR;
     CategoryAllViewDelegate             *m_allViewDelegate          = Q_NULLPTR;
     CategoryViewDataProvider            *m_dataProvider             = Q_NULLPTR;
-
 };
 
 
