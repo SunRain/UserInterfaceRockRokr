@@ -5,12 +5,18 @@
     background-color: #FCFCFC;
 }
 
-/*
-#SearchResultItem[hoverState="active"] {
-    border: 1px solid #336CFB;
+
+#Wrapper {
+    border: none;
+    border-radius: 0px;
+    padding: 0px;
+    background-color: #FCFCFC;
+}
+
+#Wrapper[hoverState="active"] {
+    border: none;
     border-radius: 0px;
     padding: 0px;
     background-color: #336CFB;
 }
 
-*/

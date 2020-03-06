@@ -33,8 +33,9 @@ protected:
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    SearchInnerLabel  *m_lable      = Q_NULLPTR;
-    SearchInnerLabel  *m_subLabel   = Q_NULLPTR;
+    SearchInnerLabel  *m_lable          = Q_NULLPTR;
+    SearchInnerLabel  *m_subLabel       = Q_NULLPTR;
+    QWidget           *m_wrapperWidget  = Q_NULLPTR;
     bool    m_hoverState = false;
 };
 
