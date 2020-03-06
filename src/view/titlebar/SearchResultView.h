@@ -30,6 +30,8 @@ public:
 
     void setSearchString(const QString &str);
 
+    void setMaximumHeight(int maxh);
+
     Q_SLOT void doSearch();
 
 Q_SIGNALS:
@@ -53,6 +55,8 @@ private:
     QPushButton         *m_searchByAllPluginBtn = Q_NULLPTR;
 
     DataProvider::TrackSearchProvider *m_searchProvider = Q_NULLPTR;
+
+    int m_maxHeight = 0;
 
     QString                             m_searchStr;
     QList<PluginMetaData>               m_usedPlugins;

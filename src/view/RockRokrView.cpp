@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStyleFactory>
+#include <QResizeEvent>
 
 #include <DThemeManager>
 

@@ -158,7 +158,7 @@ void SearchResultView::calToResize()
                           + LY_TOP_MARGIN
                           + LY_BOTTOM_MARGIN
                           ,
-                          this->maximumHeight());
+                          m_maxHeight);
     this->setFixedHeight(maxH);
 
     int pvH = 0;
@@ -195,6 +195,12 @@ void SearchResultView::setSearchString(const QString &str)
 {
     m_searchStr = str;
     m_searchByAllPluginBtn->setText(tr("Search \"%1\" in all plugin").arg(str));
+}
+
+void SearchResultView::setMaximumHeight(int maxh)
+{
+    m_maxHeight = maxh;
+    QFrame::setMaximumHeight(maxh);
 }
 
 void SearchResultView::doSearch()
