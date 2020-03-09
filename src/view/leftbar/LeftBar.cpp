@@ -235,7 +235,7 @@ void LeftBar::initUI()
                 item->setSizeHint(QSize(LEFT_BAR_ITEM_W, headerItemH));
                 fm->setFixedHeight(headerItemH);
             }
-            m_listWidget->updateHeight();
+            m_listWidget->calculateContentHeight();
         });
 
         connect(m_plsView, &RKExpand::expandChange, this, [&, item, fm, headerItemH](bool expanded) {

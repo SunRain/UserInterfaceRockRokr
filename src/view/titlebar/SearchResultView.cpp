@@ -14,6 +14,7 @@
 #include "rockrokr_global.h"
 #include "widget/RKMarqueeLabel.h"
 #include "widget/ItemFragment.h"
+#include "widget/RKListWidget.h"
 
 #include "SearchResultItem.h"
 
@@ -67,7 +68,7 @@ SearchResultView::SearchResultView(QWidget *parent)
     layout->setSpacing(0);
     this->setLayout(layout);
 
-    m_resultView = new QListWidget;
+    m_resultView = new RKListWidget;
     m_resultView->setObjectName("ResultView");
     m_resultView->setSpacing(0);
     m_resultView->setContentsMargins(0, 0, 0, 0);
@@ -179,6 +180,7 @@ void SearchResultView::calToResize()
         SearchResultItem *sm = qobject_cast<SearchResultItem*>(m_resultView->itemWidget(item));
         sm->setFixedSize(this->width(), _to_px(RET_ITEM_H));
     }
+    m_resultView->calculateContentHeight();
 
     m_pluginView->setFixedSize(this->width(), pvH);
     m_searchByAllPluginBtn->setFixedWidth(this->width());

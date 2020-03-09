@@ -18,6 +18,7 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
+class RKListWidget;
 class SearchResultView : public QFrame
 {
     Q_OBJECT
@@ -48,7 +49,7 @@ protected:
     virtual void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QListWidget           *m_resultView       = Q_NULLPTR;
+    RKListWidget          *m_resultView       = Q_NULLPTR;
 //    QStringListModel    *m_resultModel      = Q_NULLPTR;
     QListView           *m_pluginView       = Q_NULLPTR;
     QStringListModel    *m_pluginViewModel  = Q_NULLPTR;
