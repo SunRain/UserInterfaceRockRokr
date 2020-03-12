@@ -1,4 +1,4 @@
-#SearchResultView {
+#SearchResultPopup {
   border: 1px solid rgba(0, 0, 0, 10%);
   border-radius: 4px;
   background-color: qlineargradient(x1:0.5, y1:0, x2:0.5, y2:1,

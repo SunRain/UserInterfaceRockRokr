@@ -10,7 +10,7 @@ namespace UserInterface {
 namespace RockRokr {
 
 class SearchEdit;
-class SearchResultView;
+class SearchResultPopup;
 class RockrokrTitleBar : public RKTitleBar
 {
     Q_OBJECT
@@ -18,7 +18,7 @@ public:
     explicit RockrokrTitleBar(QWidget *parent = Q_NULLPTR);
     virtual ~RockrokrTitleBar() override;
 
-    void bindResultView(SearchResultView *view);
+    void bindPopup(SearchResultPopup *view);
 
     // QWidget interface
 public:

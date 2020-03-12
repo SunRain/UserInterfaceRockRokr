@@ -48,9 +48,9 @@ RockrokrTitleBar::~RockrokrTitleBar()
 
 }
 
-void RockrokrTitleBar::bindResultView(SearchResultView *view)
+void RockrokrTitleBar::bindPopup(SearchResultPopup *view)
 {
-    m_searchEdit->bindResultView(view);
+    m_searchEdit->bindPopup(view);
 }
 
 QSize RockrokrTitleBar::sizeHint() const

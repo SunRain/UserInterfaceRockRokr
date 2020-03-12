@@ -33,9 +33,9 @@ HEADERS += \
     $$PWD/src/view/MainWindowBGView.h \
     $$PWD/src/view/RockRokrView.h \
     $$PWD/src/view/SearchPage.h \
+    $$PWD/src/view/searchview/SearchResultPopup.h \
+    $$PWD/src/view/searchview/SearchResultPopupItem.h \
     $$PWD/src/view/titlebar/RockRokrTitleBar.h \
-    $$PWD/src/view/titlebar/SearchResultItem.h \
-    $$PWD/src/view/titlebar/SearchResultView.h \
     $$PWD/src/view/TrackInfoDialog.h \
     $$PWD/src/view/ViewUtility.h \
     $$PWD/src/view/leftbar/LBListItem.h \
@@ -99,9 +99,9 @@ SOURCES += \
     $$PWD/src/view/MainWindowBGView.cpp \
     $$PWD/src/view/RockRokrView.cpp \
     $$PWD/src/view/SearchPage.cpp \
+    $$PWD/src/view/searchview/SearchResultPopup.cpp \
+    $$PWD/src/view/searchview/SearchResultPopupItem.cpp \
     $$PWD/src/view/titlebar/RockRokrTitleBar.cpp \
-    $$PWD/src/view/titlebar/SearchResultItem.cpp \
-    $$PWD/src/view/titlebar/SearchResultView.cpp \
     $$PWD/src/view/TrackInfoDialog.cpp \
     $$PWD/src/view/ViewUtility.cpp \
     $$PWD/src/view/leftbar/LBListItem.cpp \

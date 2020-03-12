@@ -15,7 +15,7 @@
 
 #include "rockrokr_global.h"
 #include "ViewUtility.h"
-#include "titlebar/SearchResultView.h"
+#include "view/searchview/SearchResultPopup.h"
 #include "leftbar/LeftBar.h"
 #include "leftbar/LBListItem.h"
 #include "view/titlebar/RockRokrTitleBar.h"
@@ -50,14 +50,14 @@ RockRokrView::RockRokrView(QWidget *parent)
 
     m_ctgDetailView     = new CategoryDetailView;
     m_plsDetailView     = new PlayListDetailView;
-    m_searchResultView  = new SearchResultView(this);
+    m_searchResultPopup  = new SearchResultPopup(this);
 
     m_leftbar   = new LeftBar;
     m_leftbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
     m_titlebar  = new RockrokrTitleBar;
     m_titlebar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_titlebar->bindResultView(m_searchResultView);
+    m_titlebar->bindPopup(m_searchResultPopup);
 
     m_playbar   = new PlayBar;
     m_playbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -207,7 +207,7 @@ RockRokrView::~RockRokrView()
 void RockRokrView::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
-    m_searchResultView->setMaximumHeight(m_stack->height());
+    m_searchResultPopup->setMaximumHeight(m_stack->height());
 }
 
 void RockRokrView::initUserInterface()

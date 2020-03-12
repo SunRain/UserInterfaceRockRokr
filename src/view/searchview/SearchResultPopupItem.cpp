@@ -1,4 +1,4 @@
-#include "SearchResultItem.h"
+#include "SearchResultPopupItem.h"
 
 #include <QEvent>
 #include <QResizeEvent>
@@ -26,9 +26,9 @@ class SearchInnerLabel : public RKMarqueeLabel
 {
     Q_OBJECT
 
-    friend class SearchResultItem;
+    friend class SearchResultPopupItem;
 public:
-    SearchInnerLabel(SearchResultItem *item, QWidget *parent = Q_NULLPTR)
+    SearchInnerLabel(SearchResultPopupItem *item, QWidget *parent = Q_NULLPTR)
         : RKMarqueeLabel(parent),
           m_item(item)
     {}
@@ -53,13 +53,13 @@ protected:
         }
     }
 private:
-    SearchResultItem *m_item;
+    SearchResultPopupItem *m_item;
 };
 
-SearchResultItem::SearchResultItem(QWidget *parent)
+SearchResultPopupItem::SearchResultPopupItem(QWidget *parent)
     : QFrame(parent)
 {
-    this->setObjectName("SearchResultItem");
+    this->setObjectName("SearchResultPopupItem");
     DThemeManager::instance()->registerWidget(this);
 
     QVBoxLayout *ly = new QVBoxLayout;
@@ -102,22 +102,22 @@ SearchResultItem::SearchResultItem(QWidget *parent)
     this->setLayout(ly);
 }
 
-SearchResultItem::~SearchResultItem()
+SearchResultPopupItem::~SearchResultPopupItem()
 {
 
 }
 
-void SearchResultItem::setText(const QString &text)
+void SearchResultPopupItem::setText(const QString &text)
 {
     m_lable->setText(text);
 }
 
-void SearchResultItem::setSubText(const QString &subText)
+void SearchResultPopupItem::setSubText(const QString &subText)
 {
     m_subLabel->setText(subText);
 }
 
-void SearchResultItem::setHoverState(bool hover)
+void SearchResultPopupItem::setHoverState(bool hover)
 {
     m_hoverState = hover;
     if (hover) {
@@ -135,19 +135,19 @@ void SearchResultItem::setHoverState(bool hover)
     this->update();
 }
 
-void SearchResultItem::enterEvent(QEvent *event)
+void SearchResultPopupItem::enterEvent(QEvent *event)
 {
     Q_UNUSED(event)
     this->setHoverState(true);
 }
 
-void SearchResultItem::leaveEvent(QEvent *event)
+void SearchResultPopupItem::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event)
     this->setHoverState(false);
 }
 
-void SearchResultItem::resizeEvent(QResizeEvent *event)
+void SearchResultPopupItem::resizeEvent(QResizeEvent *event)
 {
     const QSize sz = event->size();
 

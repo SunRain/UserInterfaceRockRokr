@@ -84,8 +84,8 @@
         <file>light/PhoenixPlayer--UserInterface--RockRokr--PlayListDetailView.theme</file>
         <file>light/image/ic_pls_detail_view_mode_edit_normal.svg</file>
         <file>light/image/ic_pls_detail_view_mode_check_normal.svg</file>
-        <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultView.theme</file>
-        <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultItem.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultPopup.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultPopupItem.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--RKListWidget.theme</file>
     </qresource>
 </RCC>

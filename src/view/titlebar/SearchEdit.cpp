@@ -5,7 +5,7 @@
 #include <QResizeEvent>
 
 #include "rockrokr_global.h"
-#include "SearchResultView.h"
+#include "view/searchview/SearchResultPopup.h"
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -29,22 +29,22 @@ SearchEdit::~SearchEdit()
 
 }
 
-void SearchEdit::bindResultView(SearchResultView *view)
+void SearchEdit::bindPopup(SearchResultPopup *view)
 {
-    m_resultView = view;
-    m_resultView->hide();
+    m_resultPopup = view;
+    m_resultPopup->hide();
 
-    connect(m_resultView, &SearchResultView::searchMatched,
+    connect(m_resultPopup, &SearchResultPopup::searchMatched,
             this, [&]() {
-        m_resultView->setFixedWidth(this->width() + _to_px(40));
+        m_resultPopup->setFixedWidth(this->width() + _to_px(40));
 
-        m_resultView->calToResize();
-        m_resultView->show();
+        m_resultPopup->calToResize();
+        m_resultPopup->show();
 
-        m_resultView->move(m_topLeftToGlobal.x(),
+        m_resultPopup->move(m_topLeftToGlobal.x(),
                            m_topLeftToGlobal.y() + this->rect().height());
-        m_resultView->setFocusPolicy(Qt::StrongFocus);
-        m_resultView->raise();
+        m_resultPopup->setFocusPolicy(Qt::StrongFocus);
+        m_resultPopup->raise();
     });
 }
 
@@ -56,7 +56,7 @@ QSize SearchEdit::sizeHint() const
 void SearchEdit::onFocusOut()
 {
     QTimer::singleShot(50, [this] (){
-        m_resultView->hide();
+        m_resultPopup->hide();
     });
 }
 
@@ -65,8 +65,8 @@ void SearchEdit::onTextChanged()
     auto text = QString(this->text()).remove(" ").remove("\r").remove("\n");
     if (text.length() >= 2) {
         auto searchtext = QString(this->text()).remove("\r").remove("\n");
-        m_resultView->setSearchString(searchtext);
-        m_resultView->doSearch();
+        m_resultPopup->setSearchString(searchtext);
+        m_resultPopup->doSearch();
 
 //        m_resultView->setFixedWidth(this->width() + _to_px(40));
 

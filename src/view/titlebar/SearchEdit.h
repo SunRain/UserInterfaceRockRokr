@@ -7,7 +7,7 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
-class SearchResultView;
+class SearchResultPopup;
 class SearchEdit : public RKSearchEdit
 {
     Q_OBJECT
@@ -15,7 +15,7 @@ public:
     explicit SearchEdit(QWidget *parent = Q_NULLPTR);
     virtual ~SearchEdit();
 
-    void bindResultView(SearchResultView *view);
+    void bindPopup(SearchResultPopup *view);
 
     // QWidget interface
 public:
@@ -32,7 +32,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    SearchResultView    *m_resultView = Q_NULLPTR;
+    SearchResultPopup    *m_resultPopup = Q_NULLPTR;
     QPoint              m_topLeftToGlobal;
 };
 

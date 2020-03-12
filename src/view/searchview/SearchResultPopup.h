@@ -1,5 +1,5 @@
-#ifndef SEARCHRESULTVIEW_H
-#define SEARCHRESULTVIEW_H
+#ifndef SEARCHRESULTPOPUP_H
+#define SEARCHRESULTPOPUP_H
 
 #include <QFrame>
 #include <QListView>
@@ -19,13 +19,13 @@ namespace UserInterface {
 namespace RockRokr {
 
 class RKListWidget;
-class SearchResultView : public QFrame
+class SearchResultPopup : public QFrame
 {
     Q_OBJECT
     friend class BtnFiler;
 public:
-    explicit SearchResultView(QWidget *parent = Q_NULLPTR);
-    virtual ~SearchResultView();
+    explicit SearchResultPopup(QWidget *parent = Q_NULLPTR);
+    virtual ~SearchResultPopup();
 
     void calToResize();
 
@@ -69,4 +69,4 @@ private:
 } //namespace UserInterface
 } //namespace PhoenixPlayer
 
-#endif // SEARCHRESULTVIEW_H
+#endif // SEARCHRESULTPOPUP_H

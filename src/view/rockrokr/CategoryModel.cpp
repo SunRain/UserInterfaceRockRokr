@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QSharedData>
 #include <QSharedDataPointer>
+#include <QFile>
 
 #include "LibPhoenixPlayerMain.h"
 #include "PlayerCore/PlayerCore.h"

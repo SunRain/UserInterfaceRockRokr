@@ -1,5 +1,5 @@
-#ifndef SEARCHRESULTITEM_H
-#define SEARCHRESULTITEM_H
+#ifndef SEARCHRESULTPOPUPITEM_H
+#define SEARCHRESULTPOPUPITEM_H
 
 #include <QFrame>
 
@@ -8,12 +8,12 @@ namespace UserInterface {
 namespace RockRokr {
 
 class SearchInnerLabel;
-class SearchResultItem : public QFrame
+class SearchResultPopupItem : public QFrame
 {
     Q_OBJECT
 public:
-    explicit SearchResultItem(QWidget *parent = Q_NULLPTR);
-    virtual ~SearchResultItem();
+    explicit SearchResultPopupItem(QWidget *parent = Q_NULLPTR);
+    virtual ~SearchResultPopupItem();
 
     void setText(const QString &text);
 
@@ -43,4 +43,4 @@ private:
 } //namespace UserInterface
 } //namespace PhoenixPlayer
 
-#endif // SEARCHRESULTITEM_H
+#endif // SEARCHRESULTPOPUPITEM_H

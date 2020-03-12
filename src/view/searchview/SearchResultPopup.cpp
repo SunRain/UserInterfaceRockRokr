@@ -1,4 +1,4 @@
-#include "SearchResultView.h"
+#include "SearchResultPopup.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -16,7 +16,7 @@
 #include "widget/ItemFragment.h"
 #include "widget/RKListWidget.h"
 
-#include "SearchResultItem.h"
+#include "SearchResultPopupItem.h"
 
 DWIDGET_USE_NAMESPACE
 using namespace PhoenixPlayer::DataProvider;
@@ -32,7 +32,7 @@ class BtnFiler : public QObject
 {
     Q_OBJECT
 public:
-    explicit BtnFiler(SearchResultView *view, QObject *parent = Q_NULLPTR)
+    explicit BtnFiler(SearchResultPopup *view, QObject *parent = Q_NULLPTR)
         : QObject(parent),
           m_view(view)
     {
@@ -54,13 +54,13 @@ public:
     }
 
 private:
-    SearchResultView *m_view = Q_NULLPTR;
+    SearchResultPopup *m_view = Q_NULLPTR;
 };
 
-SearchResultView::SearchResultView(QWidget *parent)
+SearchResultPopup::SearchResultPopup(QWidget *parent)
     : QFrame(parent)
 {
-    this->setObjectName("SearchResultView");
+    this->setObjectName("SearchResultPopup");
     DThemeManager::instance()->registerWidget(this);
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -145,12 +145,12 @@ SearchResultView::SearchResultView(QWidget *parent)
     initProvider();
 }
 
-SearchResultView::~SearchResultView()
+SearchResultPopup::~SearchResultPopup()
 {
 
 }
 
-void SearchResultView::calToResize()
+void SearchResultPopup::calToResize()
 {
     const int maxH = qMin(m_resultObjList.size() * (_to_px(RET_ITEM_H))
                           + m_pluginViewModel->rowCount() * (_to_px(RET_ITEM_H))
@@ -177,7 +177,7 @@ void SearchResultView::calToResize()
     for(int i=0; i<m_resultView->count(); ++i) {
         QListWidgetItem *item = m_resultView->item(i);
         item->setSizeHint(QSize(this->width(), _to_px(RET_ITEM_H)));
-        SearchResultItem *sm = qobject_cast<SearchResultItem*>(m_resultView->itemWidget(item));
+        SearchResultPopupItem *sm = qobject_cast<SearchResultPopupItem*>(m_resultView->itemWidget(item));
         sm->setFixedSize(this->width(), _to_px(RET_ITEM_H));
     }
     m_resultView->calculateContentHeight();
@@ -193,19 +193,19 @@ void SearchResultView::calToResize()
     m_resultView->raise();
 }
 
-void SearchResultView::setSearchString(const QString &str)
+void SearchResultPopup::setSearchString(const QString &str)
 {
     m_searchStr = str;
     m_searchByAllPluginBtn->setText(tr("Search \"%1\" in all plugin").arg(str));
 }
 
-void SearchResultView::setMaximumHeight(int maxh)
+void SearchResultPopup::setMaximumHeight(int maxh)
 {
     m_maxHeight = maxh;
     QFrame::setMaximumHeight(maxh);
 }
 
-void SearchResultView::doSearch()
+void SearchResultPopup::doSearch()
 {
     if (m_searchStr.isEmpty()) {
         qWarning()<<"Can't search with empty string, ignore!!";
@@ -214,7 +214,7 @@ void SearchResultView::doSearch()
     m_searchProvider->search(m_searchStr, ITrackSearch::MatchAll);
 }
 
-void SearchResultView::initProvider()
+void SearchResultPopup::initProvider()
 {
     if (!m_searchProvider) {
         m_searchProvider = new TrackSearchProvider(this);
@@ -231,7 +231,7 @@ void SearchResultView::initProvider()
                 QListWidgetItem *item = new QListWidgetItem(m_resultView);
                 m_resultView->addItem(item);
 
-                SearchResultItem *sm = new SearchResultItem;
+                SearchResultPopupItem *sm = new SearchResultPopupItem;
                 sm->setObjectName("SearchResultItem");
                 sm->setFixedHeight(_to_px(RET_ITEM_H));
                 sm->setText(it.uri());
@@ -251,19 +251,19 @@ void SearchResultView::initProvider()
     m_pluginViewModel->setStringList(ll);
 }
 
-void SearchResultView::searchByAllPluginBtnEntered()
+void SearchResultPopup::searchByAllPluginBtnEntered()
 {
     m_resultView->setCurrentIndex(QModelIndex());
     m_pluginView->setCurrentIndex(QModelIndex());
     m_searchByAllPluginBtn->setChecked(true);
 }
 
-void SearchResultView::searchByAllPluginBtnLeave()
+void SearchResultPopup::searchByAllPluginBtnLeave()
 {
     m_searchByAllPluginBtn->setChecked(false);
 }
 
-void SearchResultView::leaveEvent(QEvent *event)
+void SearchResultPopup::leaveEvent(QEvent *event)
 {
     m_resultView->setCurrentIndex(QModelIndex());
     m_pluginView->setCurrentIndex(QModelIndex());
