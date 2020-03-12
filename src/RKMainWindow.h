@@ -25,9 +25,9 @@ namespace PhoenixPlayer {
         namespace RockRokr {
 
             class LeftBar;
-            class ImportView;
+            class ImportPage;
             class LoadingWidget;
-            class RockRokrView;
+            class RockRokrPage;
             class RKTitleBar;
             class RKStackedWidget;
             class RKOverlayWidget;
@@ -83,9 +83,9 @@ private:
 
     RKStackedWidget                     *m_stack            = Q_NULLPTR;
     LeftBar                             *m_leftBar          = Q_NULLPTR;
-    ImportView                          *m_importView       = Q_NULLPTR;
+    ImportPage                          *m_importView       = Q_NULLPTR;
     LoadingWidget                       *m_loadingWidget    = Q_NULLPTR;
-    RockRokrView                        *m_rkView           = Q_NULLPTR;
+    RockRokrPage                        *m_rkView           = Q_NULLPTR;
     RKTitleBar                          *m_rkTitleBar       = Q_NULLPTR;
     RKOverlayWidget                     *m_overlayWidget    = Q_NULLPTR;
 

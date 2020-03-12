@@ -1,5 +1,5 @@
-#ifndef IMPORTVIEW_H
-#define IMPORTVIEW_H
+#ifndef IMPORTPAGE_H
+#define IMPORTPAGE_H
 
 #include <QFrame>
 
@@ -10,12 +10,12 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
-class ImportView : public QFrame
+class ImportPage : public QFrame
 {
     Q_OBJECT
 public:
-    explicit ImportView(QWidget *parent = Q_NULLPTR);
-    virtual ~ImportView() override;
+    explicit ImportPage(QWidget *parent = Q_NULLPTR);
+    virtual ~ImportPage() override;
 
     // QWidget interface
 protected:
@@ -39,4 +39,4 @@ private:
 } //namespace UserInterface
 } //namespace PhoenixPlayer
 
-#endif // IMPORTVIEW_H
+#endif // IMPORTPAGE_H

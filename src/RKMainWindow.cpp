@@ -26,9 +26,9 @@
 #include "widget/LoadingWidget.h"
 #include "widget/RKStackWidget.h"
 #include "widget/RKOverlayWidget.h"
-#include "view/ImportView.h"
+#include "view/ImportPage.h"
 #include "view/MainWindowBGView.h"
-#include "view/RockRokrView.h"
+#include "view/RockRokrPage.h"
 #include "view/rockrokr/CategoryDetailView.h"
 #include "view/rockrokr/PlayListDetailView.h"
 
@@ -61,9 +61,9 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_stack->setDuration(600);
     ly->addWidget(m_stack);
 
-    m_importView = new ImportView;
+    m_importView = new ImportPage;
     m_loadingWidget = new LoadingWidget;
-    m_rkView = new RockRokrView;
+    m_rkView = new RockRokrPage;
 
     {
         m_overlayWidget = new RKOverlayWidget;
@@ -80,19 +80,19 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_stack->addWidget(m_rkView);
     m_stack->addWidget(m_overlayWidget);
 
-    connect(m_importView, &ImportView::scanStandardMusicPath,
+    connect(m_importView, &ImportPage::scanStandardMusicPath,
             this, [&]() {
         m_stack->setCurrentWidget(m_loadingWidget, RKStackedWidget::LeftToRight);
         m_loadingWidget->start();
         m_localMSC->scanLocalMusic();
     });
-    connect(m_importView, &ImportView::importFiles,
+    connect(m_importView, &ImportPage::importFiles,
             this, [&](const QStringList &list){
         m_stack->setCurrentWidget(m_loadingWidget, RKStackedWidget::LeftToRight);
         m_loadingWidget->start();
         m_localMSC->scarnDirs(list);
     });
-    connect(m_importView, &ImportView::showImportDlg,
+    connect(m_importView, &ImportPage::showImportDlg,
             this, &RKMainWindow::showFileImportDlg);
 
     connect(m_localMSC, &MusicLibrary::LocalMusicScanner::searchingFinished,

@@ -1,5 +1,5 @@
-#ifndef ROCKROKRVIEW_H
-#define ROCKROKRVIEW_H
+#ifndef ROCKROKRPAGE_H
+#define ROCKROKRPAGE_H
 
 #include <QFrame>
 
@@ -26,14 +26,14 @@ class CategoryDetailView;
 class PlayListDetailView;
 class BaseCategoryModel;
 class SearchResultPopup;
-class RockRokrView : public QFrame
+class RockRokrPage : public QFrame
 {
     Q_OBJECT
 
     friend class RKMainWindow;
 public:
-    explicit RockRokrView(QWidget *parent = nullptr);
-    virtual ~RockRokrView() override;
+    explicit RockRokrPage(QWidget *parent = nullptr);
+    virtual ~RockRokrPage() override;
 
     // QWidget interface
 protected:
@@ -77,4 +77,4 @@ private:
 } //namespace PhoenixPlayer
 
 
-#endif // ROCKROKRVIEW_H
+#endif // ROCKROKRPAGE_H

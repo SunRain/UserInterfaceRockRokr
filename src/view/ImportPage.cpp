@@ -1,4 +1,4 @@
-#include "ImportView.h"
+#include "ImportPage.h"
 
 #include <QDebug>
 #include <QDragEnterEvent>
@@ -19,12 +19,12 @@ namespace RockRokr {
 
 const static char *linkTemplate = "<a href='%1' style='text-decoration: none; color: #336CFB; '>%2</a>";
 
-ImportView::ImportView(QWidget *parent)
+ImportPage::ImportPage(QWidget *parent)
     : QFrame(parent),
       m_label(new QLabel),
       m_btn(new QPushButton)
 {
-    this->setObjectName("ImportView");
+    this->setObjectName("ImportPage");
     DThemeManager::instance()->registerWidget(this);
     this->setAcceptDrops(true);
 
@@ -67,12 +67,12 @@ ImportView::ImportView(QWidget *parent)
     });
 }
 
-ImportView::~ImportView()
+ImportPage::~ImportPage()
 {
 
 }
 
-void ImportView::dragEnterEvent(QDragEnterEvent *event)
+void ImportPage::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("text/uri-list")) {
         event->setDropAction(Qt::CopyAction);
@@ -83,17 +83,17 @@ void ImportView::dragEnterEvent(QDragEnterEvent *event)
     QFrame::dragEnterEvent(event);
 }
 
-void ImportView::dragMoveEvent(QDragMoveEvent *event)
+void ImportPage::dragMoveEvent(QDragMoveEvent *event)
 {
     QFrame::dragMoveEvent(event);
 }
 
-void ImportView::dragLeaveEvent(QDragLeaveEvent *event)
+void ImportPage::dragLeaveEvent(QDragLeaveEvent *event)
 {
     QFrame::dragLeaveEvent(event);
 }
 
-void ImportView::dropEvent(QDropEvent *event)
+void ImportPage::dropEvent(QDropEvent *event)
 {
     qDebug()<<event->mimeData();
     if (!event->mimeData()->hasFormat("text/uri-list")) {

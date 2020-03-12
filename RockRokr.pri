@@ -29,9 +29,9 @@ HEADERS += \
     $$PWD/src/RKUtility.h \
     $$PWD/src/UserInterfaceRockRokr.h \
     $$PWD/src/rockrokr_global.h \
-    $$PWD/src/view/ImportView.h \
+    $$PWD/src/view/ImportPage.h \
     $$PWD/src/view/MainWindowBGView.h \
-    $$PWD/src/view/RockRokrView.h \
+    $$PWD/src/view/RockRokrPage.h \
     $$PWD/src/view/SearchPage.h \
     $$PWD/src/view/searchview/SearchResultPopup.h \
     $$PWD/src/view/searchview/SearchResultPopupItem.h \
@@ -95,9 +95,9 @@ SOURCES += \
     $$PWD/src/RKUtility.cpp \
     $$PWD/src/UserInterfaceRockRokr.cpp \
     $$PWD/src/rockrokr_global.cpp \
-    $$PWD/src/view/ImportView.cpp \
+    $$PWD/src/view/ImportPage.cpp \
     $$PWD/src/view/MainWindowBGView.cpp \
-    $$PWD/src/view/RockRokrView.cpp \
+    $$PWD/src/view/RockRokrPage.cpp \
     $$PWD/src/view/SearchPage.cpp \
     $$PWD/src/view/searchview/SearchResultPopup.cpp \
     $$PWD/src/view/searchview/SearchResultPopupItem.cpp \

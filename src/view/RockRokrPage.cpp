@@ -1,4 +1,4 @@
-#include "RockRokrView.h"
+#include "RockRokrPage.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -37,11 +37,11 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
-RockRokrView::RockRokrView(QWidget *parent)
+RockRokrPage::RockRokrPage(QWidget *parent)
     : QFrame(parent)
 
 {
-    this->setObjectName("RockRokrView");
+    this->setObjectName("RockRokrPage");
     DThemeManager::instance()->registerWidget(this);
 
     m_playerCore    = new PlayerCore(this);
@@ -196,7 +196,7 @@ RockRokrView::RockRokrView(QWidget *parent)
     });
 }
 
-RockRokrView::~RockRokrView()
+RockRokrPage::~RockRokrPage()
 {
     if (m_playerCore) {
         m_playerCore->deleteLater();
@@ -204,13 +204,13 @@ RockRokrView::~RockRokrView()
     }
 }
 
-void RockRokrView::resizeEvent(QResizeEvent *event)
+void RockRokrPage::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
     m_searchResultPopup->setMaximumHeight(m_stack->height());
 }
 
-void RockRokrView::initUserInterface()
+void RockRokrPage::initUserInterface()
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -241,7 +241,7 @@ void RockRokrView::initUserInterface()
     }
 }
 
-void RockRokrView::showContextMenu(BaseCategoryModel *model, const QModelIndex &index, const QPoint &pos)
+void RockRokrPage::showContextMenu(BaseCategoryModel *model, const QModelIndex &index, const QPoint &pos)
 {
     const QString hash = model->data(index, BaseCategoryModel::RoleTrackHash).toString();
     const AudioMetaObject obj = m_libMgr->trackFromHash(hash);
