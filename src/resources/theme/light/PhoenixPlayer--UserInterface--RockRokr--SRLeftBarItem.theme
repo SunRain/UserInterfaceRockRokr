@@ -1,0 +1,26 @@
+#SRLeftBarItem {
+    border: 1px solid #FCFCFC;
+    border-radius: 8px;
+    padding: 0px;
+    background-color: #FCFCFC;
+}
+
+
+#SRLeftBarItem[hoverState="active"] {
+    border: 1px solid #336CFB;
+    border-radius: 8px;
+    padding: 0px;
+    background-color: #336CFB;
+}
+
+#SRLeftBarItemTextLabel {
+    color: #1F2022;
+    border: none;
+    background-color:transparent;
+}
+
+#SRLeftBarItemTextLabel[hoverState="active"] {
+    color: #F4F6FF;
+    border: none;
+    background-color:transparent;
+}

@@ -31,6 +31,7 @@
 #include "view/RockRokrPage.h"
 #include "view/rockrokr/CategoryDetailView.h"
 #include "view/rockrokr/PlayListDetailView.h"
+#include "view/SearchPage.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,6 +65,7 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_importView = new ImportPage;
     m_loadingWidget = new LoadingWidget;
     m_rkView = new RockRokrPage;
+    m_searchPage = new SearchPage;
 
     {
         m_overlayWidget = new RKOverlayWidget;
@@ -79,6 +81,7 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_stack->addWidget(m_loadingWidget);
     m_stack->addWidget(m_rkView);
     m_stack->addWidget(m_overlayWidget);
+    m_stack->addWidget(m_searchPage);
 
     connect(m_importView, &ImportPage::scanStandardMusicPath,
             this, [&]() {
@@ -106,10 +109,12 @@ RKMainWindow::RKMainWindow(QWidget *parent)
         if (m_stack->widget(idx) != m_loadingWidget) {
             m_loadingWidget->stop();
         }
-        if ((m_stack->widget(idx) != m_rkView) && (m_stack->widget(idx) != m_overlayWidget)) {
-            this->setDefaultTitlebarHidden(false);
-        } else {
+        if ((m_stack->widget(idx) == m_rkView) ||
+                (m_stack->widget(idx) == m_overlayWidget) ||
+                (m_stack->widget(idx) == m_searchPage)) {
             this->setDefaultTitlebarHidden(true);
+        } else {
+            this->setDefaultTitlebarHidden(false);
         }
     });
 
@@ -147,6 +152,14 @@ void RKMainWindow::showLoadingView()
 void RKMainWindow::showRockRokrView()
 {
     m_stack->setCurrentIndex(m_stack->indexOf(m_rkView), RKStackedWidget::AnimationTypeNone);
+}
+
+void RKMainWindow::showSearchPage(DataProvider::TrackSearchProvider *provider)
+{
+    if (provider) {
+        m_searchPage->bindTrackSearchProvider(provider);
+    }
+    m_stack->setCurrentIndex(m_stack->indexOf(m_searchPage), RKStackedWidget::AnimationTypeNone);
 }
 
 void RKMainWindow::showPlayingView()

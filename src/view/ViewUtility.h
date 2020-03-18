@@ -12,6 +12,10 @@ namespace PhoenixPlayer {
     class PlayerCore;
     class PlayListMetaMgr;
 
+    namespace DataProvider {
+        class TrackSearchProvider;
+    } // namespace DataProvider
+
     namespace UserInterface {
 
         namespace RockRokr {
@@ -43,6 +47,7 @@ public:
 
     static void menuTrackInfo(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
 
+    static void showSearchPage(DataProvider::TrackSearchProvider *provider);
 };
 
 } //namespace RockRokr

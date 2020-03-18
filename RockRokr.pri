@@ -33,6 +33,8 @@ HEADERS += \
     $$PWD/src/view/MainWindowBGView.h \
     $$PWD/src/view/RockRokrPage.h \
     $$PWD/src/view/SearchPage.h \
+    $$PWD/src/view/searchview/SRLeftBar.h \
+    $$PWD/src/view/searchview/SRLeftBarItem.h \
     $$PWD/src/view/searchview/SearchResultPopup.h \
     $$PWD/src/view/searchview/SearchResultPopupItem.h \
     $$PWD/src/view/titlebar/RockRokrTitleBar.h \
@@ -99,6 +101,8 @@ SOURCES += \
     $$PWD/src/view/MainWindowBGView.cpp \
     $$PWD/src/view/RockRokrPage.cpp \
     $$PWD/src/view/SearchPage.cpp \
+    $$PWD/src/view/searchview/SRLeftBar.cpp \
+    $$PWD/src/view/searchview/SRLeftBarItem.cpp \
     $$PWD/src/view/searchview/SearchResultPopup.cpp \
     $$PWD/src/view/searchview/SearchResultPopupItem.cpp \
     $$PWD/src/view/titlebar/RockRokrTitleBar.cpp \

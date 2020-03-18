@@ -204,6 +204,12 @@ void ViewUtility::menuTrackInfo(QMenu *menu, const AudioMetaObject &obj)
     });
 }
 
+void ViewUtility::showSearchPage(DataProvider::TrackSearchProvider *provider)
+{
+    chkMainWindow();
+    s_mainWindow->showSearchPage(provider);
+}
+
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer

@@ -15,8 +15,8 @@
 #include "widget/RKMarqueeLabel.h"
 #include "widget/ItemFragment.h"
 #include "widget/RKListWidget.h"
-
 #include "SearchResultPopupItem.h"
+#include "view/ViewUtility.h"
 
 DWIDGET_USE_NAMESPACE
 using namespace PhoenixPlayer::DataProvider;
@@ -109,8 +109,9 @@ SearchResultPopup::SearchResultPopup(QWidget *parent)
     connect(m_resultView, &QListWidget::itemClicked,
             this, [&](QListWidgetItem *item) {
         //TODO
+        qDebug()<<" ----------------  m_resultView clicked "<<item;
 
-        qDebug()<<" ----------------  m_resultView clicked "<<item;;
+        ViewUtility::showSearchPage(m_searchProvider);
     });
     connect(m_resultView, &QListWidget::itemEntered,
             this, [&](QListWidgetItem *item) {

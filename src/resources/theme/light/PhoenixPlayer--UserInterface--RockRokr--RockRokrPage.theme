@@ -1,4 +1,4 @@
-#RockRokrView {
+#RockRokrPage {
     color:rgba(0, 0, 0, 0.5);
     background-color: #FFFFFF;
     border:1px solid #F3F3F3;

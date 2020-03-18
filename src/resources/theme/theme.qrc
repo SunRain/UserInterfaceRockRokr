@@ -75,7 +75,7 @@
         <file>light/PhoenixPlayer--UserInterface--RockRokr--VolumeWidget.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--WaveformSlider.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--MainWindowBGView.theme</file>
-        <file>light/PhoenixPlayer--UserInterface--RockRokr--RockRokrView.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--RockRokrPage.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--RKTitleBar.theme</file>
         <file>light/image/KEY_ADDON.svg</file>
         <file>light/image/KEY_SERVICE.svg</file>
@@ -87,5 +87,10 @@
         <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultPopup.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultPopupItem.theme</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--RKListWidget.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--SRLeftBar.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchPage.theme</file>
+        <file>light/image/ic_arrow_back_grey_24px.svg</file>
+        <file>light/image/ic_arrow_back_black_24px.svg</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--SRLeftBarItem.theme</file>
     </qresource>
 </RCC>

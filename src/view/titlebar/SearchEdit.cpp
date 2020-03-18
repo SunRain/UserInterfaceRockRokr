@@ -84,7 +84,7 @@ void SearchEdit::onTextChanged()
 
 void SearchEdit::onReturnPressed()
 {
-    auto text = QString(this->text()).remove(" ");
+    auto text = QString(this->text()).remove(" ").remove("\r").remove("\n");
     if (text.isEmpty()) {
         return;
     }
