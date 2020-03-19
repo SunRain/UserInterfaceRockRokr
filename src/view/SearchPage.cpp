@@ -2,6 +2,10 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QParallelAnimationGroup>
+#include <QPropertyAnimation>
+#include <QResizeEvent>
+#include <QLabel>
 
 #include <DThemeManager>
 
@@ -73,8 +77,6 @@ protected:
     }
 };
 
-
-
 SearchPage::SearchPage(QWidget *parent)
     : QFrame(parent)
 {
@@ -82,15 +84,18 @@ SearchPage::SearchPage(QWidget *parent)
     this->setObjectName("SearchPage");
     DThemeManager::instance()->registerWidget(this);
 
-    m_leftBar = new SRLeftBar;
-    m_leftBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    m_leftBar = new SRLeftBar(this);
+    m_leftBar->setFixedWidth(LEFT_BAR_W);
+
+    m_rPart = new QWidget(this);
+
+    m_bgLabel = new QLabel(this);
 
     m_titlebar  = new RKTitleBar;
     m_titlebar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_titlebar->setDisplayedButtons(RKTitleBar::WindowOptionButton |
                                     RKTitleBar::WindowMinButton |
                                     RKTitleBar::WindowCloseButton);
-//    m_titlebar->bindPopup(m_searchResultPopup);
 
     m_playbar   = new PlayBar;
     m_playbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -110,12 +115,17 @@ SearchPage::SearchPage(QWidget *parent)
     m_leftAnim->setEasingCurve(QEasingCurve::Linear);
     m_leftAnim->setDuration(1000);
 
-    m_rightAnim->setTargetObject(m_titlebar);
+    m_rightAnim->setTargetObject(m_rPart);
     m_rightAnim->setPropertyName("geometry");
     m_rightAnim->setEasingCurve(QEasingCurve::Linear);
     m_rightAnim->setDuration(1000);
 
+
     initUserInterface();
+
+    m_bgLabel->lower();
+    m_leftBar->raise();
+    m_rPart->raise();
 }
 
 SearchPage::~SearchPage()
@@ -129,10 +139,14 @@ void SearchPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *prov
     m_leftBar->setEnabledPlugins(provider->enabledPlugins());
 }
 
+void SearchPage::setBackgroundPixmap(const QPixmap &pm)
+{
+    m_bgLabel->setPixmap(pm);
+}
+
 void SearchPage::showEvent(QShowEvent *event)
 {
     QFrame::showEvent(event);
-
     {
         QRect rcEnd = m_leftBar->geometry();
         QRect rcStart(rcEnd);
@@ -144,9 +158,9 @@ void SearchPage::showEvent(QShowEvent *event)
         qDebug()<<rcStart<<rcEnd;
     }
     {
-        QRect rcEnd = m_titlebar->geometry();
+        QRect rcEnd = m_rPart->geometry();
         QRect rcStart (rcEnd);
-        rcEnd.setX(rcStart.x() + m_titlebar->width()/2);
+        rcStart.setX(rcStart.x() + m_rPart->width()/2);
 
         m_rightAnim->setStartValue(rcStart);
         m_rightAnim->setEndValue(rcEnd);
@@ -154,6 +168,7 @@ void SearchPage::showEvent(QShowEvent *event)
         qDebug()<<rcStart<<rcEnd;
     }
     m_animGroup->start();
+
 }
 
 void SearchPage::hideEvent(QHideEvent *event)
@@ -161,15 +176,22 @@ void SearchPage::hideEvent(QHideEvent *event)
     QFrame::hideEvent(event);
 }
 
-void SearchPage::initUserInterface()
+void SearchPage::resizeEvent(QResizeEvent *event)
 {
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
+    m_bgLabel->setFixedSize(event->size());
 
-    layout->addWidget(m_leftBar);
+    m_leftBar->setFixedHeight(event->size().height());
+    m_leftBar->setGeometry(0, 0, m_leftBar->width(), m_leftBar->height());
 
-    {
+    m_rPart->setFixedWidth(event->size().width() - m_leftBar->width());
+    m_rPart->setFixedHeight(event->size().height());
+    m_rPart->setGeometry(m_leftBar->width(), 0, m_rPart->width(), m_rPart->height());
+
+    QFrame::resizeEvent(event);
+}
+
+void SearchPage::initUserInterface()
+{    
         // title bar
         {
             QHBoxLayout *hb = new QHBoxLayout;
@@ -184,7 +206,7 @@ void SearchPage::initUserInterface()
             hb->addWidget(m_searchEdit, Qt::AlignVCenter);
         }
 
-        QVBoxLayout *vbox = new QVBoxLayout;
+        QVBoxLayout *vbox = new QVBoxLayout(m_rPart);
         vbox->setContentsMargins(0, LEFT_BAR_BT_TB_MARGIN, 0, 0);
         vbox->setSpacing(0);
         {
@@ -197,9 +219,6 @@ void SearchPage::initUserInterface()
             vbox->addLayout(vv);
         }
         vbox->addWidget(m_playbar, 0, Qt::AlignBottom);
-        layout->addLayout(vbox);
-    }
-
 }
 
 

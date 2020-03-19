@@ -159,6 +159,7 @@ void RKMainWindow::showSearchPage(DataProvider::TrackSearchProvider *provider)
     if (provider) {
         m_searchPage->bindTrackSearchProvider(provider);
     }
+    m_searchPage->setBackgroundPixmap(m_stack->currentWidget()->grab());
     m_stack->setCurrentIndex(m_stack->indexOf(m_searchPage), RKStackedWidget::AnimationTypeNone);
 }
 

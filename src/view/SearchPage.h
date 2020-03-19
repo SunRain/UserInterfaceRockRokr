@@ -2,8 +2,11 @@
 #define SEARCHPAGE_H
 
 #include <QFrame>
-#include <QParallelAnimationGroup>
-#include <QPropertyAnimation>
+//#include <QStackedWidget>
+#include <QLabel>
+
+class QParallelAnimationGroup;
+class QPropertyAnimation;
 
 namespace PhoenixPlayer {
     namespace DataProvider {
@@ -26,10 +29,13 @@ public:
 
     void bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider);
 
+    void setBackgroundPixmap(const QPixmap &pm);
+
     // QWidget interface
 protected:
     virtual void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
     virtual void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+    virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 protected:
     void initUserInterface();
@@ -40,6 +46,8 @@ private:
     SPSearchEdit    *m_searchEdit   = Q_NULLPTR;
     PlayBar         *m_playbar      = Q_NULLPTR;
     DataProvider::TrackSearchProvider *m_searchProvider = Q_NULLPTR;
+    QWidget         *m_rPart        = Q_NULLPTR;
+    QLabel          *m_bgLabel      = Q_NULLPTR;
 
     QParallelAnimationGroup *m_animGroup = Q_NULLPTR;
     QPropertyAnimation      *m_leftAnim = Q_NULLPTR;
