@@ -47,7 +47,7 @@ public:
 
     static void menuTrackInfo(QMenu *menu, const PhoenixPlayer::AudioMetaObject &obj);
 
-    static void showSearchPage(DataProvider::TrackSearchProvider *provider);
+    static void showSearchPage();
 };
 
 } //namespace RockRokr

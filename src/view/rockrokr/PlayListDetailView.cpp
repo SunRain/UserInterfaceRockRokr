@@ -22,6 +22,7 @@
 #include "widget/RKLineEdit.h"
 #include "view/ViewUtility.h"
 #include "TrackListModel.h"
+#include "TrackListViewDelegate.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -45,6 +46,7 @@ public:
         m_header->setDisplayAllColumns();
 
         m_dataModel = new TrackListModel;
+        m_delegate = new TrackListViewDelegate;
     }
     virtual ~PlayListDetailViewDataProvider() override
     {
@@ -57,14 +59,23 @@ public:
     {
         return m_header;
     }
-    TrackListModel *dataModel() const Q_DECL_OVERRIDE
+    QAbstractListModel *dataModel() const Q_DECL_OVERRIDE
     {
         return m_dataModel;
+    }
+    virtual QStyledItemDelegate *delegate() const Q_DECL_OVERRIDE
+    {
+        return m_delegate;
+    }
+    virtual void resetDataModelToDefalutState() Q_DECL_OVERRIDE
+    {
+        m_dataModel->resetToDefalutState();
     }
 
 private:
     RKTableHeaderItem           *m_header  = Q_NULLPTR;
     TrackListModel              *m_dataModel = Q_NULLPTR;
+    TrackListViewDelegate       *m_delegate = Q_NULLPTR;
 };
 
 class PlayListDetailTrackView : public BaseTrackView
@@ -97,7 +108,7 @@ public:
 
     void showPlaylist(const PlayListMeta &meta)
     {
-        getModel()->showPlaylist(meta);
+        qobject_cast<TrackListModel*>(getModel())->showPlaylist(meta);
     }
 
     // BaseTrackView interface

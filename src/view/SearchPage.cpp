@@ -13,11 +13,15 @@
 
 #include "rockrokr_global.h"
 #include "searchview/SRLeftBar.h"
+#include "searchview/SearchResultContentView.h"
 #include "playbar/PlayBar.h"
 #include "widget/RKTitleBar.h"
 #include "widget/RKSearchEdit.h"
+#include "widget/RKStackWidget.h"
 
 DWIDGET_USE_NAMESPACE
+
+using namespace PhoenixPlayer::DataProvider;
 
 namespace PhoenixPlayer {
 namespace UserInterface {
@@ -91,6 +95,8 @@ SearchPage::SearchPage(QWidget *parent)
 
     m_bgLabel = new QLabel(this);
 
+    m_stack = new RKStackedWidget;
+
     m_titlebar  = new RKTitleBar;
     m_titlebar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_titlebar->setDisplayedButtons(RKTitleBar::WindowOptionButton |
@@ -113,13 +119,18 @@ SearchPage::SearchPage(QWidget *parent)
     m_leftAnim->setTargetObject(m_leftBar);
     m_leftAnim->setPropertyName("geometry");
     m_leftAnim->setEasingCurve(QEasingCurve::Linear);
-    m_leftAnim->setDuration(1000);
+    m_leftAnim->setDuration(500);
 
     m_rightAnim->setTargetObject(m_rPart);
     m_rightAnim->setPropertyName("geometry");
     m_rightAnim->setEasingCurve(QEasingCurve::Linear);
-    m_rightAnim->setDuration(1000);
+    m_rightAnim->setDuration(500);
 
+    connect(m_animGroup, &QParallelAnimationGroup::finished,
+            this, [&](){
+        m_bgLabel->lower();
+        m_bgLabel->hide();
+    });
 
     initUserInterface();
 
@@ -135,8 +146,55 @@ SearchPage::~SearchPage()
 
 void SearchPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider)
 {
+    if (m_searchProvider == provider) {
+        return;
+    }
+    if (m_searchProvider) {
+        m_searchProvider->disconnect(this);
+    }
+    if (!provider) {
+        return;
+    }
     m_searchProvider = provider;
-    m_leftBar->setEnabledPlugins(provider->enabledPlugins());
+    m_enabledPlugins.clear();
+    m_enabledPlugins.append(provider->enabledPlugins());
+
+    m_leftBar->setEnabledPlugins(m_enabledPlugins);
+
+    for (int i = 0; i < m_stack->count(); ++i) {
+        QWidget *w = m_stack->widget(i);
+        m_stack->removeWidget(w);
+        w->deleteLater();
+        w = Q_NULLPTR;
+    }
+
+    for (int i = 0; i < m_enabledPlugins.count(); ++i) {
+        SearchResultContentView *v = new SearchResultContentView;
+        m_stack->addWidget(v);
+    }
+
+    connect(m_searchProvider, &TrackSearchProvider::matched,
+            this, [&](const QString &pattern, const QList<MatchObject> &objList) {
+
+        m_matchRetMap.clear();
+        for (int i = 0; i < m_enabledPlugins.count(); ++i) {
+            auto plugin = m_enabledPlugins.at(i);
+            QList<MatchObject> list;
+            const QString key = plugin.property.name;
+            foreach (const auto &obj, objList) {
+                if (obj.pluginProperty().name == key) {
+                    list.append(obj);
+                }
+            }
+            m_matchRetMap.insert(key, list);
+
+            SearchResultContentView *widget = qobject_cast<SearchResultContentView*>(m_stack->widget(i));
+            widget->setDataMap(TrackSearchProvider::trim(list));
+        }
+    });
+
+
+
 }
 
 void SearchPage::setBackgroundPixmap(const QPixmap &pm)
@@ -167,6 +225,11 @@ void SearchPage::showEvent(QShowEvent *event)
 
         qDebug()<<rcStart<<rcEnd;
     }
+    m_bgLabel->show();
+    m_leftBar->show();
+    m_leftBar->raise();
+    m_rPart->show();
+    m_rPart->raise();
     m_animGroup->start();
 
 }
@@ -215,7 +278,7 @@ void SearchPage::initUserInterface()
             vv->setSpacing(0);
             vv->addWidget(m_titlebar);
             vv->addSpacing(10);
-//            vv->addWidget(m_stack);
+            vv->addWidget(m_stack);
             vbox->addLayout(vv);
         }
         vbox->addWidget(m_playbar, 0, Qt::AlignBottom);

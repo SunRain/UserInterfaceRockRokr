@@ -76,6 +76,26 @@ SRLeftBar::SRLeftBar(QWidget *parent)
 //        m_pluginView->setCurrentItem(item);
     });
 
+    connect(m_pluginView, &RKListWidget::scrollValueChanged,
+            this, [&](int value) {
+        if (value == 0) {
+            if (m_sepAnimation->state() == QAbstractAnimation::State::Running) {
+                m_sepAnimation->stop();
+            }
+            m_sepAnimation->setStartValue(1.0);
+            m_sepAnimation->setEndValue(0.0);
+            m_sepAnimation->start();
+        } else {
+            if (m_sepAnimation->state() == QAbstractAnimation::State::Running) {
+                return;
+            } else {
+                m_sepAnimation->setStartValue(0.0);
+                m_sepAnimation->setEndValue(1.0);
+                m_sepAnimation->start();
+            }
+        }
+    });
+
     initUserInterface();
 }
 
@@ -146,9 +166,12 @@ void SRLeftBar::initUserInterface()
         hb->addSpacing(LEFT_BAR_ITEM_CONTENT_MARGIN);
         hb->addWidget(title, Qt::AlignVCenter);
 
+        layout->addSpacing(5);
         layout->addLayout(hb);
+        layout->addSpacing(5);
     }
     layout->addWidget(m_hSep);
+    layout->addSpacing(5);
     layout->addWidget(m_pluginView);
 }
 

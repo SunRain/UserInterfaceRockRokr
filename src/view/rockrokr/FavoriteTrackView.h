@@ -23,18 +23,19 @@ namespace PhoenixPlayer {
 class FavoriteTrackViewDataProvider : public BaseTrackViewDataProvider
 {
 public:
-    FavoriteTrackViewDataProvider();
+    explicit FavoriteTrackViewDataProvider();
     virtual ~FavoriteTrackViewDataProvider() override;
 
     // BaseTrackViewDataProvider interface
 public:
     RKTableHeaderItem *headerItem() const Q_DECL_OVERRIDE;
-    TrackListModel *dataModel() const Q_DECL_OVERRIDE;
+    QAbstractListModel *dataModel() const Q_DECL_OVERRIDE;
+    QStyledItemDelegate *delegate() const Q_DECL_OVERRIDE;
     void resetDataModelToDefalutState() Q_DECL_OVERRIDE;
-
 private:
     RKTableHeaderItem           *m_header  = Q_NULLPTR;
     TrackListModel              *m_dataModel = Q_NULLPTR;
+    TrackListViewDelegate       *m_delegate = Q_NULLPTR;
 };
 
 

@@ -6,9 +6,16 @@
 namespace PhoenixPlayer {
     class PlayerCore;
     class PlayListMetaMgr;
+
+    namespace DataProvider {
+        class TrackSearchProvider;
+        class MatchObject;
+    }
+
     namespace MusicLibrary {
         class MusicLibraryManager;
     }
+
 namespace UserInterface {
 namespace RockRokr {
 
@@ -34,6 +41,8 @@ class RockRokrPage : public QFrame
 public:
     explicit RockRokrPage(QWidget *parent = nullptr);
     virtual ~RockRokrPage() override;
+
+    void bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider);
 
     // QWidget interface
 protected:

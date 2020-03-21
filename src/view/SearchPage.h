@@ -2,8 +2,10 @@
 #define SEARCHPAGE_H
 
 #include <QFrame>
-//#include <QStackedWidget>
 #include <QLabel>
+
+#include "PluginMgr.h"
+#include "DataProvider/ITrackSearch.h"
 
 class QParallelAnimationGroup;
 class QPropertyAnimation;
@@ -16,6 +18,7 @@ namespace PhoenixPlayer {
 namespace UserInterface {
 namespace RockRokr {
 
+class RKStackedWidget;
 class SRLeftBar;
 class PlayBar;
 class RKTitleBar;
@@ -48,10 +51,17 @@ private:
     DataProvider::TrackSearchProvider *m_searchProvider = Q_NULLPTR;
     QWidget         *m_rPart        = Q_NULLPTR;
     QLabel          *m_bgLabel      = Q_NULLPTR;
+    RKStackedWidget *m_stack        = Q_NULLPTR;
+
 
     QParallelAnimationGroup *m_animGroup = Q_NULLPTR;
     QPropertyAnimation      *m_leftAnim = Q_NULLPTR;
     QPropertyAnimation      *m_rightAnim = Q_NULLPTR;
+
+    QList<PluginMetaData> m_enabledPlugins;
+
+    //key PluginMetaData->PluginProperty->name
+    QMap<QString, QList<DataProvider::MatchObject>> m_matchRetMap;
 };
 
 } // namespace RockRokr

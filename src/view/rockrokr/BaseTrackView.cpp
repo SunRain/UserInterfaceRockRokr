@@ -49,7 +49,7 @@ BaseTrackView::BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent)
 //    m_uiMgr = new UserInterfaceMgr(this);
 //    m_ui = qobject_cast<UserInterfaceRockRokr*>(m_uiMgr->usedInterface());
 
-    m_delegate = new TrackListViewDelegate;
+//    m_delegate = new TrackListViewDelegate;
 
     m_listView = new RKListView;
     m_listView->setDragEnabled(false);
@@ -65,7 +65,7 @@ BaseTrackView::BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent)
     m_listView->setTableHeaders(m_provider->headerItem()->displayedColumnsWidth());
     m_listView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_listView->setModel(m_provider->dataModel());
-    m_listView->setItemDelegate(m_delegate);
+    m_listView->setItemDelegate(m_provider->delegate());
 
     initUserInterface();
 
@@ -96,6 +96,7 @@ BaseTrackView::BaseTrackView(BaseTrackViewDataProvider *pr, QWidget *parent)
                 //                qDebug()<<Q_FUNC_INFO<<" RKListView::entered entered "<<idx;
 //                m_provider->dataModel()->setCurIdx(idx);
 //        m_listView->update();
+        //TODO
             });
 
     connect(m_listView, &RKListView::customContextMenuRequested,
@@ -155,7 +156,7 @@ RKTableHeaderItem *BaseTrackView::getHeaderItem() const
     return m_provider->headerItem();
 }
 
-TrackListModel *BaseTrackView::getModel() const
+QAbstractListModel *BaseTrackView::getModel() const
 {
     return m_provider->dataModel();
 }

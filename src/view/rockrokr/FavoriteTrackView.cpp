@@ -50,6 +50,8 @@ FavoriteTrackViewDataProvider::FavoriteTrackViewDataProvider()
 
     m_dataModel = new TrackListModel;
     m_dataModel->showFavorites();
+
+    m_delegate = new TrackListViewDelegate;
 }
 
 FavoriteTrackViewDataProvider::~FavoriteTrackViewDataProvider()
@@ -62,9 +64,14 @@ RKTableHeaderItem *FavoriteTrackViewDataProvider::headerItem() const
     return m_header;
 }
 
-TrackListModel *FavoriteTrackViewDataProvider::dataModel() const
+QAbstractListModel *FavoriteTrackViewDataProvider::dataModel() const
 {
     return m_dataModel;
+}
+
+QStyledItemDelegate *FavoriteTrackViewDataProvider::delegate() const
+{
+    return m_delegate;
 }
 
 void FavoriteTrackViewDataProvider::resetDataModelToDefalutState()
@@ -120,7 +127,7 @@ void FavoriteTrackView::showContextMenu(const QPoint &pos)
 
     menu.addAction(tr("UnLike"), [&, obj](){
         m_libraryMgr->setLike(obj, false);
-        getModel()->showFavorites();
+        qobject_cast<TrackListModel*>(getModel())->showFavorites();
     });
 
     ViewUtility::menuAddToQueue(&menu, obj, m_playerCore);

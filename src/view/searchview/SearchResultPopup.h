@@ -33,13 +33,15 @@ public:
 
     void setMaximumHeight(int maxh);
 
+    void bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider);
+
     Q_SLOT void doSearch();
 
 Q_SIGNALS:
     void searchMatched();
 
 protected:
-    void initProvider();
+//    void initProvider();
 
     void searchByAllPluginBtnEntered();
     void searchByAllPluginBtnLeave();

@@ -363,7 +363,8 @@ void RKTableHeaderItem::calcColumnsWidth()
         f.setPixelSize(m_fontSize);
         QFontMetrics fm(f);
         // pixel2point p *96/72
-        const int w = fm.width("00:00") *96/72 + MUSIC_LIST_ITEM_DURATION_R_MARGIN;
+//        const int w = fm.width("00:00") *96/72 + MUSIC_LIST_ITEM_DURATION_R_MARGIN;
+        const int w = fm.horizontalAdvance("00:00") *96/72 + MUSIC_LIST_ITEM_DURATION_R_MARGIN;
         m_displayedColumn.insert(HeaderDuration, w);
         rectWidth -= w;
         --keySize;

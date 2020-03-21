@@ -21,6 +21,8 @@
 #include "PPSettings.h"
 #include "MusicLibrary/MusicLibraryManager.h"
 #include "MusicLibrary/LocalMusicScanner.h"
+#include "DataProvider/TrackSearchProvider.h"
+#include "DataProvider/ITrackSearch.h"
 
 #include "rockrokr_global.h"
 #include "widget/LoadingWidget.h"
@@ -44,6 +46,7 @@ RKMainWindow::RKMainWindow(QWidget *parent)
       m_ppSettings(new PPSettings(this)),
 //      m_libraryMgr(new MusicLibrary::MusicLibraryManager(this)),
       m_localMSC(new MusicLibrary::LocalMusicScanner(this)),
+      m_searchProvider(new DataProvider::TrackSearchProvider(this)),
       m_defaultTitlebarH(this->titlebar()->height())
 {
     this->setMouseTracking(true);
@@ -65,7 +68,9 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_importView = new ImportPage;
     m_loadingWidget = new LoadingWidget;
     m_rkView = new RockRokrPage;
+    m_rkView->bindTrackSearchProvider(m_searchProvider);
     m_searchPage = new SearchPage;
+    m_searchPage->bindTrackSearchProvider(m_searchProvider);
 
     {
         m_overlayWidget = new RKOverlayWidget;
@@ -154,11 +159,8 @@ void RKMainWindow::showRockRokrView()
     m_stack->setCurrentIndex(m_stack->indexOf(m_rkView), RKStackedWidget::AnimationTypeNone);
 }
 
-void RKMainWindow::showSearchPage(DataProvider::TrackSearchProvider *provider)
+void RKMainWindow::showSearchPage()
 {
-    if (provider) {
-        m_searchPage->bindTrackSearchProvider(provider);
-    }
     m_searchPage->setBackgroundPixmap(m_stack->currentWidget()->grab());
     m_stack->setCurrentIndex(m_stack->indexOf(m_searchPage), RKStackedWidget::AnimationTypeNone);
 }

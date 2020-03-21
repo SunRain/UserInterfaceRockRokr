@@ -111,7 +111,7 @@ SearchResultPopup::SearchResultPopup(QWidget *parent)
         //TODO
         qDebug()<<" ----------------  m_resultView clicked "<<item;
 
-        ViewUtility::showSearchPage(m_searchProvider);
+        ViewUtility::showSearchPage();
     });
     connect(m_resultView, &QListWidget::itemEntered,
             this, [&](QListWidgetItem *item) {
@@ -143,7 +143,7 @@ SearchResultPopup::SearchResultPopup(QWidget *parent)
         m_searchProvider->search(m_searchStr, ITrackSearch::MatchAll);
     });
 
-    initProvider();
+//    initProvider();
 }
 
 SearchResultPopup::~SearchResultPopup()
@@ -206,6 +206,51 @@ void SearchResultPopup::setMaximumHeight(int maxh)
     QFrame::setMaximumHeight(maxh);
 }
 
+void SearchResultPopup::bindTrackSearchProvider(TrackSearchProvider *provider)
+{
+    if (m_searchProvider == provider) {
+        return;
+    }
+    if (m_searchProvider) {
+        m_searchProvider->disconnect(this);
+    }
+    if (!provider) {
+        return;
+    }
+    m_searchProvider = provider;
+
+    connect(m_searchProvider, &TrackSearchProvider::matched,
+            this, [&](const QString &pattern, const QList<MatchObject> &objList) {
+        if (m_searchStr != pattern) {
+            return;
+        }
+        m_resultView->clear();
+        m_resultObjList.clear();
+        m_resultObjList.append(objList);
+
+        foreach(const auto &it, m_resultObjList) {
+            QListWidgetItem *item = new QListWidgetItem(m_resultView);
+            m_resultView->addItem(item);
+
+            SearchResultPopupItem *sm = new SearchResultPopupItem;
+            sm->setObjectName("SearchResultItem");
+            sm->setFixedHeight(_to_px(RET_ITEM_H));
+            sm->setText(it.uri());
+            sm->setSubText(it.matchedStr());
+            m_resultView->setItemWidget(item, sm);
+
+        }
+        Q_EMIT searchMatched();
+    });
+    m_usedPlugins.clear();
+    m_usedPlugins.append(m_searchProvider->enabledPlugins());
+    QStringList ll;
+    foreach (const auto &it, m_usedPlugins) {
+        ll.append(tr("Search by \"%1\"").arg(it.property.name));
+    }
+    m_pluginViewModel->setStringList(ll);
+}
+
 void SearchResultPopup::doSearch()
 {
     if (m_searchStr.isEmpty()) {
@@ -215,42 +260,42 @@ void SearchResultPopup::doSearch()
     m_searchProvider->search(m_searchStr, ITrackSearch::MatchAll);
 }
 
-void SearchResultPopup::initProvider()
-{
-    if (!m_searchProvider) {
-        m_searchProvider = new TrackSearchProvider(this);
-        connect(m_searchProvider, &TrackSearchProvider::matched,
-                this, [&](const QString &pattern, const QList<MatchObject> &objList) {
-            if (m_searchStr != pattern) {
-                return;
-            }
-            m_resultView->clear();
-            m_resultObjList.clear();
-            m_resultObjList.append(objList);
+//void SearchResultPopup::initProvider()
+//{
+//    if (!m_searchProvider) {
+//        m_searchProvider = new TrackSearchProvider(this);
+//        connect(m_searchProvider, &TrackSearchProvider::matched,
+//                this, [&](const QString &pattern, const QList<MatchObject> &objList) {
+//            if (m_searchStr != pattern) {
+//                return;
+//            }
+//            m_resultView->clear();
+//            m_resultObjList.clear();
+//            m_resultObjList.append(objList);
 
-            foreach(const auto &it, m_resultObjList) {
-                QListWidgetItem *item = new QListWidgetItem(m_resultView);
-                m_resultView->addItem(item);
+//            foreach(const auto &it, m_resultObjList) {
+//                QListWidgetItem *item = new QListWidgetItem(m_resultView);
+//                m_resultView->addItem(item);
 
-                SearchResultPopupItem *sm = new SearchResultPopupItem;
-                sm->setObjectName("SearchResultItem");
-                sm->setFixedHeight(_to_px(RET_ITEM_H));
-                sm->setText(it.uri());
-                sm->setSubText(it.matchedStr());
-                m_resultView->setItemWidget(item, sm);
+//                SearchResultPopupItem *sm = new SearchResultPopupItem;
+//                sm->setObjectName("SearchResultItem");
+//                sm->setFixedHeight(_to_px(RET_ITEM_H));
+//                sm->setText(it.uri());
+//                sm->setSubText(it.matchedStr());
+//                m_resultView->setItemWidget(item, sm);
 
-            }
-            Q_EMIT searchMatched();
-        });
-    }
-    m_usedPlugins.clear();
-    m_usedPlugins.append(m_searchProvider->enabledPlugins());
-    QStringList ll;
-    foreach (const auto &it, m_usedPlugins) {
-        ll.append(tr("Search by \"%1\"").arg(it.property.name));
-    }
-    m_pluginViewModel->setStringList(ll);
-}
+//            }
+//            Q_EMIT searchMatched();
+//        });
+//    }
+//    m_usedPlugins.clear();
+//    m_usedPlugins.append(m_searchProvider->enabledPlugins());
+//    QStringList ll;
+//    foreach (const auto &it, m_usedPlugins) {
+//        ll.append(tr("Search by \"%1\"").arg(it.property.name));
+//    }
+//    m_pluginViewModel->setStringList(ll);
+//}
 
 void SearchResultPopup::searchByAllPluginBtnEntered()
 {

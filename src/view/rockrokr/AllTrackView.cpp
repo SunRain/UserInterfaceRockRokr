@@ -122,6 +122,8 @@ AllTrackViewDataProvider::AllTrackViewDataProvider()
 
     m_dataModel = new TrackListModel;
     m_dataModel->showAllTracks();
+
+    m_delegate = new TrackListViewDelegate;
 }
 
 AllTrackViewDataProvider::~AllTrackViewDataProvider()
@@ -134,9 +136,14 @@ RKTableHeaderItem *AllTrackViewDataProvider::headerItem() const
     return m_header;
 }
 
-TrackListModel *AllTrackViewDataProvider::dataModel() const
+QAbstractListModel *AllTrackViewDataProvider::dataModel() const
 {
     return m_dataModel;
+}
+
+QStyledItemDelegate *AllTrackViewDataProvider::delegate() const
+{
+    return m_delegate;
 }
 
 void AllTrackViewDataProvider::resetDataModelToDefalutState()

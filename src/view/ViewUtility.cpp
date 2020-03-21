@@ -204,10 +204,10 @@ void ViewUtility::menuTrackInfo(QMenu *menu, const AudioMetaObject &obj)
     });
 }
 
-void ViewUtility::showSearchPage(DataProvider::TrackSearchProvider *provider)
+void ViewUtility::showSearchPage()
 {
     chkMainWindow();
-    s_mainWindow->showSearchPage(provider);
+    s_mainWindow->showSearchPage();
 }
 
 } //namespace RockRokr

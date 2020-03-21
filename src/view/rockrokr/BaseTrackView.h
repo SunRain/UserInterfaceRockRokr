@@ -2,6 +2,7 @@
 #define BASETRACKVIEW_H
 
 #include <QFrame>
+#include <QStyledItemDelegate>
 #include "AudioMetaObject.h"
 
 #include "TrackListModel.h"
@@ -29,11 +30,9 @@ public:
     virtual ~BaseTrackViewDataProvider() {};
 
     virtual RKTableHeaderItem *headerItem() const = 0;
-    virtual TrackListModel *dataModel() const = 0;
-    virtual void resetDataModelToDefalutState()
-    {
-        dataModel()->resetToDefalutState();
-    }
+    virtual QAbstractListModel *dataModel() const = 0;
+    virtual QStyledItemDelegate *delegate() const = 0;
+    virtual void resetDataModelToDefalutState() = 0;
 };
 
 class BaseTrackView : public QFrame
@@ -62,7 +61,7 @@ protected:
     virtual void onClicked(const QModelIndex &index) {}
 
     RKTableHeaderItem *getHeaderItem() const;
-    TrackListModel *getModel() const;
+    QAbstractListModel *getModel() const;
 
     inline BaseTrackViewDataProvider *dataProvider() const
     {
@@ -87,7 +86,7 @@ private:
 //    PlayListMetaMgr             *m_plsMetaMgr = Q_NULLPTR;
 
     RKListView                  *m_listView = Q_NULLPTR;
-    TrackListViewDelegate       *m_delegate = Q_NULLPTR;
+//    TrackListViewDelegate       *m_delegate = Q_NULLPTR;
     BaseTrackViewDataProvider   *m_provider = Q_NULLPTR;
 //    UserInterfaceMgr            *m_uiMgr    = Q_NULLPTR;
 //    UserInterfaceRockRokr       *m_ui       = Q_NULLPTR;

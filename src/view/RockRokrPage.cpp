@@ -204,6 +204,11 @@ RockRokrPage::~RockRokrPage()
     }
 }
 
+void RockRokrPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider)
+{
+    m_searchResultPopup->bindTrackSearchProvider(provider);
+}
+
 void RockRokrPage::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);

@@ -17,6 +17,7 @@ namespace PhoenixPlayer {
 
     namespace DataProvider {
         class TrackSearchProvider;
+        class MatchObject;
     } // namespace DataProvider
 
     namespace MusicLibrary {
@@ -55,7 +56,7 @@ public:
 
     void showRockRokrView();
 
-    void showSearchPage(DataProvider::TrackSearchProvider *provider);
+    void showSearchPage();
 
     void showPlayingView();
 
@@ -84,8 +85,8 @@ private:
     QTimer                              *m_tipTimer         = Q_NULLPTR;
 
     PPSettings                          *m_ppSettings       = Q_NULLPTR;
-//    MusicLibrary::MusicLibraryManager   *m_libraryMgr       = Q_NULLPTR;
     MusicLibrary::LocalMusicScanner     *m_localMSC         = Q_NULLPTR;
+    DataProvider::TrackSearchProvider   *m_searchProvider   = Q_NULLPTR;
 
     RKStackedWidget                     *m_stack            = Q_NULLPTR;
     LeftBar                             *m_leftBar          = Q_NULLPTR;
@@ -97,7 +98,7 @@ private:
 
     DTK_WIDGET_NAMESPACE::DToast        *m_tip              = Q_NULLPTR;
     DTK_WIDGET_NAMESPACE::DToast        *m_toast            = Q_NULLPTR;
-    const int                           m_defaultTitlebarH  = 0;
+    int                                 m_defaultTitlebarH  = 0;
 };
 
 } //namespace RockRokr
