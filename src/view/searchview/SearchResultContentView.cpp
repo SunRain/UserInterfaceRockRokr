@@ -85,21 +85,13 @@ public:
         QList<MatchObject> list = m_dataList.value(m_keyList.at(index.row()));
 
         switch (role) {
-        case RoleCurIdx:
-            return index == m_curIdx;
+
         case RoleMatchTypes: {
             ITrackSearch::MatchTypes t = ITrackSearch::MatchUndefined;
             foreach (const auto &it, list) {
                 t |= it.matchType();
             }
             return (int)t;
-        }
-        case RolePlayingState: {
-            //TODO
-//            if (m_playerCore->curTrackMetaObject().hash() == obj.hash()) {
-//                return m_playerCore->playBackendStateInt();
-//            }
-            return -1;
         }
         case RoleMatchFilePathObject: {
             foreach (const auto &it, list) {
@@ -121,10 +113,69 @@ public:
             }
             return QVariant();
         }
+        case RoleMatchArtistNameObject: {
+            //TODO
+            return QVariant();
+        }
+        case RoleMatchAlbumNameObject: {
+            //TODO
+            return QVariant();
+        }
+        case RoleAlbumImageUrl: {
+            //TODO
+            return QVariant();
+        }
+        case RoleAlbumName: {
+            //TODO
+            return QVariant();
+        }
+        case RoleArtistImageUri: {
+            return QVariant();
+        }
+        case RoleArtistName: {
+            return QVariant();
+        }
+        case RoleCoverArtLarge: {
+            return QVariant();
+        }
+        case RoleCoverArtMiddle:{
+            return QVariant();
+        }
+        case RoleCoverArtSmall: {
+            return QVariant();
+        }
+        case RoleHash: {
+            return QVariant();
+        }
+        case RoleMediaType: {
+            return QVariant();
+        }
+        case RoleSongTitle: {
+            QString str = list.first().audioMetaObject().trackMeta().title();
+            if (str.isEmpty()) {
+                str = list.first().audioMetaObject().name();
+            }
+            return str;
+        }
+        case RoleTrackImageUri: {
+            return list.first().audioMetaObject().queryImgUri();
+        }
 
+        case RoleDuration: {
+            return QVariant();
+        }
+        case RolePlayingState: {
+            //TODO
+//            if (m_playerCore->curTrackMetaObject().hash() == obj.hash()) {
+//                return m_playerCore->playBackendStateInt();
+//            }
+            return -1;
+        }
 
-        //TODO
-
+        case RoleCurIdx:
+            return index == m_curIdx;
+        default:
+            return QVariant();
         }
         return QVariant();
     }
@@ -340,40 +391,57 @@ public:
             const int textWidth = columnMap.value(RKTableHeaderItem::HeaderTitle);
             QString text = index.data(SearchResultContentViewModel::RoleSongTitle).toString();
             QFont font = option.font;
-            font.setPixelSize(_to_font_px(S_FONT_SIZE));
+            font.setPixelSize(S_FONT_SIZE);
+            font.setBold(false);
+            painter->setFont(font);
             QFontMetrics fm(font);
-            qreal textY = rect.y() + (rect.height() - S_FONT_SIZE)/2;
+            qreal textY = 0;
 
             if (text.isEmpty()) {
                 text = tr("Unknow");
             }
             if (((matchTypes & ITrackSearch::MatchTrackName) == ITrackSearch::MatchTrackName)
                     || ((matchTypes & ITrackSearch::MatchFilePath) == ITrackSearch::MatchFilePath)) {
-//                MatchObject mo = index.data(SearchResultContentViewModel::RoleMatchTrackNameObject).value<MatchObject>();
                 QVariant va = index.data(SearchResultContentViewModel::RoleMatchTrackNameObject);
                 if (va.isNull() || !va.isValid()) {
                     va = index.data(SearchResultContentViewModel::RoleMatchFilePathObject);
                 }
-                if (va.canConvert<MatchObject>()) {
-                    qDebug()<<" --------------------- can convert";
-                } else {
-                    qDebug()<<" --------------------- not can convert";
-                }
                 MatchObject mo = va.value<MatchObject>();
-
-
-
-
-
-
+                const QString queryStr = mo.queryStr();
+                if (!text.contains(queryStr)) {
+                    const QRectF tf(titleX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
+                    painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
+                } else {
+                    const int idx = text.indexOf(queryStr);
+                    const int lw = fm.horizontalAdvance(text.left(idx));
+                    const int mw = fm.horizontalAdvance(queryStr);
+                    const int rw = textWidth - lw - mw - _to_px(4);
+                    int xpos = titleX + _to_px(2);
+                    {
+                        const QRectF tf(xpos, textY, lw, rect.height());
+                        painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text.left(idx));
+                        xpos += lw;
+                    }
+                    {
+                        font.setBold(true);
+                        painter->setFont(font);
+                        const QRectF tf(xpos, textY, mw, rect.height());
+                        painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, queryStr);
+                        xpos += mw;
+                    }
+                    {
+                        font.setBold(false);
+                        painter->setFont(font);
+                        const QRectF tf(xpos, textY, rw, rect.height());
+                        painter->drawText(tf,
+                                          Qt::AlignLeft | Qt::AlignVCenter,
+                                          text.right(text.length() - idx - queryStr.length()));
+                    }
+                }
             } else {
-                const QRectF tf(painterX+_to_px(2), textY, textWidth - _to_px(4), S_FONT_SIZE);
+                const QRectF tf(titleX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
                 painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
             }
-
-
-
-
         }
 
 
@@ -461,10 +529,18 @@ void SearchResultContentViewDataProvider::resetDataModelToDefalutState()
     // dummy
 }
 
+/**************************************************************************************************
+ *
+ *
+ *
+ *
+ **************************************************************************************************/
+
 SearchResultContentView::SearchResultContentView(QWidget *parent)
     : BaseTrackView(new SearchResultContentViewDataProvider, parent)
 {
-    //TODO
+    this->setObjectName("SearchResultContentView");
+    DThemeManager::instance()->registerWidget(this);
 }
 
 SearchResultContentView::~SearchResultContentView()

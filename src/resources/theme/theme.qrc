@@ -92,5 +92,6 @@
         <file>light/image/ic_arrow_back_grey_24px.svg</file>
         <file>light/image/ic_arrow_back_black_24px.svg</file>
         <file>light/PhoenixPlayer--UserInterface--RockRokr--SRLeftBarItem.theme</file>
+        <file>light/PhoenixPlayer--UserInterface--RockRokr--SearchResultContentView.theme</file>
     </qresource>
 </RCC>
