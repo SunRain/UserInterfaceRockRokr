@@ -9,6 +9,7 @@
 #include <DHiDPIHelper>
 #include <DDesktopServices>
 
+#include "PPUtility.h"
 #include "DataProvider/ITrackSearch.h"
 
 #include "rockrokr_global.h"
@@ -114,11 +115,23 @@ public:
             return QVariant();
         }
         case RoleMatchArtistNameObject: {
-            //TODO
+            foreach (const auto &it, list) {
+                if (it.matchType() == ITrackSearch::MatchArtistName) {
+                    QVariant v;
+                    v.setValue(it);
+                    return v;
+                }
+            }
             return QVariant();
         }
         case RoleMatchAlbumNameObject: {
-            //TODO
+            foreach (const auto &it, list) {
+                if (it.matchType() == ITrackSearch::MatchAlbumName) {
+                    QVariant v;
+                    v.setValue(it);
+                    return v;
+                }
+            }
             return QVariant();
         }
         case RoleAlbumImageUrl: {
@@ -126,14 +139,13 @@ public:
             return QVariant();
         }
         case RoleAlbumName: {
-            //TODO
-            return QVariant();
+            return list.first().audioMetaObject().albumMeta().name();
         }
         case RoleArtistImageUri: {
             return QVariant();
         }
         case RoleArtistName: {
-            return QVariant();
+            return list.first().audioMetaObject().artistMeta().name();
         }
         case RoleCoverArtLarge: {
             return QVariant();
@@ -162,7 +174,7 @@ public:
         }
 
         case RoleDuration: {
-            return QVariant();
+            return PPUtility::formateSongDuration(list.first().audioMetaObject().trackMeta().duration());
         }
         case RolePlayingState: {
             //TODO
@@ -371,35 +383,57 @@ public:
         int durationX = albumX + columnMap.value(RKTableHeaderItem::HeaderAlbum);
         int matchTypes = index.data(SearchResultContentViewModel::RoleMatchTypes).toInt();
 
-        qDebug()<<" ------------ matchTypes "<<matchTypes;
-
-
-#define DRAW_TEXT(role, textWidth) \
-    QString text = index.data(role).toString(); \
+#define INIT_BASE(titleRole, contentRole) \
+    const int textWidth = columnMap.value(titleRole); \
+    QString text = index.data(contentRole).toString(); \
+    QFont font = option.font; \
+    font.setPixelSize(S_FONT_SIZE); \
+    font.setBold(false); \
+    painter->setFont(font); \
+    QFontMetrics fm(font); \
+    qreal textY = rect.y(); \
     if (text.isEmpty()) { \
         text = tr("Unknow"); \
-    } \
-    QFont font = option.font; \
-    font.setPixelSize(_to_font_px(S_FONT_SIZE)); \
-    QFontMetrics fm(font); \
-    const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - _to_px(4)); \
-    qreal textY = rect.y() + (rect.height() - S_FONT_SIZE)/2; \
-    const QRectF tf(painterX+_to_px(2), textY, textWidth - _to_px(4), S_FONT_SIZE); \
-    painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
+    }
+
+#define DRAW_QUERY(matchObj, pos) \
+    const QString queryStr = matchObj.queryStr(); \
+    if (!text.contains(queryStr)) { \
+        const QRectF tf(pos+_to_px(2), textY, textWidth - _to_px(4), rect.height()); \
+        painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text); \
+    } else { \
+        const int idx = text.indexOf(queryStr); \
+        const int lw = fm.horizontalAdvance(text.left(idx)); \
+        const int mw = fm.horizontalAdvance(queryStr); \
+        const int rw = textWidth - lw - mw - _to_px(4); \
+        int xpos = pos + _to_px(2); \
+        { \
+            const QRectF tf(xpos, textY, lw, rect.height()); \
+            painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text.left(idx)); \
+            xpos += lw; \
+        } \
+        { \
+            font.setBold(true); \
+            painter->setFont(font); \
+            const QRectF tf(xpos, textY, mw, rect.height()); \
+            painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, queryStr); \
+            xpos += mw; \
+        } \
+        { \
+            font.setBold(false); \
+            painter->setFont(font); \
+            const QRectF tf(xpos, textY, rw, rect.height()); \
+            painter->drawText(tf, \
+                              Qt::AlignLeft | Qt::AlignVCenter, \
+                              text.right(text.length() - idx - queryStr.length())); \
+        } \
+    }
+
+
         // title
         {
-            const int textWidth = columnMap.value(RKTableHeaderItem::HeaderTitle);
-            QString text = index.data(SearchResultContentViewModel::RoleSongTitle).toString();
-            QFont font = option.font;
-            font.setPixelSize(S_FONT_SIZE);
-            font.setBold(false);
-            painter->setFont(font);
-            QFontMetrics fm(font);
-            qreal textY = 0;
+            INIT_BASE(RKTableHeaderItem::HeaderTitle, SearchResultContentViewModel::RoleSongTitle)
 
-            if (text.isEmpty()) {
-                text = tr("Unknow");
-            }
             if (((matchTypes & ITrackSearch::MatchTrackName) == ITrackSearch::MatchTrackName)
                     || ((matchTypes & ITrackSearch::MatchFilePath) == ITrackSearch::MatchFilePath)) {
                 QVariant va = index.data(SearchResultContentViewModel::RoleMatchTrackNameObject);
@@ -407,52 +441,66 @@ public:
                     va = index.data(SearchResultContentViewModel::RoleMatchFilePathObject);
                 }
                 MatchObject mo = va.value<MatchObject>();
-                const QString queryStr = mo.queryStr();
-                if (!text.contains(queryStr)) {
-                    const QRectF tf(titleX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
-                    painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
-                } else {
-                    const int idx = text.indexOf(queryStr);
-                    const int lw = fm.horizontalAdvance(text.left(idx));
-                    const int mw = fm.horizontalAdvance(queryStr);
-                    const int rw = textWidth - lw - mw - _to_px(4);
-                    int xpos = titleX + _to_px(2);
-                    {
-                        const QRectF tf(xpos, textY, lw, rect.height());
-                        painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text.left(idx));
-                        xpos += lw;
-                    }
-                    {
-                        font.setBold(true);
-                        painter->setFont(font);
-                        const QRectF tf(xpos, textY, mw, rect.height());
-                        painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, queryStr);
-                        xpos += mw;
-                    }
-                    {
-                        font.setBold(false);
-                        painter->setFont(font);
-                        const QRectF tf(xpos, textY, rw, rect.height());
-                        painter->drawText(tf,
-                                          Qt::AlignLeft | Qt::AlignVCenter,
-                                          text.right(text.length() - idx - queryStr.length()));
-                    }
-                }
+                DRAW_QUERY(mo, titleX)
             } else {
                 const QRectF tf(titleX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
                 painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
             }
         }
+        // artist
+        {
+            INIT_BASE(RKTableHeaderItem::HeaderArtist, SearchResultContentViewModel::RoleArtistName)
 
+            if ((matchTypes & ITrackSearch::MatchArtistName) == ITrackSearch::MatchArtistName) {
+                QVariant va = index.data(SearchResultContentViewModel::RoleMatchArtistNameObject);
+                if (va.isNull() || !va.isValid()) {
+                    const QRectF tf(artistX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
+                    painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
+                } else {
+                    MatchObject mo = va.value<MatchObject>();
+                    DRAW_QUERY(mo, artistX)
+                }
+            } else {
+                const QRectF tf(artistX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
+                painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
+            }
+        }
+        //album
+        {
+            INIT_BASE(RKTableHeaderItem::HeaderAlbum, SearchResultContentViewModel::RoleAlbumName)
 
-
-
-
-
-
-
-
-
+            if ((matchTypes & ITrackSearch::MatchAlbumName) == ITrackSearch::MatchAlbumName) {
+                QVariant va = index.data(SearchResultContentViewModel::RoleMatchAlbumNameObject);
+                if (va.isNull() || !va.isValid()) {
+                    const QRectF tf(albumX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
+                    painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
+                } else {
+                    MatchObject mo = va.value<MatchObject>();
+                    DRAW_QUERY(mo, albumX)
+                }
+            } else {
+                const QRectF tf(albumX+_to_px(2), textY, textWidth - _to_px(4), rect.height());
+                painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, text);
+            }
+        }
+        //duration
+        {
+            painter->setPen(timeTextColor);
+            painter->setBrush(timeTextColor);
+            const int textWidth = columnMap.value(RKTableHeaderItem::HeaderDuration);
+            QString text = index.data(SearchResultContentViewModel::RoleDuration).toString();
+            if (text.isEmpty()) {
+                text = tr("Unknow");
+            }
+            QFont font = option.font;
+            font.setPixelSize(S_FONT_SIZE);
+            painter->setFont(font);
+            QFontMetrics fm(font);
+            const QString str = fm.elidedText(text, Qt::ElideRight, textWidth - _to_px(4));
+            qreal textY = rect.y();
+            const QRectF tf(durationX, textY, textWidth - _to_px(4), rect.height());
+            painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, str);
+        }
     }
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE
     {
