@@ -37,6 +37,8 @@ RKTitleBar::RKTitleBar(QWidget *parent)
     });
 
     m_contentWidget = new QWidget;
+    m_contentWidget->setObjectName("ContentWidget");
+    m_contentWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Ignored);
 
     m_optionBtn = new DWindowOptionButton;
     m_optionBtn->setEnabled(false);
@@ -83,8 +85,6 @@ void RKTitleBar::setDisplayedButtons(DisplayedButtons buttons)
 {
     m_buttons = buttons;
 
-    int contentWidth = this->width();
-
     m_mainLayout->removeWidget(m_backBtn);
     m_backBtn->setEnabled(false);
     m_backBtn->hide();
@@ -103,38 +103,22 @@ void RKTitleBar::setDisplayedButtons(DisplayedButtons buttons)
         m_backBtn->setEnabled(true);
         m_backBtn->show();
         m_mainLayout->insertWidget(0, m_backBtn);
-
-        contentWidth -= m_backBtn->width();
-        contentWidth -= ICON_LY_SPACING;
     }
     if ((buttons & WindowCloseButton) == WindowCloseButton) {
         m_closeBtn->setEnabled(true);
         m_closeBtn->show();
         m_iconLayout->insertWidget(0, m_closeBtn);
-
-        contentWidth -= m_closeBtn->width();
-        contentWidth -= ICON_LY_SPACING;
     }
     if ((buttons & WindowMinButton) == WindowMinButton) {
         m_minimizeBtn->setEnabled(true);
         m_minimizeBtn->show();
         m_iconLayout->insertWidget(0, m_minimizeBtn);
-        contentWidth -= m_minimizeBtn->width();
-
-        contentWidth -= ICON_LY_SPACING;
     }
     if ((buttons & WindowOptionButton) == WindowOptionButton) {
         m_optionBtn->setEnabled(true);
         m_optionBtn->show();
         m_iconLayout->insertWidget(0, m_optionBtn);
-
-        contentWidth -= m_optionBtn->width();
-        contentWidth -= ICON_LY_SPACING;
     }
-
-    contentWidth -= MAIN_LY_R_SPACING;
-
-    m_contentWidget->setFixedSize(contentWidth, this->height());
 }
 
 QSize RKTitleBar::sizeHint() const
@@ -145,6 +129,7 @@ QSize RKTitleBar::sizeHint() const
 void RKTitleBar::resizeEvent(QResizeEvent *event)
 {
     m_backBtn->setFixedSize(m_optionBtn->size());
+    m_contentWidget->setFixedHeight(event->size().height());
     setDisplayedButtons(m_buttons);
     QFrame::resizeEvent(event);
 }
