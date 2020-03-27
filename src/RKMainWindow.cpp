@@ -34,6 +34,7 @@
 #include "view/rockrokr/CategoryDetailView.h"
 #include "view/rockrokr/PlayListDetailView.h"
 #include "view/SearchPage.h"
+#include "view/searchview/SearchResultPopup.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,7 +45,6 @@ namespace RockRokr {
 RKMainWindow::RKMainWindow(QWidget *parent)
     : DMainWindow(parent),
       m_ppSettings(new PPSettings(this)),
-//      m_libraryMgr(new MusicLibrary::MusicLibraryManager(this)),
       m_localMSC(new MusicLibrary::LocalMusicScanner(this)),
       m_searchProvider(new DataProvider::TrackSearchProvider(this)),
       m_defaultTitlebarH(this->titlebar()->height())
@@ -55,38 +55,43 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_mainWidget->resize(MAIN_WINDOW_W, MAIN_WINDOW_H);
     this->setCentralWidget(m_mainWidget);
 
-    QVBoxLayout *ly = new QVBoxLayout(m_mainWidget);
-    ly->setContentsMargins(0, 0, 0, 0);
-    ly->setSpacing(0);
+    m_searchResultPopup = new SearchResultPopup(this);
+    m_searchResultPopup->bindTrackSearchProvider(m_searchProvider);
 
-    m_stack = new RKStackedWidget(m_mainWidget);
-    m_stack->setContentsMargins(0, 0, 0, 0);
-    m_stack->setFadeEnable(true);
-    m_stack->setDuration(600);
-    ly->addWidget(m_stack);
+    {
+        QVBoxLayout *ly = new QVBoxLayout(m_mainWidget);
+        ly->setContentsMargins(0, 0, 0, 0);
+        ly->setSpacing(0);
 
-    m_importView = new ImportPage;
-    m_loadingWidget = new LoadingWidget;
-    m_rkView = new RockRokrPage;
-    m_rkView->bindTrackSearchProvider(m_searchProvider);
-    m_searchPage = new SearchPage;
-    m_searchPage->bindTrackSearchProvider(m_searchProvider);
+        m_stack = new RKStackedWidget(m_mainWidget);
+        m_stack->setContentsMargins(0, 0, 0, 0);
+        m_stack->setFadeEnable(true);
+        m_stack->setDuration(600);
+        ly->addWidget(m_stack);
+
+        m_importView = new ImportPage;
+        m_loadingWidget = new LoadingWidget;
+        m_rkPage = new RockRokrPage;
+        m_rkPage->bindSearchResultPopup(m_searchResultPopup);
+        m_searchPage = new SearchPage;
+        m_searchPage->bindTrackSearchProvider(m_searchProvider);
+
+        m_stack->addWidget(m_importView);
+        m_stack->addWidget(m_loadingWidget);
+        m_stack->addWidget(m_rkPage);
+        m_stack->addWidget(m_overlayWidget);
+        m_stack->addWidget(m_searchPage);
+    }
 
     {
         m_overlayWidget = new RKOverlayWidget;
 
-        m_rkView->categoryDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
-        m_overlayWidget->addWidget(m_rkView->categoryDetailView());
+        m_rkPage->categoryDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+        m_overlayWidget->addWidget(m_rkPage->categoryDetailView());
 
-        m_rkView->playListDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
-        m_overlayWidget->addWidget(m_rkView->playListDetailView());
+        m_rkPage->playListDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+        m_overlayWidget->addWidget(m_rkPage->playListDetailView());
     }
-
-    m_stack->addWidget(m_importView);
-    m_stack->addWidget(m_loadingWidget);
-    m_stack->addWidget(m_rkView);
-    m_stack->addWidget(m_overlayWidget);
-    m_stack->addWidget(m_searchPage);
 
     connect(m_importView, &ImportPage::scanStandardMusicPath,
             this, [&]() {
@@ -106,7 +111,7 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     connect(m_localMSC, &MusicLibrary::LocalMusicScanner::searchingFinished,
             this, [&]() {
         m_loadingWidget->stop();
-        m_stack->setCurrentWidget(m_rkView, RKStackedWidget::LeftToRight);
+        m_stack->setCurrentWidget(m_rkPage, RKStackedWidget::LeftToRight);
     });
 
     connect(m_stack, &QStackedWidget::currentChanged,
@@ -114,7 +119,7 @@ RKMainWindow::RKMainWindow(QWidget *parent)
         if (m_stack->widget(idx) != m_loadingWidget) {
             m_loadingWidget->stop();
         }
-        if ((m_stack->widget(idx) == m_rkView) ||
+        if ((m_stack->widget(idx) == m_rkPage) ||
                 (m_stack->widget(idx) == m_overlayWidget) ||
                 (m_stack->widget(idx) == m_searchPage)) {
             this->setDefaultTitlebarHidden(true);
@@ -143,20 +148,20 @@ void RKMainWindow::show()
     Dtk::Widget::moveToCenter(this);
 }
 
-void RKMainWindow::showImportView()
+void RKMainWindow::showImportPage()
 {
     m_stack->setCurrentIndex(m_stack->indexOf(m_importView), RKStackedWidget::AnimationTypeNone);
 }
 
-void RKMainWindow::showLoadingView()
+void RKMainWindow::showLoadingPage()
 {
     m_stack->setCurrentIndex(m_stack->indexOf(m_loadingWidget), RKStackedWidget::AnimationTypeNone);
     m_loadingWidget->start();
 }
 
-void RKMainWindow::showRockRokrView()
+void RKMainWindow::showRockRokrPage()
 {
-    m_stack->setCurrentIndex(m_stack->indexOf(m_rkView), RKStackedWidget::AnimationTypeNone);
+    m_stack->setCurrentIndex(m_stack->indexOf(m_rkPage), RKStackedWidget::AnimationTypeNone);
 }
 
 void RKMainWindow::showSearchPage()
@@ -284,7 +289,7 @@ void RKMainWindow::showCategoryDetailView()
     m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
 
     m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
-    m_overlayWidget->setCurrentWidget(m_rkView->categoryDetailView());
+    m_overlayWidget->setCurrentWidget(m_rkPage->categoryDetailView());
 }
 
 void RKMainWindow::showPlaylistDetailView()
@@ -292,7 +297,7 @@ void RKMainWindow::showPlaylistDetailView()
     m_overlayWidget->setBackgroundPixmap(m_stack->grab(m_stack->rect()));
 
     m_stack->setCurrentWidget(m_overlayWidget, RKStackedWidget::AnimationType::AnimationTypeNone);
-    m_overlayWidget->setCurrentWidget(m_rkView->playListDetailView());
+    m_overlayWidget->setCurrentWidget(m_rkPage->playListDetailView());
 }
 
 void RKMainWindow::resizeEvent(QResizeEvent *event)

@@ -42,7 +42,9 @@ public:
     explicit RockRokrPage(QWidget *parent = nullptr);
     virtual ~RockRokrPage() override;
 
-    void bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider);
+//    void bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider);
+
+    void bindSearchResultPopup(SearchResultPopup *pop);
 
     // QWidget interface
 protected:
@@ -76,7 +78,7 @@ private:
     FavoriteTrackView   *m_favTrackView     = Q_NULLPTR;
     CategoryDetailView  *m_ctgDetailView    = Q_NULLPTR;
     PlayListDetailView  *m_plsDetailView    = Q_NULLPTR;
-    SearchResultPopup   *m_searchResultPopup = Q_NULLPTR;
+//    SearchResultPopup   *m_searchResultPopup = Q_NULLPTR;
     PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
     MusicLibrary::MusicLibraryManager   *m_libMgr       = Q_NULLPTR;
 };

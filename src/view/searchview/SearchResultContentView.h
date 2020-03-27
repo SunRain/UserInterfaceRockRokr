@@ -7,8 +7,12 @@
 #include "view/rockrokr/BaseTrackView.h"
 
 namespace PhoenixPlayer {
-namespace UserInterface {
-namespace RockRokr {
+    class PlayerCore;
+    class PlayListMetaMgr;
+
+    namespace UserInterface {
+
+        namespace RockRokr {
 
 class RKTableHeaderItem;
 class SearchResultContentViewModel;
@@ -55,6 +59,10 @@ protected:
 protected:
     virtual void showContextMenu(const QPoint &pos) Q_DECL_OVERRIDE;
     virtual void onClicked(const QModelIndex &index) Q_DECL_OVERRIDE;
+
+private:
+    PlayerCore                          *m_playerCore   = Q_NULLPTR;
+    PlayListMetaMgr                     *m_plsMetaMgr   = Q_NULLPTR;
 };
 
 

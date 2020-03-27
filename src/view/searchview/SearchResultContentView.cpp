@@ -4,16 +4,21 @@
 #include <QSortFilterProxyModel>
 #include <QStyledItemDelegate>
 #include <QPainter>
+#include <QMenu>
+#include <QStyleFactory>
 
 #include <DThemeManager>
 #include <DHiDPIHelper>
 #include <DDesktopServices>
 
 #include "PPUtility.h"
+#include "PlayerCore/PlayerCore.h"
+#include "PlayerCore/PlayListMetaMgr.h"
 #include "DataProvider/ITrackSearch.h"
 
 #include "rockrokr_global.h"
 #include "RKUtility.h"
+#include "view/ViewUtility.h"
 #include "view/rockrokr/CategoryModelImageProvider.h"
 #include "widget/RKTableHeaderItem.h"
 #include "widget/RKListView.h"
@@ -44,6 +49,7 @@ public:
 //        RoleMatchedLength,
 //        RoleQueryStr,
 //        RoleAudioMetaObject,
+        RoleAudioMetaObject,
 
         RoleArtistName,
         RoleArtistImageUri,
@@ -134,6 +140,11 @@ public:
             }
             return QVariant();
         }
+        case RoleAudioMetaObject: {
+            QVariant v;
+            v.setValue(list.first().audioMetaObject());
+            return v;
+        }
         case RoleAlbumImageUrl: {
             //TODO
             return QVariant();
@@ -157,7 +168,7 @@ public:
             return QVariant();
         }
         case RoleHash: {
-            return QVariant();
+            return list.first().audioMetaObject().hash();
         }
         case RoleMediaType: {
             return QVariant();
@@ -199,6 +210,8 @@ public:
         role.insert(ModelRoles::RoleMatchTrackNameObject, "RoleMatchTrackNameObject");
         role.insert(ModelRoles::RoleMatchArtistNameObject, "RoleMatchArtistNameObject");
         role.insert(ModelRoles::RoleMatchAlbumNameObject, "RoleMatchAlbumNameObject");
+
+        role.insert(ModelRoles::RoleAudioMetaObject, "RoleAudioMetaObject");
 
         role.insert(ModelRoles::RoleAlbumImageUrl, "albumImageUrl");
         role.insert(ModelRoles::RoleAlbumName, "albumName");
@@ -404,7 +417,7 @@ public:
     } else { \
         const int idx = text.indexOf(queryStr); \
         const int lw = fm.horizontalAdvance(text.left(idx)); \
-        const int mw = fm.horizontalAdvance(queryStr); \
+        const int mw = fm.horizontalAdvance(queryStr + " "); \
         const int rw = textWidth - lw - mw - _to_px(4); \
         int xpos = pos + _to_px(2); \
         { \
@@ -414,13 +427,15 @@ public:
         } \
         { \
             font.setBold(true); \
+            font.setItalic(true); \
             painter->setFont(font); \
             const QRectF tf(xpos, textY, mw, rect.height()); \
-            painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, queryStr); \
+            painter->drawText(tf, Qt::AlignLeft | Qt::AlignVCenter, queryStr + " "); \
             xpos += mw; \
         } \
         { \
             font.setBold(false); \
+            font.setItalic(false); \
             painter->setFont(font); \
             const QRectF tf(xpos, textY, rw, rect.height()); \
             painter->drawText(tf, \
@@ -433,7 +448,6 @@ public:
         // title
         {
             INIT_BASE(RKTableHeaderItem::HeaderTitle, SearchResultContentViewModel::RoleSongTitle)
-
             if (((matchTypes & ITrackSearch::MatchTrackName) == ITrackSearch::MatchTrackName)
                     || ((matchTypes & ITrackSearch::MatchFilePath) == ITrackSearch::MatchFilePath)) {
                 QVariant va = index.data(SearchResultContentViewModel::RoleMatchTrackNameObject);
@@ -540,7 +554,7 @@ SearchResultContentViewDataProvider::SearchResultContentViewDataProvider()
     m_header->setCoverColumnWidth(_to_px(50));
     m_header->setCoverColumnIcon(DHiDPIHelper::loadNxPixmap(":/light/image/ic_format_list_numbered.svg"),
                                  DHiDPIHelper::loadNxPixmap(":/light/image/ic_format_list_numbered_hover.svg"));
-    m_header->setCoverColumnToolTip(QObject::tr("Reset to default order"));
+//    m_header->setCoverColumnToolTip(QObject::tr("Reset to default order"));
     m_header->setDisplayedColumns(RKTableHeaderItem::HeaderCover |
                                   RKTableHeaderItem::HeaderTitle |
                                   RKTableHeaderItem::HeaderArtist |
@@ -589,6 +603,9 @@ SearchResultContentView::SearchResultContentView(QWidget *parent)
 {
     this->setObjectName("SearchResultContentView");
     DThemeManager::instance()->registerWidget(this);
+
+    m_playerCore = new PlayerCore(this);
+    m_plsMetaMgr = new PlayListMetaMgr(this);
 }
 
 SearchResultContentView::~SearchResultContentView()
@@ -610,12 +627,42 @@ void SearchResultContentView::resizeEvent(QResizeEvent *event)
 
 void SearchResultContentView::showContextMenu(const QPoint &pos)
 {
-    //TODO
+    const QModelIndex idx = indexAtPos(pos);
+    if (!idx.isValid()) {
+        qWarning()<<"Invalid QModelIndex!!";
+        return;
+    }
+
+    QVariant va = this->getModel()->data(idx, SearchResultContentViewModel::RoleAudioMetaObject);
+    if (va.isNull() || !va.isValid()) {
+        ViewUtility::showToast(tr("Invalid audio meta object !!"));
+        return;
+    }
+    AudioMetaObject obj = va.value<AudioMetaObject>();
+
+    QMenu menu;
+    menu.setStyle(QStyleFactory::create("dlight"));
+
+    ViewUtility::menuAddToQueue(&menu, obj, m_playerCore);
+    ViewUtility::menuAddToPlaylist(&menu, obj, m_plsMetaMgr);
+    menu.addSeparator();
+    ViewUtility::menuRemoveObject(&menu, obj);
+    ViewUtility::menuShowInFileMgr(&menu, obj);
+    menu.addSeparator();
+    ViewUtility::menuTrackInfo(&menu, obj);
+
+    menu.exec(this->mapToGlobal(pos));
 }
 
 void SearchResultContentView::onClicked(const QModelIndex &index)
 {
-    //TODO
+    QVariant va = this->getModel()->data(index, SearchResultContentViewModel::RoleAudioMetaObject);
+    if (va.isNull() || !va.isValid()) {
+        ViewUtility::showToast(tr("Invalid audio meta object !!"));
+        return;
+    }
+    AudioMetaObject obj = va.value<AudioMetaObject>();
+    m_playerCore->playFromLibrary(obj.hash());
 }
 
 

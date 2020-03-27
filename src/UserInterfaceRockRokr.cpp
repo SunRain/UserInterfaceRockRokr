@@ -67,9 +67,9 @@ void UserInterfaceRockRokr::show()
 {
 #if 1
     if (m_libraryMgr->isEmpty()) {
-        m_mainWindow->showImportView();
+        m_mainWindow->showImportPage();
     } else {
-        m_mainWindow->showRockRokrView();
+        m_mainWindow->showRockRokrPage();
     }
 #else
     m_mainWindow->showImportView();

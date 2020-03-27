@@ -22,7 +22,7 @@ public:
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 protected:
-//    void onFocusIn();
+    void onFocusIn();
     void onFocusOut();
     void onTextChanged();
     void onReturnPressed();

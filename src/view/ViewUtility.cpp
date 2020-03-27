@@ -210,6 +210,12 @@ void ViewUtility::showSearchPage()
     s_mainWindow->showSearchPage();
 }
 
+void ViewUtility::showRockRokrPage()
+{
+    chkMainWindow();
+    s_mainWindow->showRockRokrPage();
+}
+
 } //namespace RockRokr
 } //namespace UserInterface
 } //namespace PhoenixPlayer

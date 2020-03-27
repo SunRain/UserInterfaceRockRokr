@@ -50,14 +50,14 @@ RockRokrPage::RockRokrPage(QWidget *parent)
 
     m_ctgDetailView     = new CategoryDetailView;
     m_plsDetailView     = new PlayListDetailView;
-    m_searchResultPopup  = new SearchResultPopup(this);
+//    m_searchResultPopup  = new SearchResultPopup(this);
 
     m_leftbar   = new LeftBar;
     m_leftbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
     m_titlebar  = new RockrokrTitleBar;
     m_titlebar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_titlebar->bindPopup(m_searchResultPopup);
+//    m_titlebar->bindPopup(m_searchResultPopup);
 
     m_playbar   = new PlayBar;
     m_playbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -204,15 +204,23 @@ RockRokrPage::~RockRokrPage()
     }
 }
 
-void RockRokrPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider)
+void RockRokrPage::bindSearchResultPopup(SearchResultPopup *pop)
 {
-    m_searchResultPopup->bindTrackSearchProvider(provider);
+    m_titlebar->bindPopup(pop);
+    if (pop) {
+        pop->setMaximumHeight(m_stack->height());
+    }
 }
+
+//void RockRokrPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider)
+//{
+//    m_searchResultPopup->bindTrackSearchProvider(provider);
+//}
 
 void RockRokrPage::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
-    m_searchResultPopup->setMaximumHeight(m_stack->height());
+//    m_searchResultPopup->setMaximumHeight(m_stack->height());
 }
 
 void RockRokrPage::initUserInterface()

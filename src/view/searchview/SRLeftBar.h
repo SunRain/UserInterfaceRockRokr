@@ -32,6 +32,9 @@ public:
 public:
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
+Q_SIGNALS:
+    void clickedBackBtn();
+
 protected:
     void initUserInterface();
 

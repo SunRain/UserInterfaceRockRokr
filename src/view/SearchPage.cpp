@@ -6,6 +6,8 @@
 #include <QPropertyAnimation>
 #include <QResizeEvent>
 #include <QLabel>
+#include <QTimer>
+#include <QLineEdit>
 
 #include <DThemeManager>
 
@@ -18,6 +20,7 @@
 #include "widget/RKTitleBar.h"
 #include "widget/RKSearchEdit.h"
 #include "widget/RKStackWidget.h"
+#include "view/ViewUtility.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -47,6 +50,10 @@ public:
     {
 
     }
+    void bindTrackSearchProvider(DataProvider::TrackSearchProvider *provider)
+    {
+        m_provider = provider;
+    }
 
     // QWidget interface
 public:
@@ -65,7 +72,9 @@ protected:
         auto text = QString(this->text()).remove(" ").remove("\r").remove("\n");
         if (text.length() >= 2) {
             auto searchtext = QString(this->text()).remove("\r").remove("\n");
-
+            if (m_provider) {
+                m_provider->search(searchtext, ITrackSearch::MatchAll);
+            }
         } else {
             onFocusOut();
         }
@@ -79,6 +88,8 @@ protected:
     //    onFocusOut();
         onTextChanged();
     }
+private:
+    DataProvider::TrackSearchProvider *m_provider = Q_NULLPTR;
 };
 
 SearchPage::SearchPage(QWidget *parent)
@@ -128,9 +139,16 @@ SearchPage::SearchPage(QWidget *parent)
 
     connect(m_animGroup, &QParallelAnimationGroup::finished,
             this, [&](){
-        m_bgLabel->lower();
-        m_bgLabel->hide();
+        if (!m_hideState) {
+            m_bgLabel->lower();
+            m_bgLabel->hide();
+        } else {
+            ViewUtility::showRockRokrPage();
+        }
     });
+
+    connect(m_leftBar, &SRLeftBar::clickedBackBtn,
+            this, &SearchPage::showHideAnimation);
 
     initUserInterface();
 
@@ -155,6 +173,8 @@ void SearchPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *prov
     if (!provider) {
         return;
     }
+    m_searchEdit->bindTrackSearchProvider(provider);
+
     m_searchProvider = provider;
     m_enabledPlugins.clear();
     m_enabledPlugins.append(provider->enabledPlugins());
@@ -176,6 +196,10 @@ void SearchPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *prov
     connect(m_searchProvider, &TrackSearchProvider::matched,
             this, [&](const QString &pattern, const QList<MatchObject> &objList) {
 
+        if (m_searchEdit->getLineEdit()->text() != pattern) {
+            m_searchEdit->getLineEdit()->setText(pattern);
+        }
+
         m_matchRetMap.clear();
         for (int i = 0; i < m_enabledPlugins.count(); ++i) {
             auto plugin = m_enabledPlugins.at(i);
@@ -189,12 +213,9 @@ void SearchPage::bindTrackSearchProvider(DataProvider::TrackSearchProvider *prov
             m_matchRetMap.insert(key, list);
 
             SearchResultContentView *widget = qobject_cast<SearchResultContentView*>(m_stack->widget(i));
-            widget->setDataMap(TrackSearchProvider::trim(list));
+            widget->setDataMap(TrackSearchProvider::trimByUri(list));
         }
     });
-
-
-
 }
 
 void SearchPage::setBackgroundPixmap(const QPixmap &pm)
@@ -205,25 +226,23 @@ void SearchPage::setBackgroundPixmap(const QPixmap &pm)
 void SearchPage::showEvent(QShowEvent *event)
 {
     QFrame::showEvent(event);
+    m_hideState = false;
+
     {
-        QRect rcEnd = m_leftBar->geometry();
+        QRect rcEnd = m_leftGeometry;
         QRect rcStart(rcEnd);
         rcStart.setX(-m_leftBar->width());
 
         m_leftAnim->setStartValue(rcStart);
         m_leftAnim->setEndValue(rcEnd);
-
-        qDebug()<<rcStart<<rcEnd;
     }
     {
-        QRect rcEnd = m_rPart->geometry();
+        QRect rcEnd = m_rightGeometry;
         QRect rcStart (rcEnd);
         rcStart.setX(rcStart.x() + m_rPart->width()/2);
 
         m_rightAnim->setStartValue(rcStart);
         m_rightAnim->setEndValue(rcEnd);
-
-        qDebug()<<rcStart<<rcEnd;
     }
     m_bgLabel->show();
     m_leftBar->show();
@@ -231,12 +250,12 @@ void SearchPage::showEvent(QShowEvent *event)
     m_rPart->show();
     m_rPart->raise();
     m_animGroup->start();
-
 }
 
 void SearchPage::hideEvent(QHideEvent *event)
 {
     QFrame::hideEvent(event);
+    m_hideState = true;
 }
 
 void SearchPage::resizeEvent(QResizeEvent *event)
@@ -244,11 +263,11 @@ void SearchPage::resizeEvent(QResizeEvent *event)
     m_bgLabel->setFixedSize(event->size());
 
     m_leftBar->setFixedHeight(event->size().height());
-    m_leftBar->setGeometry(0, 0, m_leftBar->width(), m_leftBar->height());
+    m_leftGeometry = QRect(0, 0, m_leftBar->width(), m_leftBar->height());
 
     m_rPart->setFixedWidth(event->size().width() - m_leftBar->width());
     m_rPart->setFixedHeight(event->size().height());
-    m_rPart->setGeometry(m_leftBar->width(), 0, m_rPart->width(), m_rPart->height());
+    m_rightGeometry = QRect(m_leftBar->width(), 0, m_rPart->width(), m_rPart->height());
 
     QFrame::resizeEvent(event);
 }
@@ -282,6 +301,34 @@ void SearchPage::initUserInterface()
             vbox->addLayout(vv);
         }
         vbox->addWidget(m_playbar, 0, Qt::AlignBottom);
+}
+
+void SearchPage::showHideAnimation()
+{
+    m_hideState = true;
+
+    {
+        QRect rcStart = m_leftGeometry;
+        QRect rcEnd(rcStart);
+        rcEnd.setX(-m_leftBar->width());
+
+        m_leftAnim->setStartValue(rcStart);
+        m_leftAnim->setEndValue(rcEnd);
+    }
+    {
+        QRect rcStart = m_rightGeometry;
+        QRect rcEnd (rcStart);
+        rcEnd.setX(rcStart.x() + m_rPart->width()/2);
+
+        m_rightAnim->setStartValue(rcStart);
+        m_rightAnim->setEndValue(rcEnd);
+    }
+    m_bgLabel->show();
+    m_leftBar->show();
+    m_leftBar->raise();
+    m_rPart->show();
+    m_rPart->raise();
+    m_animGroup->start();
 }
 
 

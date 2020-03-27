@@ -12,6 +12,7 @@
 #include "widget/ItemFragment.h"
 #include "widget/RKListWidget.h"
 #include "widget/ItemFragment.h"
+#include "view/ViewUtility.h"
 
 #include "SRLeftBarItem.h"
 
@@ -58,8 +59,7 @@ SRLeftBar::SRLeftBar(QWidget *parent)
     m_pluginView->setFocusPolicy(Qt::NoFocus);
 
     connect(m_backBtn, &DImageButton::clicked, this, [&]() {
-        //TODO
-
+        Q_EMIT clickedBackBtn();
     });
 
     connect(m_pluginView, &QListWidget::itemClicked,

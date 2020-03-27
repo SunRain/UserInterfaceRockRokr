@@ -42,6 +42,7 @@ protected:
 
 protected:
     void initUserInterface();
+    void showHideAnimation();
 
 private:
     SRLeftBar       *m_leftBar      = Q_NULLPTR;
@@ -57,6 +58,11 @@ private:
     QParallelAnimationGroup *m_animGroup = Q_NULLPTR;
     QPropertyAnimation      *m_leftAnim = Q_NULLPTR;
     QPropertyAnimation      *m_rightAnim = Q_NULLPTR;
+
+    bool m_hideState = false;
+
+    QRect m_leftGeometry;
+    QRect m_rightGeometry;
 
     QList<PluginMetaData> m_enabledPlugins;
 

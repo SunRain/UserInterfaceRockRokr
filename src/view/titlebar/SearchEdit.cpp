@@ -22,6 +22,9 @@ SearchEdit::SearchEdit(QWidget *parent)
 
     connect(this, &SearchEdit::returnPressed,
             this, &SearchEdit::onReturnPressed);
+
+    connect(this, &SearchEdit::focusIn,
+            this, &SearchEdit::onFocusIn);
 }
 
 SearchEdit::~SearchEdit()
@@ -53,6 +56,11 @@ QSize SearchEdit::sizeHint() const
     return QSize(TITLE_BAR_SEARCH_VIEW_W, TITLE_BAR_SEARCH_VIEW_H);
 }
 
+void SearchEdit::onFocusIn()
+{
+    onTextChanged();
+}
+
 void SearchEdit::onFocusOut()
 {
     QTimer::singleShot(50, [this] (){
@@ -67,16 +75,6 @@ void SearchEdit::onTextChanged()
         auto searchtext = QString(this->text()).remove("\r").remove("\n");
         m_resultPopup->setSearchString(searchtext);
         m_resultPopup->doSearch();
-
-//        m_resultView->setFixedWidth(this->width() + _to_px(40));
-
-//        m_resultView->calToResize();
-//        m_resultView->show();
-
-//        m_resultView->move(m_topLeftToGlobal.x(),
-//                           m_topLeftToGlobal.y() + this->rect().height());
-//        m_resultView->setFocusPolicy(Qt::StrongFocus);
-//        m_resultView->raise();
     } else {
         onFocusOut();
     }
@@ -88,9 +86,6 @@ void SearchEdit::onReturnPressed()
     if (text.isEmpty()) {
         return;
     }
-
-//    onFocusOut();
-
     onTextChanged();
 }
 

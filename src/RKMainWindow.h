@@ -37,6 +37,7 @@ namespace PhoenixPlayer {
             class RKOverlayWidget;
             class CategoryDetailView;
             class SearchPage;
+            class SearchResultPopup;
 
 class RKMainWindow : public DTK_WIDGET_NAMESPACE::DMainWindow
 {
@@ -50,11 +51,11 @@ protected:
     Q_SLOT void show();
 
 public:
-    void showImportView();
+    void showImportPage();
 
-    void showLoadingView();
+    void showLoadingPage();
 
-    void showRockRokrView();
+    void showRockRokrPage();
 
     void showSearchPage();
 
@@ -92,9 +93,10 @@ private:
     LeftBar                             *m_leftBar          = Q_NULLPTR;
     ImportPage                          *m_importView       = Q_NULLPTR;
     LoadingWidget                       *m_loadingWidget    = Q_NULLPTR;
-    RockRokrPage                        *m_rkView           = Q_NULLPTR;
+    RockRokrPage                        *m_rkPage           = Q_NULLPTR;
     RKOverlayWidget                     *m_overlayWidget    = Q_NULLPTR;
     SearchPage                          *m_searchPage       = Q_NULLPTR;
+    SearchResultPopup                   *m_searchResultPopup = Q_NULLPTR;
 
     DTK_WIDGET_NAMESPACE::DToast        *m_tip              = Q_NULLPTR;
     DTK_WIDGET_NAMESPACE::DToast        *m_toast            = Q_NULLPTR;

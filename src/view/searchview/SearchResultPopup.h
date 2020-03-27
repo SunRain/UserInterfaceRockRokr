@@ -39,10 +39,9 @@ public:
 
 Q_SIGNALS:
     void searchMatched();
+    void clicked(const DataProvider::MatchObject &obj);
 
 protected:
-//    void initProvider();
-
     void searchByAllPluginBtnEntered();
     void searchByAllPluginBtnLeave();
 
