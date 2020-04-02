@@ -77,13 +77,13 @@ LeftBar::LeftBar(QWidget *parent)
         qDebug()<<"---- currentItemChanged ---";
         LBListItem *lbi = qobject_cast<LBListItem*>(m_listWidget->itemWidget(current));
         if (!lbi) {
-            qWarning()<<"empty item";
+            qWarning()<<"empty current item";
         } else {
             lbi->setHoverState(true);
         }
         lbi = qobject_cast<LBListItem*>(m_listWidget->itemWidget(previous));
         if (!lbi) {
-            qWarning()<<"empty item";
+            qWarning()<<"empty previous item";
         } else {
             lbi->setHoverState(false);
         }

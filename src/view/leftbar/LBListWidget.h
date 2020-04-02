@@ -21,7 +21,7 @@ public:
     virtual ~LBListWidget() override;
 
 protected:
-    virtual void showContextMenu(const QPoint &pos) {}
+    virtual void showContextMenu(const QPoint &pos) {Q_UNUSED(pos)}
 };
 
 } //namespace RockRokr
