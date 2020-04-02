@@ -59,6 +59,22 @@ RKMainWindow::RKMainWindow(QWidget *parent)
     m_searchResultPopup->bindTrackSearchProvider(m_searchProvider);
 
     {
+        m_importView    = new ImportPage;
+        m_loadingWidget = new LoadingWidget;
+        m_rkPage        = new RockRokrPage;
+        m_rkPage->bindSearchResultPopup(m_searchResultPopup);
+        m_searchPage    = new SearchPage;
+        m_searchPage->bindTrackSearchProvider(m_searchProvider);
+        m_overlayWidget = new RKOverlayWidget;
+
+        m_rkPage->categoryDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+        m_overlayWidget->addWidget(m_rkPage->categoryDetailView());
+
+        m_rkPage->playListDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
+        m_overlayWidget->addWidget(m_rkPage->playListDetailView());
+    }
+
+    {
         QVBoxLayout *ly = new QVBoxLayout(m_mainWidget);
         ly->setContentsMargins(0, 0, 0, 0);
         ly->setSpacing(0);
@@ -69,28 +85,11 @@ RKMainWindow::RKMainWindow(QWidget *parent)
         m_stack->setDuration(600);
         ly->addWidget(m_stack);
 
-        m_importView = new ImportPage;
-        m_loadingWidget = new LoadingWidget;
-        m_rkPage = new RockRokrPage;
-        m_rkPage->bindSearchResultPopup(m_searchResultPopup);
-        m_searchPage = new SearchPage;
-        m_searchPage->bindTrackSearchProvider(m_searchProvider);
-
         m_stack->addWidget(m_importView);
         m_stack->addWidget(m_loadingWidget);
         m_stack->addWidget(m_rkPage);
         m_stack->addWidget(m_overlayWidget);
         m_stack->addWidget(m_searchPage);
-    }
-
-    {
-        m_overlayWidget = new RKOverlayWidget;
-
-        m_rkPage->categoryDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
-        m_overlayWidget->addWidget(m_rkPage->categoryDetailView());
-
-        m_rkPage->playListDetailView()->setFixedSize(MAIN_WINDOW_W *3/5, MAIN_WINDOW_H *3/5);
-        m_overlayWidget->addWidget(m_rkPage->playListDetailView());
     }
 
     connect(m_importView, &ImportPage::scanStandardMusicPath,
